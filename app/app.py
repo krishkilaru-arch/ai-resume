@@ -590,10 +590,75 @@ def _genie_ask_api(question, conversation_id=None):
         return None
 
 
-_GREETING_WORDS = {"hi", "hello", "hey", "howdy", "hola", "greetings", "sup", "yo", "what's up", "whats up"}
+_GREETING_WORDS = {"hi", "hello", "hey", "howdy", "hola", "greetings", "sup", "yo",
+                    "what's up", "whats up", "good morning", "good afternoon", "good evening"}
+_SMALLTALK_PATTERNS = {"how are you", "how's it going", "how do you do", "what's going on",
+                       "how are things", "how r u", "wassup", "how is it going", "nice to meet you",
+                       "who are you", "what are you", "what can you do", "help", "thank you",
+                       "thanks", "bye", "goodbye", "see you", "take care"}
 
 def _is_greeting(question):
-    return question.strip().lower().rstrip("!.,? ") in _GREETING_WORDS
+    q = question.strip().lower().rstrip("!.,? ")
+    return q in _GREETING_WORDS
+
+def _is_smalltalk(question):
+    q = question.strip().lower().rstrip("!.,? ")
+    return q in _SMALLTALK_PATTERNS or any(q.startswith(p) for p in _SMALLTALK_PATTERNS)
+
+def _smalltalk_response(question):
+    q = question.strip().lower()
+    if any(w in q for w in ["how are you", "how's it going", "how do you do", "how r u"]):
+        text = (
+            "I'm doing great, thanks for asking! 🐒✨ Just swinging through Krish's career data, "
+            "polishing those 19+ years of experience until they shine brighter than the Cave of Wonders.\n\n"
+            "But enough about me — I'm here for *you*! What would you like to know about Krish? "
+            "Skills, experience, certifications, projects — you name it, I'll fetch it! 🪄"
+        )
+    elif any(w in q for w in ["who are you", "what are you", "what can you do"]):
+        text = (
+            "I'm **Abu** 🐒 — Krish Kilaru's AI Career Assistant, powered by the **Databricks AI/BI Genie** 🧞!\n\n"
+            "I can answer questions about Krish's:\n"
+            "- 💼 **Work experience** across 12+ enterprise clients\n"
+            "- 🛠 **Technical skills** (Databricks, Spark, AWS, and more)\n"
+            "- 🎓 **Education** & **Certifications** (10 and counting!)\n"
+            "- 📝 **Publications** & thought leadership\n"
+            "- 🏆 **Key achievements** and impact metrics\n\n"
+            "Ask away — your wish is my command! 🪄"
+        )
+    elif any(w in q for w in ["thank", "thanks"]):
+        text = (
+            "You're welcome! 🐒 Happy to help! If you have more questions about Krish's experience, "
+            "I'm always here — unlike a regular resume, I never get filed away in a drawer. 😄"
+        )
+    elif any(w in q for w in ["bye", "goodbye", "see you", "take care"]):
+        text = (
+            "See you later! 👋 Remember, Krish is always open to connecting — "
+            "reach out on [LinkedIn](https://www.linkedin.com/in/brickster/) anytime.\n\n"
+            "As the Genie would say: *\"You ain't never had a friend like me!\"* 🧞✨"
+        )
+    elif "help" in q:
+        text = (
+            "Sure thing! Here's what you can ask me:\n\n"
+            "🔹 **\"What are Krish's top skills?\"**\n"
+            "🔹 **\"Tell me about his work at Capital Group\"**\n"
+            "🔹 **\"What certifications does he hold?\"**\n"
+            "🔹 **\"What companies has he worked with?\"**\n"
+            "🔹 **\"What's his education background?\"**\n"
+            "🔹 **\"Show me his publications\"**\n\n"
+            "Just type a question and I'll dig through the data for you! 🐒🔍"
+        )
+    else:
+        text = (
+            "Great question — but that's a bit outside my area! I'm best at answering questions about "
+            "Krish's career, skills, and experience. Try something like:\n\n"
+            "- \"What are his top technical skills?\"\n"
+            "- \"Which clients has he worked with?\"\n\n"
+            "I promise the answers are more interesting than small talk! 🐒"
+        )
+    return {
+        "text": text, "sql": None, "df": None,
+        "conversation_id": None, "status": "COMPLETED", "source": "greeting",
+    }
 
 def _greeting_response():
     return {
@@ -617,12 +682,17 @@ def _greeting_response():
     }
 
 def genie_ask(question, conversation_id=None):
-    """Handle greetings locally, then try Genie API, then fall back to local Q&A."""
+    """Handle greetings/smalltalk locally, then try Genie API, then fall back to local Q&A."""
     if _is_greeting(question):
         return _greeting_response()
+    if _is_smalltalk(question):
+        return _smalltalk_response(question)
 
     api_result = _genie_ask_api(question, conversation_id)
     if api_result and api_result.get("text"):
+        genie_text = api_result["text"].lower()
+        if "unrelated to" in genie_text or "cannot answer" in genie_text or "not related" in genie_text:
+            return _smalltalk_response(question)
         api_result["source"] = "genie"
         return api_result
 
