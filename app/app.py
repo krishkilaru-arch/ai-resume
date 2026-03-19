@@ -271,7 +271,7 @@ def get_workspace_client():
         return None
 
 
-@st.cache_data(ttl=600)
+@st.cache_data(ttl=60)
 def load_resume_json():
     if DATA_FILE.exists():
         with open(DATA_FILE) as f:
@@ -431,7 +431,7 @@ def _json_to_df(data, table):
     return pd.DataFrame(raw if isinstance(raw, list) else [raw])
 
 
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=60)
 def load_table(table_name):
     """Load a table: try Databricks first, fall back to local JSON."""
     df = query_sql(f"SELECT * FROM {table_name}")
