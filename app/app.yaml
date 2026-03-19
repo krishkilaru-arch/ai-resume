@@ -1,0 +1,21 @@
+command:
+  - "streamlit"
+  - "run"
+  - "app.py"
+  - "--server.port=8501"
+  - "--server.address=0.0.0.0"
+
+env:
+  - name: RESUME_CATALOG
+    description: "Unity Catalog name where resume tables live"
+    value: "resume_catalog"
+
+  - name: RESUME_SCHEMA
+    description: "Schema name within the catalog"
+    value: "career_profile"
+
+  - name: SQL_WAREHOUSE_ID
+    description: "Databricks SQL Warehouse ID for executing dashboard queries"
+
+  - name: GENIE_SPACE_ID
+    description: "Genie Space ID for the interactive Q&A feature"

@@ -1,0 +1,242 @@
+{
+  "catalog": "resume_catalog",
+  "schema": "career_profile",
+
+  "profile": {
+    "full_name": "YOUR FULL NAME",
+    "headline": "Senior Data Engineer | Analytics Leader | Cloud Architect",
+    "summary": "Results-driven data engineering leader with 10+ years of experience designing and implementing large-scale data platforms. Proven track record of building high-performance data pipelines, leading cross-functional teams, and driving data-informed decision-making across Fortune 500 organizations. Expert in Databricks, Spark, AWS, and modern data stack technologies.",
+    "email": "your.email@example.com",
+    "phone": "+1-555-000-0000",
+    "linkedin_url": "https://linkedin.com/in/yourprofile",
+    "github_url": "https://github.com/yourprofile",
+    "website_url": "https://yourwebsite.com",
+    "location_city": "San Francisco",
+    "location_state": "CA",
+    "location_country": "United States",
+    "years_of_experience": 10,
+    "willing_to_relocate": true,
+    "work_authorization": "US Citizen",
+    "preferred_work_model": "Hybrid"
+  },
+
+  "work_experience": [
+    {
+      "company": "TechCorp Inc.",
+      "title": "Senior Data Engineer",
+      "location": "San Francisco, CA",
+      "employment_type": "Full-time",
+      "start_date": "2022-01-01",
+      "end_date": null,
+      "is_current": true,
+      "industry": "Technology",
+      "team_size_managed": 5,
+      "description": "Lead the data platform team building next-generation analytics infrastructure on Databricks and AWS.",
+      "highlights": [
+        {
+          "description": "Architected and deployed a unified data lakehouse on Databricks serving 500+ analysts, reducing query latency by 70%",
+          "category": "Technical",
+          "impact_metric": "70% reduction in query latency"
+        },
+        {
+          "description": "Led migration of 200+ legacy ETL pipelines to Delta Live Tables, improving data freshness from 24hrs to 15min",
+          "category": "Technical",
+          "impact_metric": "96% improvement in data freshness"
+        },
+        {
+          "description": "Managed a team of 5 data engineers, implementing agile practices and reducing deployment cycle time by 60%",
+          "category": "Leadership",
+          "impact_metric": "60% faster deployments"
+        },
+        {
+          "description": "Implemented Unity Catalog governance framework across 3 business units, ensuring GDPR and SOC2 compliance",
+          "category": "Business",
+          "impact_metric": "100% compliance achieved"
+        }
+      ]
+    },
+    {
+      "company": "DataFlow Analytics",
+      "title": "Data Engineer",
+      "location": "New York, NY",
+      "employment_type": "Full-time",
+      "start_date": "2019-03-01",
+      "end_date": "2021-12-31",
+      "is_current": false,
+      "industry": "Financial Services",
+      "team_size_managed": 0,
+      "description": "Built and maintained real-time data pipelines for trading analytics and risk management platforms.",
+      "highlights": [
+        {
+          "description": "Designed real-time streaming pipeline processing 2M+ events/sec using Spark Structured Streaming and Kafka",
+          "category": "Technical",
+          "impact_metric": "2M+ events/sec throughput"
+        },
+        {
+          "description": "Built ML feature store serving 50+ models, reducing feature engineering time by 80%",
+          "category": "Technical",
+          "impact_metric": "80% reduction in feature engineering time"
+        },
+        {
+          "description": "Reduced cloud infrastructure costs by $500K/year through optimization of Spark cluster configurations",
+          "category": "Business",
+          "impact_metric": "$500K annual savings"
+        }
+      ]
+    },
+    {
+      "company": "StartupXYZ",
+      "title": "Junior Data Engineer",
+      "location": "Austin, TX",
+      "employment_type": "Full-time",
+      "start_date": "2016-06-01",
+      "end_date": "2019-02-28",
+      "is_current": false,
+      "industry": "E-commerce",
+      "team_size_managed": 0,
+      "description": "First data hire responsible for building the company's data infrastructure from scratch.",
+      "highlights": [
+        {
+          "description": "Built the entire data warehouse from scratch using AWS Redshift and Airflow, enabling the company's first self-service analytics",
+          "category": "Technical",
+          "impact_metric": "0 to 1 data platform build"
+        },
+        {
+          "description": "Created customer 360 data model that drove a 25% increase in customer retention",
+          "category": "Business",
+          "impact_metric": "25% improvement in retention"
+        }
+      ]
+    }
+  ],
+
+  "education": [
+    {
+      "institution": "University of California, Berkeley",
+      "degree": "Master of Science",
+      "field_of_study": "Computer Science - Data Systems",
+      "start_date": "2014-08-01",
+      "end_date": "2016-05-31",
+      "gpa": 3.85,
+      "honors": "Magna Cum Laude",
+      "relevant_coursework": "Distributed Systems, Machine Learning, Database Systems, Statistical Methods"
+    },
+    {
+      "institution": "University of Texas at Austin",
+      "degree": "Bachelor of Science",
+      "field_of_study": "Computer Science",
+      "start_date": "2010-08-01",
+      "end_date": "2014-05-31",
+      "gpa": 3.7,
+      "honors": "Dean's List",
+      "relevant_coursework": "Data Structures, Algorithms, Linear Algebra, Probability & Statistics"
+    }
+  ],
+
+  "skills": [
+    {"skill_name": "Apache Spark", "category": "Big Data", "proficiency": "Expert", "years_used": 7},
+    {"skill_name": "Databricks", "category": "Cloud Platform", "proficiency": "Expert", "years_used": 5},
+    {"skill_name": "Delta Lake", "category": "Big Data", "proficiency": "Expert", "years_used": 5},
+    {"skill_name": "Python", "category": "Programming", "proficiency": "Expert", "years_used": 10},
+    {"skill_name": "SQL", "category": "Programming", "proficiency": "Expert", "years_used": 10},
+    {"skill_name": "Scala", "category": "Programming", "proficiency": "Advanced", "years_used": 5},
+    {"skill_name": "AWS", "category": "Cloud Platform", "proficiency": "Expert", "years_used": 8},
+    {"skill_name": "Azure", "category": "Cloud Platform", "proficiency": "Advanced", "years_used": 3},
+    {"skill_name": "Kafka", "category": "Big Data", "proficiency": "Advanced", "years_used": 5},
+    {"skill_name": "Airflow", "category": "Orchestration", "proficiency": "Expert", "years_used": 6},
+    {"skill_name": "dbt", "category": "Data Transformation", "proficiency": "Advanced", "years_used": 3},
+    {"skill_name": "Terraform", "category": "Infrastructure", "proficiency": "Advanced", "years_used": 4},
+    {"skill_name": "Docker", "category": "Infrastructure", "proficiency": "Advanced", "years_used": 5},
+    {"skill_name": "Kubernetes", "category": "Infrastructure", "proficiency": "Intermediate", "years_used": 3},
+    {"skill_name": "Unity Catalog", "category": "Data Governance", "proficiency": "Expert", "years_used": 3},
+    {"skill_name": "Delta Live Tables", "category": "Data Transformation", "proficiency": "Expert", "years_used": 3},
+    {"skill_name": "Machine Learning", "category": "AI/ML", "proficiency": "Advanced", "years_used": 5},
+    {"skill_name": "MLflow", "category": "AI/ML", "proficiency": "Advanced", "years_used": 4},
+    {"skill_name": "Git", "category": "DevOps", "proficiency": "Expert", "years_used": 10},
+    {"skill_name": "CI/CD", "category": "DevOps", "proficiency": "Advanced", "years_used": 6},
+    {"skill_name": "Team Leadership", "category": "Soft Skills", "proficiency": "Advanced", "years_used": 4},
+    {"skill_name": "Agile/Scrum", "category": "Soft Skills", "proficiency": "Expert", "years_used": 7},
+    {"skill_name": "Technical Writing", "category": "Soft Skills", "proficiency": "Advanced", "years_used": 8},
+    {"skill_name": "Stakeholder Management", "category": "Soft Skills", "proficiency": "Advanced", "years_used": 5}
+  ],
+
+  "certifications": [
+    {
+      "name": "Databricks Certified Data Engineer Professional",
+      "issuing_organization": "Databricks",
+      "issue_date": "2023-06-15",
+      "expiry_date": "2025-06-15",
+      "credential_id": "DBCE-PRO-12345",
+      "credential_url": "https://credentials.databricks.com/12345"
+    },
+    {
+      "name": "AWS Solutions Architect - Professional",
+      "issuing_organization": "Amazon Web Services",
+      "issue_date": "2022-03-10",
+      "expiry_date": "2025-03-10",
+      "credential_id": "AWS-SAP-67890",
+      "credential_url": "https://aws.amazon.com/verification/67890"
+    },
+    {
+      "name": "Google Cloud Professional Data Engineer",
+      "issuing_organization": "Google Cloud",
+      "issue_date": "2021-11-20",
+      "expiry_date": "2023-11-20",
+      "credential_id": "GCP-DE-11111",
+      "credential_url": "https://google.accredible.com/11111"
+    }
+  ],
+
+  "projects": [
+    {
+      "name": "Enterprise Data Lakehouse Platform",
+      "description": "Designed and implemented a multi-tenant data lakehouse on Databricks serving the entire organization's analytics needs.",
+      "role": "Lead Architect",
+      "technologies": "Databricks, Delta Lake, Unity Catalog, Terraform, AWS S3, Spark",
+      "start_date": "2022-03-01",
+      "end_date": null,
+      "is_current": true,
+      "impact": "Consolidated 5 disparate data systems into one platform, saving $2M annually",
+      "url": null
+    },
+    {
+      "name": "Real-time Fraud Detection Pipeline",
+      "description": "Built a real-time streaming pipeline for detecting fraudulent transactions using ML models.",
+      "role": "Senior Engineer",
+      "technologies": "Spark Streaming, Kafka, MLflow, Delta Lake, Python",
+      "start_date": "2020-01-01",
+      "end_date": "2021-06-30",
+      "is_current": false,
+      "impact": "Reduced fraud losses by 40%, processing 2M+ transactions per second with <100ms latency",
+      "url": null
+    },
+    {
+      "name": "Customer 360 Analytics Platform",
+      "description": "Created a unified customer data model integrating data from 15+ sources for a holistic customer view.",
+      "role": "Data Engineer",
+      "technologies": "AWS Redshift, Airflow, Python, dbt, Looker",
+      "start_date": "2017-06-01",
+      "end_date": "2019-02-28",
+      "is_current": false,
+      "impact": "Enabled personalized marketing campaigns that increased customer retention by 25%",
+      "url": null
+    }
+  ],
+
+  "publications": [
+    {
+      "title": "Building Scalable Data Lakehouses: Lessons from the Trenches",
+      "publisher": "Databricks Blog",
+      "date": "2023-09-15",
+      "type": "Blog Post",
+      "url": "https://example.com/blog/lakehouse-lessons"
+    },
+    {
+      "title": "Real-time Feature Engineering at Scale",
+      "publisher": "Data Engineering Conference 2022",
+      "date": "2022-10-20",
+      "type": "Conference Talk",
+      "url": "https://example.com/talks/feature-engineering"
+    }
+  ]
+}
