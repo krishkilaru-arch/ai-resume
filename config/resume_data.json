@@ -3,108 +3,272 @@
   "schema": "career_profile",
 
   "profile": {
-    "full_name": "YOUR FULL NAME",
-    "headline": "Senior Data Engineer | Analytics Leader | Cloud Architect",
+    "full_name": "Krish Kilaru",
+    "headline": "Associate Director Data & AI | Analytics Leader | Databricks Solution Architect",
     "summary": "Results-driven data engineering leader with 10+ years of experience designing and implementing large-scale data platforms. Proven track record of building high-performance data pipelines, leading cross-functional teams, and driving data-informed decision-making across Fortune 500 organizations. Expert in Databricks, Spark, AWS, and modern data stack technologies.",
-    "email": "your.email@example.com",
-    "phone": "+1-555-000-0000",
-    "linkedin_url": "https://linkedin.com/in/yourprofile",
-    "github_url": "https://github.com/yourprofile",
-    "website_url": "https://yourwebsite.com",
-    "location_city": "San Francisco",
-    "location_state": "CA",
+    "email": "thedatabrickster@gmail.com",
+    "phone": "6363626272",
+    "linkedin_url": "https://www.linkedin.com/in/brickster/",
+    "github_url": "https://github.com/krishkilaru-arch",
+    "website_url": "https://thedatabrickster.streamlit.app",
+    "location_city": "Jacksonville",
+    "location_state": "FL",
     "location_country": "United States",
-    "years_of_experience": 10,
+    "years_of_experience": 19,
     "willing_to_relocate": true,
-    "work_authorization": "US Citizen",
+    "work_authorization": "Canadian Citizen, Green Card EAD (GC expected May 2026)",
     "preferred_work_model": "Hybrid"
   },
 
   "work_experience": [
     {
-      "company": "TechCorp Inc.",
-      "title": "Senior Data Engineer",
-      "location": "San Francisco, CA",
+      "company": "Lumenalta",
+      "title_at_employer": "Associate Director, Data & AI",
+      "role_at_customer": "Senior Solutions Architect - Databricks",
+      "location": "Remote, Jacksonville, FL",
       "employment_type": "Full-time",
-      "start_date": "2022-01-01",
+      "start_date": "2024-07-01",
       "end_date": null,
       "is_current": true,
-      "industry": "Technology",
-      "team_size_managed": 5,
-      "description": "Lead the data platform team building next-generation analytics infrastructure on Databricks and AWS.",
+      "industry": "Data & AI Consulting",
+      "team_size_managed": 8,
+      "description": "Leading Databricks platform strategy and delivery for Capital Group's Enterprise Data Office (EDO). Spearheading pre-sales, POC delivery, and enterprise Databricks adoption. Built Databricks Center of Excellence and drove company-wide partnership and certification programs.",
       "highlights": [
         {
-          "description": "Architected and deployed a unified data lakehouse on Databricks serving 500+ analysts, reducing query latency by 70%",
-          "category": "Technical",
-          "impact_metric": "70% reduction in query latency"
+          "description": "Delivered a live Databricks Genie demo during pre-sales that won the Capital Group engagement over Accenture, KPMG, Capgemini, and Infosys",
+          "category": "Business",
+          "impact_metric": "Won deal against 4 major competitors"
         },
         {
-          "description": "Led migration of 200+ legacy ETL pipelines to Delta Live Tables, improving data freshness from 24hrs to 15min",
+          "description": "Successfully executed POC with the Quants team at Capital Group, leading to award of the full Databricks onboarding project for EDO",
           "category": "Technical",
-          "impact_metric": "96% improvement in data freshness"
+          "impact_metric": "POC converted to full enterprise project"
         },
         {
-          "description": "Managed a team of 5 data engineers, implementing agile practices and reducing deployment cycle time by 60%",
+          "description": "Championed Databricks partnership with CEO/CTO, elevating Lumenalta from no partnership to Silver Partner status",
           "category": "Leadership",
-          "impact_metric": "60% faster deployments"
+          "impact_metric": "Achieved Databricks Silver Partner"
         },
         {
-          "description": "Implemented Unity Catalog governance framework across 3 business units, ensuring GDPR and SOC2 compliance",
+          "description": "Built Databricks Center of Excellence from scratch inside Lumenalta with training programs, best practices, and delivery frameworks",
+          "category": "Leadership",
+          "impact_metric": "CoE established from zero"
+        },
+        {
+          "description": "Drove company-wide Databricks certification initiative resulting in 50+ certified employees and 2 Databricks MVPs",
+          "category": "Leadership",
+          "impact_metric": "50+ certifications, 2 Databricks MVPs"
+        },
+        {
+          "description": "Leading Databricks onboarding for EDO teams at Capital Group including platform architecture, data engineering, and governance",
+          "category": "Technical",
+          "impact_metric": "Enterprise-wide Databricks adoption"
+        },
+        {
+          "description": "Delivering pre-sales demos and training programs on Genie, AI/BI Dashboards, Databricks Apps, and AgentBricks to win new client engagements",
           "category": "Business",
-          "impact_metric": "100% compliance achieved"
+          "impact_metric": "Multiple pre-sales engagements won"
         }
       ]
     },
     {
-      "company": "DataFlow Analytics",
-      "title": "Data Engineer",
-      "location": "New York, NY",
+      "company": "Lead IT Corporation",
+      "title_at_employer": "Technical Manager - Data Engineering",
+      "role_at_customer": "Senior Data Engineer / Databricks Specialist",
+      "location": "Tennessee, United States",
       "employment_type": "Full-time",
-      "start_date": "2019-03-01",
-      "end_date": "2021-12-31",
+      "start_date": "2013-04-01",
+      "end_date": "2024-08-31",
       "is_current": false,
-      "industry": "Financial Services",
-      "team_size_managed": 0,
-      "description": "Built and maintained real-time data pipelines for trading analytics and risk management platforms.",
+      "industry": "IT Consulting / Financial Services / Insurance / Healthcare",
+      "team_size_managed": 5,
+      "description": "11+ year tenure delivering data engineering and Databricks solutions across major enterprise clients including Guardian Life, Johnson & Johnson, FIS Global, TD Bank, Moody's, Rocket Mortgage, Essent Mortgage, Nissan, BCBS, Wells Fargo, and more.",
       "highlights": [
         {
-          "description": "Designed real-time streaming pipeline processing 2M+ events/sec using Spark Structured Streaming and Kafka",
+          "description": "Built end-to-end frameworks for data Ingestion, Orchestration, and ETL in Databricks for TD Bank. Onboarded Unity Catalog for the Data Governance team, establishing centralized access controls, lineage tracking, and audit policies",
           "category": "Technical",
-          "impact_metric": "2M+ events/sec throughput"
+          "impact_metric": "Full Databricks framework + Unity Catalog governance",
+          "client": "TD Bank"
         },
         {
-          "description": "Built ML feature store serving 50+ models, reducing feature engineering time by 80%",
+          "description": "Enabled and optimized Databricks environments for Guardian Life, improving cross-team collaboration and cutting query times by 40% through cluster tuning, job optimization, and workspace governance",
           "category": "Technical",
-          "impact_metric": "80% reduction in feature engineering time"
+          "impact_metric": "40% reduction in query times",
+          "client": "Guardian Life"
         },
         {
-          "description": "Reduced cloud infrastructure costs by $500K/year through optimization of Spark cluster configurations",
-          "category": "Business",
-          "impact_metric": "$500K annual savings"
+          "description": "Diagnosed and resolved critical Spark bottlenecks for Johnson & Johnson's data pipelines, achieving a 3x throughput boost through partition optimization, broadcast joins, and caching strategies",
+          "category": "Technical",
+          "impact_metric": "3x throughput improvement",
+          "client": "Johnson & Johnson"
+        },
+        {
+          "description": "Architected and provisioned Databricks infrastructure using Terraform for FIS Global, enabling repeatable, version-controlled environment deployments across dev, staging, and production",
+          "category": "Technical",
+          "impact_metric": "Infrastructure-as-Code with Terraform",
+          "client": "FIS Global"
+        },
+        {
+          "description": "Designed fully serverless data architecture for Moody's Analytics using AWS Lambda, Glue, Step Functions, and DynamoDB, eliminating server management overhead and enabling event-driven data processing",
+          "category": "Technical",
+          "impact_metric": "Fully serverless architecture",
+          "client": "Moody's"
+        },
+        {
+          "description": "Led Essent Mortgage's 15-year legacy system migration to AWS (with Quantiphi), re-architecting batch and streaming pipelines, achieving 50% faster data processing and 35% infrastructure cost savings",
+          "category": "Technical",
+          "impact_metric": "50% faster processing, 35% cost savings",
+          "client": "Essent Mortgage"
+        },
+        {
+          "description": "Migrated Hortonworks-based data pipelines to AWS Glue at Rocket Mortgage, drove organization-wide Glue adoption, delivered Spark training to engineering teams, and won multiple Hack Week awards for innovative data solutions",
+          "category": "Technical",
+          "impact_metric": "Company-wide Glue adoption + Hack Week awards",
+          "client": "Rocket Mortgage"
+        },
+        {
+          "description": "Migrated legacy on-prem data systems to Hadoop/Spark ecosystem for Nissan, building scalable data lake architecture for vehicle telemetry and supply chain analytics",
+          "category": "Technical",
+          "impact_metric": "Legacy to Hadoop/Spark migration",
+          "client": "Nissan"
+        },
+        {
+          "description": "Implemented real-time Kafka streaming pipelines and optimized SSRS reporting dashboards for BCBS, improving claims data processing speed and analytics delivery",
+          "category": "Technical",
+          "impact_metric": "Real-time streaming + optimized reporting",
+          "client": "BCBS"
+        },
+        {
+          "description": "Developed SSIS ETL solutions and data warehouse modernization for Illinois Board of Education, enabling standardized reporting across school districts",
+          "category": "Technical",
+          "impact_metric": "Standardized statewide data reporting",
+          "client": "Illinois Board of Education"
+        },
+        {
+          "description": "Built data integration pipelines and optimized analytical workloads for Wells Fargo's financial data platforms using Hadoop and Spark",
+          "category": "Technical",
+          "impact_metric": "Optimized financial data analytics",
+          "client": "Wells Fargo"
+        },
+        {
+          "description": "Designed and delivered ETL frameworks and reporting solutions for Horace Mann, modernizing legacy data infrastructure to support insurance analytics",
+          "category": "Technical",
+          "impact_metric": "Legacy modernization for insurance analytics",
+          "client": "Horace Mann"
         }
       ]
     },
     {
-      "company": "StartupXYZ",
-      "title": "Junior Data Engineer",
-      "location": "Austin, TX",
+      "company": "US Internships",
+      "title_at_employer": "Intern",
+      "role_at_customer": "Database / Software Intern",
+      "location": "Illinois / San Diego, CA",
       "employment_type": "Full-time",
-      "start_date": "2016-06-01",
-      "end_date": "2019-02-28",
+      "start_date": "2011-09-01",
+      "end_date": "2013-03-31",
       "is_current": false,
-      "industry": "E-commerce",
+      "industry": "Government / Healthcare IT",
       "team_size_managed": 0,
-      "description": "First data hire responsible for building the company's data infrastructure from scratch.",
+      "description": "Two US internships: Graduate Public Service Intern (GPSI) at the Illinois Office of Comptroller via University of Illinois, and Database Intern at CareFusion in San Diego.",
       "highlights": [
         {
-          "description": "Built the entire data warehouse from scratch using AWS Redshift and Airflow, enabling the company's first self-service analytics",
+          "description": "Streamlined the 2012 Election Data using SQL Server, optimizing data management and improving query performance by implementing efficient indexing and stored procedures",
           "category": "Technical",
-          "impact_metric": "0 to 1 data platform build"
+          "impact_metric": "Optimized election data processing",
+          "client": "Illinois Office of Comptroller"
         },
         {
-          "description": "Created customer 360 data model that drove a 25% increase in customer retention",
-          "category": "Business",
-          "impact_metric": "25% improvement in retention"
+          "description": "Enhanced front-end systems using ColdFusion by refactoring legacy code, improving maintainability, and integrating new features that addressed user needs",
+          "category": "Technical",
+          "impact_metric": "Legacy code modernization",
+          "client": "Illinois Office of Comptroller"
+        },
+        {
+          "description": "Designed and developed interactive dashboards with SQL queries and ColdFusion to provide real-time insights, significantly improving decision-making efficiency",
+          "category": "Technical",
+          "impact_metric": "Real-time decision-making dashboards",
+          "client": "Illinois Office of Comptroller"
+        },
+        {
+          "description": "Collaborated with cross-functional teams to ensure data integrity and security, facilitating integration of SQL Server backend with various reporting tools",
+          "category": "Technical",
+          "impact_metric": "Data integrity and reporting integration",
+          "client": "Illinois Office of Comptroller"
+        },
+        {
+          "description": "Led migration of critical databases from SQL Server 2008 R2 to SQL Server 2012 at CareFusion, ensuring data integrity and minimal downtime",
+          "category": "Technical",
+          "impact_metric": "Zero-downtime database migration",
+          "client": "CareFusion"
+        },
+        {
+          "description": "Modified and optimized SSIS packages for the new SQL Server 2012 environment, enhancing data integration workflows and improving performance",
+          "category": "Technical",
+          "impact_metric": "Optimized SSIS data integration",
+          "client": "CareFusion"
+        },
+        {
+          "description": "Performed comprehensive testing and validation of stored procedures, functions, and triggers to ensure compatibility with the upgraded SQL Server",
+          "category": "Technical",
+          "impact_metric": "Full compatibility validation",
+          "client": "CareFusion"
+        },
+        {
+          "description": "Implemented advanced indexing strategies and query optimizations to boost database performance post-migration",
+          "category": "Technical",
+          "impact_metric": "Post-migration performance boost",
+          "client": "CareFusion"
+        }
+      ]
+    },
+    {
+      "company": "Multiple Companies (Offshore)",
+      "title_at_employer": "Senior Software Engineer / Associate Consultant",
+      "role_at_customer": "Data Engineer / BI Developer",
+      "location": "Hyderabad, Telangana, India",
+      "employment_type": "Full-time",
+      "start_date": "2007-06-01",
+      "end_date": "2011-07-31",
+      "is_current": false,
+      "industry": "IT Consulting / Manufacturing / Retail",
+      "team_size_managed": 0,
+      "description": "Offshore experience across Wipro, Avanade (Accenture), and Keane, delivering data engineering and BI solutions for global enterprise clients including Microsoft, Henkel, Caterpillar, and SuperValu.",
+      "highlights": [
+        {
+          "description": "Enhanced Microsoft's internal Engagement Management Tool by upgrading data pipelines to SQL Server 2008 R2, ensuring improved performance and scalability (Wipro Consultant)",
+          "category": "Technical",
+          "impact_metric": "Upgraded data pipelines for scalability",
+          "client": "Microsoft"
+        },
+        {
+          "description": "Developed and deployed SSRS reports on the new SQL Server environment for Microsoft, enabling more efficient data analysis and reporting for stakeholders",
+          "category": "Technical",
+          "impact_metric": "Enterprise SSRS reporting",
+          "client": "Microsoft"
+        },
+        {
+          "description": "Led migration of critical Oracle workloads to SQL Server 2008 R2 for Henkel, conducting detailed assessments and developing tailored migration strategies to minimize downtime (Avanade / Accenture)",
+          "category": "Technical",
+          "impact_metric": "Oracle to SQL Server migration",
+          "client": "Henkel"
+        },
+        {
+          "description": "Optimized SQL Server configurations post-migration for Henkel, enhancing system reliability and efficiency",
+          "category": "Technical",
+          "impact_metric": "Post-migration optimization",
+          "client": "Henkel"
+        },
+        {
+          "description": "Developed comprehensive reports on Caterpillar's CRM system using SSRS, providing actionable insights with real-time data feeds and automated report generation (Avanade / Accenture)",
+          "category": "Technical",
+          "impact_metric": "Real-time CRM reporting",
+          "client": "Caterpillar"
+        },
+        {
+          "description": "Selected through campus interview at Keane, trained in data warehousing, ETL processes, and data modeling. Contributed to SuperValu project designing and implementing DW solutions for BI and analytics",
+          "category": "Technical",
+          "impact_metric": "Data warehouse design for retail analytics",
+          "client": "SuperValu"
         }
       ]
     }
@@ -112,24 +276,24 @@
 
   "education": [
     {
-      "institution": "University of California, Berkeley",
+      "institution": "University of Illinois Springfield",
       "degree": "Master of Science",
-      "field_of_study": "Computer Science - Data Systems",
-      "start_date": "2014-08-01",
-      "end_date": "2016-05-31",
-      "gpa": 3.85,
-      "honors": "Magna Cum Laude",
-      "relevant_coursework": "Distributed Systems, Machine Learning, Database Systems, Statistical Methods"
+      "field_of_study": "Management Information Systems, General",
+      "start_date": "2011-07-01",
+      "end_date": "2013-04-30",
+      "gpa": 4.0,
+      "honors": "Perfect GPA",
+      "relevant_coursework": "Management Information Systems, Database Management, Systems Analysis & Design"
     },
     {
-      "institution": "University of Texas at Austin",
-      "degree": "Bachelor of Science",
-      "field_of_study": "Computer Science",
-      "start_date": "2010-08-01",
-      "end_date": "2014-05-31",
-      "gpa": 3.7,
-      "honors": "Dean's List",
-      "relevant_coursework": "Data Structures, Algorithms, Linear Algebra, Probability & Statistics"
+      "institution": "KL University",
+      "degree": "Bachelor of Technology",
+      "field_of_study": "Industrial Engineering",
+      "start_date": "2003-06-01",
+      "end_date": "2007-05-31",
+      "gpa": 8.2,
+      "honors": "8.2/10 GPA",
+      "relevant_coursework": "Industrial Engineering, Data Structures, Programming, Mathematics"
     }
   ],
 
@@ -164,26 +328,72 @@
     {
       "name": "Databricks Certified Data Engineer Professional",
       "issuing_organization": "Databricks",
-      "issue_date": "2023-06-15",
-      "expiry_date": "2025-06-15",
-      "credential_id": "DBCE-PRO-12345",
-      "credential_url": "https://credentials.databricks.com/12345"
+      "issue_date": "2026-03-01",
+      "expiry_date": "2028-03-01",
+      "credential_id": "176412625"
     },
     {
-      "name": "AWS Solutions Architect - Professional",
-      "issuing_organization": "Amazon Web Services",
-      "issue_date": "2022-03-10",
-      "expiry_date": "2025-03-10",
-      "credential_id": "AWS-SAP-67890",
-      "credential_url": "https://aws.amazon.com/verification/67890"
+      "name": "Databricks Certified Generative AI Engineer Associate",
+      "issuing_organization": "Databricks",
+      "issue_date": "2026-03-01",
+      "expiry_date": "2028-03-01",
+      "credential_id": "176749975"
     },
     {
-      "name": "Google Cloud Professional Data Engineer",
-      "issuing_organization": "Google Cloud",
-      "issue_date": "2021-11-20",
-      "expiry_date": "2023-11-20",
-      "credential_id": "GCP-DE-11111",
-      "credential_url": "https://google.accredible.com/11111"
+      "name": "Databricks Certified Machine Learning Associate",
+      "issuing_organization": "Databricks",
+      "issue_date": "2026-02-01",
+      "expiry_date": "2028-02-01",
+      "credential_id": "175261769"
+    },
+    {
+      "name": "Databricks Certified Data Engineer Associate",
+      "issuing_organization": "Databricks",
+      "issue_date": "2023-09-01",
+      "expiry_date": "2025-09-01",
+      "credential_id": "82433633"
+    },
+    {
+      "name": "Partner Training - Solutions Architect Essentials",
+      "issuing_organization": "Databricks",
+      "issue_date": "2026-03-01",
+      "expiry_date": "2028-03-01",
+      "credential_id": "176982222"
+    },
+    {
+      "name": "Partner Training - Lakebridge for SQL Source Migration (Verified)",
+      "issuing_organization": "Databricks",
+      "issue_date": "2025-08-01",
+      "expiry_date": "2026-08-01",
+      "credential_id": "158611041"
+    },
+    {
+      "name": "Academy Accreditation - Generative AI Fundamentals",
+      "issuing_organization": "Databricks",
+      "issue_date": "2025-06-01",
+      "expiry_date": null,
+      "credential_id": "148592408"
+    },
+    {
+      "name": "Academy Accreditation - Databricks Fundamentals",
+      "issuing_organization": "Databricks",
+      "issue_date": "2025-08-01",
+      "expiry_date": null,
+      "credential_id": "159086228"
+    },
+    {
+      "name": "Knowledge Badge - Get Started with AI Agents on Databricks",
+      "issuing_organization": "Databricks",
+      "issue_date": "2025-11-01",
+      "expiry_date": "2026-11-01",
+      "credential_id": "167491484"
+    },
+    {
+      "name": "Snowflake SnowPro Core Certified",
+      "issuing_organization": "Snowflake",
+      "issue_date": "2024-09-01",
+      "expiry_date": "2026-09-01",
+      "credential_id": "0x0d7e1c7bf29200e93c4b852fb2d5be6d138c1bfa0a03f249db67cbb15bcd2b23"
     }
   ],
 
@@ -225,18 +435,46 @@
 
   "publications": [
     {
-      "title": "Building Scalable Data Lakehouses: Lessons from the Trenches",
-      "publisher": "Databricks Blog",
-      "date": "2023-09-15",
-      "type": "Blog Post",
-      "url": "https://example.com/blog/lakehouse-lessons"
+      "title": "The CTO's Guide to Scalable, AI-Driven Data Transformation with Databricks",
+      "publisher": "Lumenalta Labs",
+      "date": "2025-03-11",
+      "type": "Whitepaper / Research Guide",
+      "url": "https://lumenalta.com/labs/databricks-guide"
     },
     {
-      "title": "Real-time Feature Engineering at Scale",
-      "publisher": "Data Engineering Conference 2022",
-      "date": "2022-10-20",
-      "type": "Conference Talk",
-      "url": "https://example.com/talks/feature-engineering"
+      "title": "Databricks Backfill Jobs",
+      "publisher": "LinkedIn Pulse",
+      "date": "2025-01-01",
+      "type": "Article",
+      "url": "https://www.linkedin.com/pulse/databricks-backfill-jobs-krish-kilaru-yg7kc"
+    },
+    {
+      "title": "Building Retrieval Augmented Generation (RAG) for Financial Services",
+      "publisher": "LinkedIn Pulse",
+      "date": "2025-01-01",
+      "type": "Article",
+      "url": "https://www.linkedin.com/pulse/building-retrieval-augmented-generation-rag-financial-krish-kilaru-qihwc"
+    },
+    {
+      "title": "Part 1: Comprehensive Guide to AI/BI Genie in Databricks — In-Depth Basics, Advanced Features, Security, Privacy, and LLMs",
+      "publisher": "LinkedIn Pulse",
+      "date": "2025-01-01",
+      "type": "Article",
+      "url": "https://www.linkedin.com/pulse/comprehensive-guide-aibi-genie-databricks-in-depth-basics-kilaru-uqrsc"
+    },
+    {
+      "title": "Part 2 : AI/BI Genie in Databricks: Architecture Internals and Detailed Workflow",
+      "publisher": "LinkedIn Pulse",
+      "date": "2025-01-01",
+      "type": "Article",
+      "url": "https://www.linkedin.com/pulse/part-2-aibi-genie-databricks-architecture-internals-detailed-kilaru-uw0ec"
+    },
+    {
+      "title": "Part 1: dbt vs Databricks — Clash or Collaboration? The Ultimate Showdown",
+      "publisher": "LinkedIn Pulse",
+      "date": "2025-01-01",
+      "type": "Article",
+      "url": "https://www.linkedin.com/pulse/part-1-dbt-vs-databricks-clash-collaboration-ultimate-krish-kilaru-7zowc"
     }
   ]
 }
