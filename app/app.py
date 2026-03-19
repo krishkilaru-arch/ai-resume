@@ -508,6 +508,9 @@ def _genie_ask_api(question, conversation_id=None):
     if not w or not GENIE_SPACE_ID:
         return None
 
+    if conversation_id == "local":
+        conversation_id = None
+
     try:
         if conversation_id:
             resp = w.genie.create_message(
