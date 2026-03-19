@@ -603,7 +603,15 @@ def _is_greeting(question):
 
 def _is_smalltalk(question):
     q = question.strip().lower().rstrip("!.,? ")
-    return q in _SMALLTALK_PATTERNS or any(q.startswith(p) for p in _SMALLTALK_PATTERNS)
+    if q in _SMALLTALK_PATTERNS:
+        return True
+    if any(q.startswith(p) for p in _SMALLTALK_PATTERNS):
+        return True
+    if any(p in q for p in ["how are", "how r u", "how do you", "who are you",
+                             "what are you", "what can you", "nice to meet",
+                             "thank", "bye", "goodbye", "see you", "take care"]):
+        return True
+    return False
 
 def _smalltalk_response(question):
     q = question.strip().lower()
@@ -649,11 +657,13 @@ def _smalltalk_response(question):
         )
     else:
         text = (
-            "Great question — but that's a bit outside my area! I'm best at answering questions about "
-            "Krish's career, skills, and experience. Try something like:\n\n"
+            "Hey! I'm **Abu** 🐒 — Krish Kilaru's AI Career Assistant, powered by **Databricks AI/BI Genie** 🧞.\n\n"
+            "You can ask me anything about Krish's career! For example:\n\n"
             "- \"What are his top technical skills?\"\n"
-            "- \"Which clients has he worked with?\"\n\n"
-            "I promise the answers are more interesting than small talk! 🐒"
+            "- \"Which clients has he worked with?\"\n"
+            "- \"Tell me about his Databricks experience\"\n"
+            "- \"What certifications does he hold?\"\n\n"
+            "Go ahead, your wish is my command! 🪄"
         )
     return {
         "text": text, "sql": None, "df": None,
@@ -691,7 +701,11 @@ def genie_ask(question, conversation_id=None):
     api_result = _genie_ask_api(question, conversation_id)
     if api_result and api_result.get("text"):
         genie_text = api_result["text"].lower()
-        if "unrelated to" in genie_text or "cannot answer" in genie_text or "not related" in genie_text:
+        if any(phrase in genie_text for phrase in [
+            "unrelated to", "cannot answer", "not related",
+            "i'm here to help you analyze", "please let me know what",
+            "please ask a question about", "available tables",
+        ]):
             return _smalltalk_response(question)
         api_result["source"] = "genie"
         return api_result
