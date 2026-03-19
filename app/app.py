@@ -1221,27 +1221,129 @@ def render_career_timeline(timeline_df):
     _html('<div class="section-header">Career Timeline</div>')
 
     df = timeline_df.copy()
-    today_str = datetime.now().strftime("%Y-%m-%d")
+    today = datetime.now()
+    today_str = today.strftime("%Y-%m-%d")
     df["end_plot"] = df["end_date"].apply(lambda x: today_str if x in ("Present", None, "") else x)
     df["start_plot"] = pd.to_datetime(df["start_date"])
     df["end_plot"] = pd.to_datetime(df["end_plot"])
-    df["label"] = df["title"] + " @ " + df["organization"]
 
-    color_map = {"Work": "#065A82", "Education": "#1C7C54", "Certification": "#F4A261"}
-
-    fig = px.timeline(
-        df, x_start="start_plot", x_end="end_plot", y="label",
-        color="event_type", color_discrete_map=color_map,
+    df["months"] = ((df["end_plot"] - df["start_plot"]).dt.days / 30.44).round().astype(int)
+    df["duration_label"] = df["months"].apply(
+        lambda m: f"{m // 12}y {m % 12}m" if m >= 12 else f"{m}m"
     )
-    fig.update_yaxes(autorange="reversed", title="")
-    fig.update_xaxes(title="")
+    df["is_current"] = df["is_current"].astype(str).str.lower().isin(["true", "1"])
+
+    color_map = {"Work": "#065A82", "Education": "#1C7C54"}
+    df["color"] = df["event_type"].map(color_map).fillna("#F4A261")
+    df = df.sort_values("start_plot")
+
+    fig = go.Figure()
+
+    for i, (_, row) in enumerate(df.iterrows()):
+        is_current = row["is_current"]
+        etype = row["event_type"]
+        bar_color = row["color"]
+        opacity = 1.0 if is_current else 0.85
+
+        icon = "💼" if etype == "Work" else "🎓"
+        current_tag = " ⬅ CURRENT" if is_current else ""
+        hover = (
+            f"<b>{row['title']}</b><br>"
+            f"{icon} {row['organization']}<br>"
+            f"📅 {row['start_plot'].strftime('%b %Y')} — "
+            f"{'Present' if is_current else row['end_plot'].strftime('%b %Y')}<br>"
+            f"⏱ {row['duration_label']}<br>"
+            f"{'📍 ' + row['location'] + '<br>' if row.get('location') else ''}"
+            f"<b>{current_tag}</b>"
+        )
+
+        fig.add_trace(go.Bar(
+            x=[(row["end_plot"] - row["start_plot"]).days],
+            y=[i],
+            base=[row["start_plot"]],
+            orientation="h",
+            marker=dict(
+                color=bar_color,
+                opacity=opacity,
+                line=dict(width=1, color="white"),
+            ),
+            hovertemplate=hover + "<extra></extra>",
+            showlegend=False,
+            text=row["duration_label"],
+            textposition="inside",
+            textfont=dict(color="white", size=11, family="Arial Black"),
+        ))
+
+    labels_left = []
+    labels_right = []
+    for i, (_, row) in enumerate(df.iterrows()):
+        is_current = row["is_current"]
+        etype = row["event_type"]
+        icon = "💼" if etype == "Work" else "🎓"
+        current_marker = " 🟢" if is_current else ""
+
+        labels_left.append(
+            f"<b>{row['title']}</b>{current_marker}"
+        )
+        labels_right.append(
+            f"{icon} {row['organization']}"
+        )
+
+    fig.update_yaxes(
+        tickvals=list(range(len(df))),
+        ticktext=labels_left,
+        autorange="reversed",
+        title="",
+        tickfont=dict(size=12),
+    )
+
+    fig.add_vline(
+        x=today, line_width=2, line_dash="dot",
+        line_color="#E74C3C", opacity=0.7,
+        annotation_text="Today",
+        annotation_position="top",
+        annotation_font=dict(size=10, color="#E74C3C"),
+    )
+
+    for i, (_, row) in enumerate(df.iterrows()):
+        etype = row["event_type"]
+        icon = "💼" if etype == "Work" else "🎓"
+        mid_x = row["start_plot"] + (row["end_plot"] - row["start_plot"]) / 2
+        fig.add_annotation(
+            x=row["end_plot"] + timedelta(days=30),
+            y=i,
+            text=f"<b>{icon} {row['organization']}</b>",
+            showarrow=False,
+            font=dict(size=10, color="#555"),
+            xanchor="left",
+        )
+
+    fig.update_xaxes(
+        title="",
+        tickformat="%Y",
+        gridcolor="rgba(0,0,0,0.06)",
+        dtick="M24",
+    )
+
     fig.update_layout(
-        height=max(200, len(df) * 55 + 80),
-        margin=dict(l=0, r=20, t=10, b=30),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, title=""),
-        font=dict(size=12),
+        height=max(280, len(df) * 65 + 100),
+        margin=dict(l=10, r=150, t=40, b=40),
         plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        font=dict(size=12, family="Inter, sans-serif"),
+        bargap=0.35,
+        xaxis=dict(side="top"),
     )
+
+    legend_html = (
+        '<div style="display:flex; gap:20px; margin-bottom:8px; font-size:0.85rem;">'
+        '<span><span style="display:inline-block;width:14px;height:14px;background:#065A82;border-radius:3px;vertical-align:middle;margin-right:4px;"></span> Work Experience</span>'
+        '<span><span style="display:inline-block;width:14px;height:14px;background:#1C7C54;border-radius:3px;vertical-align:middle;margin-right:4px;"></span> Education</span>'
+        '<span>🟢 Current Role</span>'
+        '<span style="color:#E74C3C;">┆ Today</span>'
+        '</div>'
+    )
+    _html(legend_html)
     st.plotly_chart(fig, width="stretch")
 
 
