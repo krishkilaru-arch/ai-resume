@@ -1231,6 +1231,7 @@ def render_career_timeline(timeline_df):
         lambda m: f"{m // 12}y {m % 12}m" if m >= 12 and m % 12 else (f"{m // 12}y" if m >= 12 else f"{m}m")
     )
     df["is_current"] = df["is_current"].astype(str).str.lower().isin(["true", "1"])
+    df = df[~((df["event_type"] == "Education") & (df["organization"].str.contains("KL University", case=False, na=False)))]
     df = df.sort_values("start_dt", ascending=True)
 
     earliest = df["start_dt"].min()
