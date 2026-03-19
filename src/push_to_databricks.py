@@ -106,7 +106,7 @@ def main():
     )""")
     print("  1 row")
 
-    # 2. Work Experience (experience_id, company, title, location, employment_type,
+    # 2. Work Experience (experience_id, company, title, role_at_customer, location, employment_type,
     #    start_date, end_date, is_current_role, industry, team_size_managed, description, duration_months)
     print(">>> work_experience")
     run_sql(f"DELETE FROM {FQ}.work_experience")
@@ -114,8 +114,9 @@ def main():
         end_dt = w.get("end_date")
         dur = calc_months(w["start_date"], end_dt)
         title = w.get("title_at_employer", w.get("title", ""))
+        role = w.get("role_at_customer", "")
         run_sql(f"""INSERT INTO {FQ}.work_experience VALUES (
-            {i}, {esc(w['company'])}, {esc(title)},
+            {i}, {esc(w['company'])}, {esc(title)}, {esc(role)},
             {esc(w['location'])}, {esc(w['employment_type'])},
             {esc(w['start_date'])}, {esc(end_dt)}, {str(w['is_current']).lower()},
             {esc(w['industry'])}, {w['team_size_managed']}, {esc(w['description'])}, {dur}

@@ -45,7 +45,7 @@
           "impact_metric": "POC converted to full enterprise project"
         },
         {
-          "description": "Championed Databricks partnership with CEO/CTO, elevating Lumenalta from no partnership to Silver Partner status",
+          "description": "Championed Databricks partnership with Alliances and Partnerships team at Lumenalta, elevating Lumenalta from no partnership to Silver Partner status",
           "category": "Leadership",
           "impact_metric": "Achieved Databricks Silver Partner"
         },
@@ -82,7 +82,7 @@
       "is_current": false,
       "industry": "IT Consulting / Financial Services / Insurance / Healthcare",
       "team_size_managed": 5,
-      "description": "11+ year tenure delivering data engineering and Databricks solutions across major enterprise clients including Guardian Life, Johnson & Johnson, FIS Global, TD Bank, Moody's, Rocket Mortgage, Essent Mortgage, Nissan, BCBS, Wells Fargo, and more.",
+      "description": "11+ year tenure delivering data engineering including Hortonworks, AWS,  Databricks solutions across major enterprise clients including Guardian Life, Johnson & Johnson, FIS Global, TD Bank, Moody's, Rocket Mortgage, Essent Mortgage, Nissan, BCBS, Wells Fargo, and more.",
       "highlights": [
         {
           "description": "Built end-to-end frameworks for data Ingestion, Orchestration, and ETL in Databricks for TD Bank. Onboarded Unity Catalog for the Data Governance team, establishing centralized access controls, lineage tracking, and audit policies",
