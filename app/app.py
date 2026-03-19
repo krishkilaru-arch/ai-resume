@@ -559,7 +559,8 @@ def _genie_ask_api(question, conversation_id=None):
             "df": result_df, "conversation_id": conv_id,
             "status": message.status.value if message and message.status else "COMPLETED",
         }
-    except Exception:
+    except Exception as e:
+        st.session_state["_genie_api_error"] = str(e)
         return None
 
 
@@ -567,9 +568,12 @@ def genie_ask(question, conversation_id=None):
     """Try real Genie API first, fall back to local Q&A engine."""
     api_result = _genie_ask_api(question, conversation_id)
     if api_result and api_result.get("text"):
+        api_result["source"] = "genie"
         return api_result
 
-    return _genie_ask_local(question)
+    local_result = _genie_ask_local(question)
+    local_result["source"] = "local"
+    return local_result
 
 
 def _genie_ask_local(question):
@@ -1360,6 +1364,24 @@ def render_genie_chat():
         with st.chat_message("assistant", avatar="🧞"):
             with st.spinner("Querying resume data..."):
                 result = genie_ask(question, st.session_state.conversation_id)
+
+            source = result.get("source", "local")
+            if source == "genie":
+                st.caption("Powered by Databricks AI/BI Genie")
+            else:
+                api_err = st.session_state.pop("_genie_api_error", None)
+                debug_parts = []
+                if not GENIE_SPACE_ID:
+                    debug_parts.append("GENIE_SPACE_ID not set")
+                if not WAREHOUSE_ID:
+                    debug_parts.append("WAREHOUSE_ID not set")
+                w = get_workspace_client()
+                if not w:
+                    debug_parts.append("WorkspaceClient unavailable")
+                if api_err:
+                    debug_parts.append(f"API error: {api_err[:150]}")
+                if debug_parts:
+                    st.caption(f"Local Q&A fallback ({'; '.join(debug_parts)})")
 
             st.markdown(result["text"])
             if result.get("df") is not None and not result["df"].empty:
