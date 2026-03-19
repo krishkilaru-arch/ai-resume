@@ -1223,131 +1223,82 @@ def render_career_timeline(timeline_df):
     df = timeline_df.copy()
     today = datetime.now()
     today_str = today.strftime("%Y-%m-%d")
-    df["end_plot"] = df["end_date"].apply(lambda x: today_str if x in ("Present", None, "") else x)
-    df["start_plot"] = pd.to_datetime(df["start_date"])
-    df["end_plot"] = pd.to_datetime(df["end_plot"])
-
-    df["months"] = ((df["end_plot"] - df["start_plot"]).dt.days / 30.44).round().astype(int)
+    df["end_calc"] = df["end_date"].apply(lambda x: today_str if x in ("Present", None, "") else x)
+    df["start_dt"] = pd.to_datetime(df["start_date"])
+    df["end_dt"] = pd.to_datetime(df["end_calc"])
+    df["months"] = ((df["end_dt"] - df["start_dt"]).dt.days / 30.44).round().astype(int)
     df["duration_label"] = df["months"].apply(
-        lambda m: f"{m // 12}y {m % 12}m" if m >= 12 else f"{m}m"
+        lambda m: f"{m // 12} yr {'%d mo' % (m % 12) if m % 12 else ''}".strip() if m >= 12 else f"{m} mo"
     )
     df["is_current"] = df["is_current"].astype(str).str.lower().isin(["true", "1"])
+    df = df.sort_values("start_dt", ascending=False)
 
-    color_map = {"Work": "#065A82", "Education": "#1C7C54"}
-    df["color"] = df["event_type"].map(color_map).fillna("#F4A261")
-    df = df.sort_values("start_plot")
-
-    fig = go.Figure()
-
-    for i, (_, row) in enumerate(df.iterrows()):
+    items_html = ""
+    for _, row in df.iterrows():
+        is_work = row["event_type"] == "Work"
         is_current = row["is_current"]
-        etype = row["event_type"]
-        bar_color = row["color"]
-        opacity = 1.0 if is_current else 0.85
+        icon = "💼" if is_work else "🎓"
+        color = "#065A82" if is_work else "#1C7C54"
+        start_fmt = row["start_dt"].strftime("%b %Y")
+        end_fmt = "Present" if is_current else row["end_dt"].strftime("%b %Y")
+        loc = row.get("location") or ""
+        loc_html = f'<span style="color:#888;font-size:0.8rem;">📍 {loc}</span>' if loc else ""
 
-        icon = "💼" if etype == "Work" else "🎓"
-        current_tag = " ⬅ CURRENT" if is_current else ""
-        hover = (
-            f"<b>{row['title']}</b><br>"
-            f"{icon} {row['organization']}<br>"
-            f"📅 {row['start_plot'].strftime('%b %Y')} — "
-            f"{'Present' if is_current else row['end_plot'].strftime('%b %Y')}<br>"
-            f"⏱ {row['duration_label']}<br>"
-            f"{'📍 ' + row['location'] + '<br>' if row.get('location') else ''}"
-            f"<b>{current_tag}</b>"
+        dot_style = (
+            f"background:{color}; box-shadow: 0 0 0 4px {'rgba(6,90,130,0.2)' if is_work else 'rgba(28,124,84,0.2)'};"
+            + (" animation: pulse-dot 2s infinite;" if is_current else "")
         )
+        current_badge = '<span style="background:#E8F5E9;color:#2E7D32;font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:8px;">CURRENT</span>' if is_current else ""
+        border_color = color if is_current else "#E9ECEF"
 
-        fig.add_trace(go.Bar(
-            x=[(row["end_plot"] - row["start_plot"]).days],
-            y=[i],
-            base=[row["start_plot"]],
-            orientation="h",
-            marker=dict(
-                color=bar_color,
-                opacity=opacity,
-                line=dict(width=1, color="white"),
-            ),
-            hovertemplate=hover + "<extra></extra>",
-            showlegend=False,
-            text=row["duration_label"],
-            textposition="inside",
-            textfont=dict(color="white", size=11, family="Arial Black"),
-        ))
+        items_html += f'''
+        <div style="display:flex; gap:20px; margin-bottom:0; position:relative;">
+            <div style="display:flex;flex-direction:column;align-items:center;min-width:60px;">
+                <div style="width:14px;height:14px;border-radius:50%;{dot_style};flex-shrink:0;margin-top:18px;z-index:2;"></div>
+                <div style="width:2px;flex:1;background:linear-gradient(180deg,{color}22,{color}08);"></div>
+            </div>
+            <div style="flex:1;background:#fff;border:1px solid {border_color};border-left:3px solid {color};border-radius:10px;padding:16px 20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.04);transition:box-shadow 0.2s;">
+                <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">
+                    <span style="font-size:1.15rem;">{icon}</span>
+                    <span style="font-weight:700;color:#1B3A4B;font-size:1rem;">{row["title"]}</span>
+                    {current_badge}
+                </div>
+                <div style="color:{color};font-weight:600;font-size:0.9rem;margin-top:2px;">{row["organization"]}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;align-items:center;">
+                    <span style="color:#555;font-size:0.82rem;">📅 {start_fmt} — {end_fmt}</span>
+                    <span style="background:{color}15;color:{color};font-size:0.78rem;font-weight:700;padding:2px 10px;border-radius:12px;border:1px solid {color}30;">⏱ {row["duration_label"]}</span>
+                    {loc_html}
+                </div>
+            </div>
+        </div>'''
 
-    labels_left = []
-    labels_right = []
-    for i, (_, row) in enumerate(df.iterrows()):
-        is_current = row["is_current"]
-        etype = row["event_type"]
-        icon = "💼" if etype == "Work" else "🎓"
-        current_marker = " 🟢" if is_current else ""
+    total_yrs = df["months"].sum() // 12
+    work_yrs = df[df["event_type"] == "Work"]["months"].sum() // 12
 
-        labels_left.append(
-            f"<b>{row['title']}</b>{current_marker}"
-        )
-        labels_right.append(
-            f"{icon} {row['organization']}"
-        )
-
-    fig.update_yaxes(
-        tickvals=list(range(len(df))),
-        ticktext=labels_left,
-        autorange="reversed",
-        title="",
-        tickfont=dict(size=12),
-    )
-
-    today_ts = today.timestamp() * 1000
-    fig.add_shape(
-        type="line", x0=today_ts, x1=today_ts, y0=-0.5, y1=len(df) - 0.5,
-        line=dict(color="#E74C3C", width=2, dash="dot"),
-        opacity=0.7, yref="y",
-    )
-    fig.add_annotation(
-        x=today_ts, y=-0.5, text="Today", showarrow=False,
-        font=dict(size=10, color="#E74C3C"), yanchor="bottom", yshift=-18,
-    )
-
-    for i, (_, row) in enumerate(df.iterrows()):
-        etype = row["event_type"]
-        icon = "💼" if etype == "Work" else "🎓"
-        mid_x = row["start_plot"] + (row["end_plot"] - row["start_plot"]) / 2
-        fig.add_annotation(
-            x=row["end_plot"] + timedelta(days=30),
-            y=i,
-            text=f"<b>{icon} {row['organization']}</b>",
-            showarrow=False,
-            font=dict(size=10, color="#555"),
-            xanchor="left",
-        )
-
-    fig.update_xaxes(
-        title="",
-        tickformat="%Y",
-        gridcolor="rgba(0,0,0,0.06)",
-        dtick="M24",
-    )
-
-    fig.update_layout(
-        height=max(280, len(df) * 65 + 100),
-        margin=dict(l=10, r=150, t=40, b=40),
-        plot_bgcolor="rgba(0,0,0,0)",
-        paper_bgcolor="rgba(0,0,0,0)",
-        font=dict(size=12, family="Inter, sans-serif"),
-        bargap=0.35,
-        xaxis=dict(side="top"),
-    )
-
-    legend_html = (
-        '<div style="display:flex; gap:20px; margin-bottom:8px; font-size:0.85rem;">'
-        '<span><span style="display:inline-block;width:14px;height:14px;background:#065A82;border-radius:3px;vertical-align:middle;margin-right:4px;"></span> Work Experience</span>'
-        '<span><span style="display:inline-block;width:14px;height:14px;background:#1C7C54;border-radius:3px;vertical-align:middle;margin-right:4px;"></span> Education</span>'
-        '<span>🟢 Current Role</span>'
-        '<span style="color:#E74C3C;">┆ Today</span>'
-        '</div>'
-    )
-    _html(legend_html)
-    st.plotly_chart(fig, width="stretch")
+    _html(f'''
+    <style>
+        @keyframes pulse-dot {{
+            0%, 100% {{ box-shadow: 0 0 0 4px rgba(6,90,130,0.2); }}
+            50% {{ box-shadow: 0 0 0 8px rgba(6,90,130,0.1); }}
+        }}
+    </style>
+    <div style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:6px;font-size:0.85rem;">
+            <span style="display:inline-block;width:12px;height:12px;background:#065A82;border-radius:50%;"></span>
+            <span style="color:#555;">Work Experience</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:0.85rem;">
+            <span style="display:inline-block;width:12px;height:12px;background:#1C7C54;border-radius:50%;"></span>
+            <span style="color:#555;">Education</span>
+        </div>
+        <div style="margin-left:auto;font-size:0.85rem;color:#888;">
+            {work_yrs}+ years professional experience across {len(df[df["event_type"]=="Work"])} roles
+        </div>
+    </div>
+    <div style="padding-left:4px;">
+        {items_html}
+    </div>
+    ''')
 
 
 def render_skills_charts(skills_df):
