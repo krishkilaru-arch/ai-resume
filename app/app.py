@@ -598,18 +598,19 @@ def _is_greeting(question):
 def _greeting_response():
     return {
         "text": (
-            "Hey there! I'm **Krish's AI Career Assistant** — think of me as his resume, "
-            "but one that actually talks back (and never exaggerates... well, mostly).\n\n"
-            "I'm powered by **Databricks AI/BI Genie** and I have access to Krish's entire "
+            "Hey there! I'm **Abu** 🐒 — Krish's trusty sidekick, here to guide you through "
+            "the cave of wonders that is his career!\n\n"
+            "I'm powered by the **Databricks AI/BI Genie** 🧞 (yes, *that* Genie — phenomenal "
+            "cosmic powers, itty-bitty SQL warehouse), and I have access to Krish's entire "
             "career profile — 19+ years of data engineering, Databricks wizardry, and enough "
-            "certifications to wallpaper a small office.\n\n"
-            "**Try asking me things like:**\n"
+            "certifications to fill Aladdin's treasure room.\n\n"
+            "**Rub the lamp and ask me things like:**\n"
             "- \"What are Krish's top skills?\"\n"
             "- \"Tell me about his Databricks experience\"\n"
             "- \"Which companies has he worked with?\"\n"
             "- \"What certifications does he hold?\"\n"
             "- \"What did he do at Capital Group?\"\n\n"
-            "Go ahead — I don't bite, and I bill way less than a recruiter. 😄"
+            "Go ahead — your wish is my command! (Well, up to three... just kidding, ask as many as you want.) 🪄"
         ),
         "sql": None, "df": None, "conversation_id": None,
         "status": "COMPLETED", "source": "greeting",
