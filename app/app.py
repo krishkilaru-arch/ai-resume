@@ -428,77 +428,491 @@ def load_table(table_name):
 
 
 # ────────────────────────────────────────────────────────────────
-# Genie Q&A
+# Genie Q&A Engine
 # ────────────────────────────────────────────────────────────────
 
+# Intent patterns: (keywords, intent_key)
+_INTENT_PATTERNS = [
+    (["tell me about", "who is", "summary", "overview", "introduce", "about this candidate", "about yourself"], "profile"),
+    (["current role", "current job", "currently", "right now", "present role", "working now", "current position"], "current_role"),
+    (["top skill", "best skill", "strongest", "expert skill", "main skill", "key skill"], "top_skills"),
+    (["technical skill", "tech skill", "programming", "technology", "technologies", "tech stack", "tools"], "technical_skills"),
+    (["all skill", "skill", "what skills", "list skill", "proficien"], "all_skills"),
+    (["experience with", "how many years", "years of experience with", "how long", "worked with"], "skill_lookup"),
+    (["career progression", "career journey", "career timeline", "career path", "career history", "progression", "timeline"], "timeline"),
+    (["work experience", "job history", "employment", "work history", "where have they worked", "previous job", "past role"], "work_history"),
+    (["achievement", "accomplish", "impact", "highlight", "result", "deliver"], "achievements"),
+    (["leadership", "manage", "team", "led", "lead", "mentor", "direct report"], "leadership"),
+    (["education", "degree", "university", "school", "college", "academic", "studied", "gpa", "major"], "education"),
+    (["certification", "certified", "credential", "certificate"], "certifications"),
+    (["project", "built", "designed", "architected", "implemented"], "projects"),
+    (["publication", "talk", "blog", "article", "publish", "conference", "wrote", "written", "speak"], "publications"),
+    (["industry", "industries", "sector", "domain", "worked in"], "industries"),
+    (["databricks", "spark", "delta", "unity catalog", "delta live", "lakehouse"], "databricks_skills"),
+    (["cloud", "aws", "azure", "gcp", "google cloud"], "cloud_skills"),
+    (["python", "sql", "scala", "java", "programming language", "language", "code"], "programming"),
+    (["salary", "compensation", "pay", "money"], "not_available"),
+    (["contact", "email", "phone", "linkedin", "github", "reach", "hire"], "contact"),
+    (["relocate", "remote", "hybrid", "on-site", "work model", "location", "where"], "work_preferences"),
+    (["cost saving", "saved", "revenue", "business impact", "roi", "dollar", "\\$"], "business_impact"),
+    (["real-time", "streaming", "kafka", "real time", "event"], "streaming"),
+    (["ml", "machine learning", "mlflow", "model", "ai ", "artificial intelligence", "feature store"], "ml_skills"),
+]
+
+
+def _detect_intent(question):
+    q = question.lower().strip()
+    for keywords, intent in _INTENT_PATTERNS:
+        for kw in keywords:
+            if kw in q:
+                return intent, kw
+    return "general", None
+
+
+def _extract_skill_name(question):
+    """Try to extract a specific technology/skill name from the question."""
+    data = load_resume_json()
+    if not data:
+        return None
+    q = question.lower()
+    for s in data.get("skills", []):
+        if s["skill_name"].lower() in q:
+            return s["skill_name"]
+    tech_aliases = {
+        "spark": "Apache Spark", "k8s": "Kubernetes", "dbt": "dbt",
+        "dlt": "Delta Live Tables", "uc": "Unity Catalog",
+    }
+    for alias, name in tech_aliases.items():
+        if alias in q:
+            return name
+    return None
+
+
 def genie_ask(question, conversation_id=None):
-    """Send a question to Genie and return the response."""
-    w = get_workspace_client()
-    if not w or not GENIE_SPACE_ID:
-        return {
-            "text": "Genie is not configured. Set `GENIE_SPACE_ID` and `SQL_WAREHOUSE_ID` to enable Q&A.",
-            "sql": None, "df": None, "conversation_id": None, "status": "NOT_CONFIGURED",
-        }
+    """Local Genie-style Q&A: detect intent, generate SQL, query DataFrames."""
+    data = load_resume_json()
+    if not data:
+        return {"text": "No resume data found.", "sql": None, "df": None,
+                "conversation_id": "local", "status": "ERROR"}
 
-    try:
-        if conversation_id:
-            resp = w.genie.create_message(
-                space_id=GENIE_SPACE_ID,
-                conversation_id=conversation_id,
-                content=question,
-            )
-            conv_id = conversation_id
-            msg_id = resp.id
+    intent, matched_kw = _detect_intent(question)
+    profile = data.get("profile", {})
+    name = profile.get("full_name", "this candidate")
+
+    # Load DataFrames
+    skills_df = load_table("skills")
+    work_df = load_table("work_experience")
+    highlights_df = load_table("work_highlights")
+    edu_df = load_table("education")
+    certs_df = load_table("certifications")
+    projects_df = load_table("projects")
+    pubs_df = load_table("publications")
+    timeline_df = load_table("career_timeline")
+
+    text = ""
+    sql = ""
+    df = None
+
+    if intent == "profile":
+        text = (f"**{name}** — {profile.get('headline', '')}\n\n"
+                f"{profile.get('summary', '')}\n\n"
+                f"📍 {profile.get('location_city', '')}, {profile.get('location_state', '')} · "
+                f"{profile.get('years_of_experience', '')} years of experience · "
+                f"Preferred: {profile.get('preferred_work_model', '')} · "
+                f"{profile.get('work_authorization', '')}")
+        sql = "SELECT full_name, headline, summary, location_city, location_state,\n       years_of_experience, preferred_work_model, work_authorization\nFROM profile;"
+
+    elif intent == "current_role":
+        if not work_df.empty:
+            current = work_df[work_df["is_current_role"].astype(str).str.lower().isin(["true", "1"])]
+            if not current.empty:
+                r = current.iloc[0]
+                text = (f"**{name}** is currently working as **{r['title']}** at **{r['company']}** "
+                        f"in {r['location']}.\n\n*{r.get('description', '')}*")
+                if not highlights_df.empty:
+                    ch = highlights_df[highlights_df["experience_id"].astype(str) == str(r["experience_id"])]
+                    if not ch.empty:
+                        text += "\n\n**Key achievements in this role:**"
+                        df = ch[["highlight", "category", "impact_metric"]].rename(
+                            columns={"highlight": "Achievement", "category": "Category", "impact_metric": "Impact"})
+                sql = ("SELECT w.company, w.title, w.location, w.start_date, w.description,\n"
+                       "       h.highlight, h.category, h.impact_metric\n"
+                       "FROM work_experience w\n"
+                       "LEFT JOIN work_highlights h ON w.experience_id = h.experience_id\n"
+                       "WHERE w.is_current_role = true;")
+            else:
+                text = "No current role found in the data."
         else:
-            resp = w.genie.start_conversation(
-                space_id=GENIE_SPACE_ID,
-                content=question,
-            )
-            conv_id = resp.conversation_id
-            msg_id = resp.message_id
+            text = "No work experience data available."
 
-        # Poll for completion
-        message = None
-        for _ in range(60):
-            message = w.genie.get_message(GENIE_SPACE_ID, conv_id, msg_id)
-            status = message.status if hasattr(message, "status") else None
-            if status and status.value in ("COMPLETED", "FAILED", "CANCELLED", "QUERY_RESULT_EXPIRED"):
-                break
-            time.sleep(1)
+    elif intent == "top_skills":
+        if not skills_df.empty:
+            s = skills_df.copy()
+            s["years_of_experience"] = pd.to_numeric(s["years_of_experience"], errors="coerce")
+            top = s[s["proficiency_level"] == "Expert"].sort_values("years_of_experience", ascending=False)
+            if top.empty:
+                top = s.sort_values("years_of_experience", ascending=False).head(10)
+            text = f"Here are **{name}**'s top skills at **Expert** proficiency level:"
+            df = top[["skill_name", "category", "proficiency_level", "years_of_experience"]].rename(
+                columns={"skill_name": "Skill", "category": "Category",
+                         "proficiency_level": "Proficiency", "years_of_experience": "Years"})
+            sql = ("SELECT skill_name, category, proficiency_level, years_of_experience\n"
+                   "FROM skills\n"
+                   "WHERE proficiency_level = 'Expert'\n"
+                   "ORDER BY years_of_experience DESC;")
 
-        answer_text = message.content or "" if message else ""
-        sql_query = None
-        result_df = None
+    elif intent == "technical_skills":
+        if not skills_df.empty:
+            s = skills_df.copy()
+            s["years_of_experience"] = pd.to_numeric(s["years_of_experience"], errors="coerce")
+            tech = s[s["category"] != "Soft Skills"].sort_values("years_of_experience", ascending=False)
+            text = f"Here are all **technical skills** for {name}:"
+            df = tech[["skill_name", "category", "proficiency_level", "years_of_experience"]].rename(
+                columns={"skill_name": "Skill", "category": "Category",
+                         "proficiency_level": "Proficiency", "years_of_experience": "Years"})
+            sql = ("SELECT skill_name, category, proficiency_level, years_of_experience\n"
+                   "FROM skills\n"
+                   "WHERE category != 'Soft Skills'\n"
+                   "ORDER BY years_of_experience DESC;")
 
-        if message and message.attachments:
-            for att in message.attachments:
-                if hasattr(att, "text") and att.text:
-                    answer_text = att.text.content
-                if hasattr(att, "query") and att.query:
-                    sql_query = att.query.query
-                    try:
-                        qr = w.genie.get_message_query_result(GENIE_SPACE_ID, conv_id, msg_id)
-                        if qr and hasattr(qr, "statement_response") and qr.statement_response:
-                            sr = qr.statement_response
-                            cols = [c.name for c in sr.manifest.schema.columns]
-                            rows = sr.result.data_array if sr.result else []
-                            result_df = pd.DataFrame(rows, columns=cols)
-                    except Exception:
-                        if sql_query:
-                            result_df = query_sql(sql_query)
+    elif intent == "all_skills":
+        if not skills_df.empty:
+            s = skills_df.copy()
+            s["years_of_experience"] = pd.to_numeric(s["years_of_experience"], errors="coerce")
+            text = f"{name} has **{len(s)} skills** across {s['category'].nunique()} categories:"
+            df = s[["skill_name", "category", "proficiency_level", "years_of_experience"]].rename(
+                columns={"skill_name": "Skill", "category": "Category",
+                         "proficiency_level": "Proficiency", "years_of_experience": "Years"})
+            sql = "SELECT skill_name, category, proficiency_level, years_of_experience\nFROM skills\nORDER BY years_of_experience DESC;"
 
-        return {
-            "text": answer_text, "sql": sql_query,
-            "df": result_df, "conversation_id": conv_id,
-            "status": message.status.value if message and message.status else "UNKNOWN",
-        }
+    elif intent == "skill_lookup":
+        skill_name = _extract_skill_name(question)
+        if skill_name and not skills_df.empty:
+            match = skills_df[skills_df["skill_name"].str.lower() == skill_name.lower()]
+            if not match.empty:
+                r = match.iloc[0]
+                text = (f"{name} has **{r['years_of_experience']} years** of experience with "
+                        f"**{r['skill_name']}** at **{r['proficiency_level']}** level.\n\n"
+                        f"Category: {r['category']}")
+                df = match[["skill_name", "category", "proficiency_level", "years_of_experience"]].rename(
+                    columns={"skill_name": "Skill", "category": "Category",
+                             "proficiency_level": "Proficiency", "years_of_experience": "Years"})
+                sql = f"SELECT skill_name, category, proficiency_level, years_of_experience\nFROM skills\nWHERE LOWER(skill_name) = LOWER('{skill_name}');"
+            else:
+                text = f"No specific data found for '{skill_name}'. Here are all skills:"
+                df = skills_df[["skill_name", "category", "proficiency_level", "years_of_experience"]].rename(
+                    columns={"skill_name": "Skill", "category": "Category",
+                             "proficiency_level": "Proficiency", "years_of_experience": "Years"})
+                sql = "SELECT * FROM skills ORDER BY years_of_experience DESC;"
+        else:
+            text = "Here are all skills with years of experience:"
+            if not skills_df.empty:
+                s = skills_df.copy()
+                s["years_of_experience"] = pd.to_numeric(s["years_of_experience"], errors="coerce")
+                df = s.sort_values("years_of_experience", ascending=False)[
+                    ["skill_name", "category", "proficiency_level", "years_of_experience"]].rename(
+                    columns={"skill_name": "Skill", "category": "Category",
+                             "proficiency_level": "Proficiency", "years_of_experience": "Years"})
+            sql = "SELECT skill_name, category, proficiency_level, years_of_experience\nFROM skills\nORDER BY years_of_experience DESC;"
 
-    except Exception as e:
-        return {
-            "text": f"Sorry, I encountered an error: {str(e)}",
-            "sql": None, "df": None, "conversation_id": conversation_id,
-            "status": "ERROR",
-        }
+    elif intent == "timeline":
+        if not timeline_df.empty:
+            text = f"Here is **{name}**'s career timeline from earliest to most recent:"
+            df = timeline_df.sort_values("start_date")[
+                ["event_type", "title", "organization", "start_date", "end_date"]].rename(
+                columns={"event_type": "Type", "title": "Title", "organization": "Organization",
+                         "start_date": "Start", "end_date": "End"})
+            sql = ("SELECT event_type, title, organization, start_date, end_date\n"
+                   "FROM career_timeline\n"
+                   "ORDER BY start_date;")
+
+    elif intent == "work_history":
+        if not work_df.empty:
+            text = f"{name} has worked at **{len(work_df)} companies**:"
+            df = work_df[["company", "title", "location", "start_date", "end_date", "industry", "duration_months"]].rename(
+                columns={"company": "Company", "title": "Title", "location": "Location",
+                         "start_date": "Start", "end_date": "End", "industry": "Industry",
+                         "duration_months": "Months"})
+            sql = ("SELECT company, title, location, start_date, end_date, industry, duration_months\n"
+                   "FROM work_experience\n"
+                   "ORDER BY start_date DESC;")
+
+    elif intent == "achievements":
+        if not highlights_df.empty:
+            text = f"Here are **{name}**'s key achievements and impact metrics:"
+            df = highlights_df[["company", "title", "highlight", "category", "impact_metric"]].rename(
+                columns={"company": "Company", "title": "Role", "highlight": "Achievement",
+                         "category": "Category", "impact_metric": "Impact"})
+            sql = ("SELECT h.company, h.title AS role, h.highlight, h.category, h.impact_metric\n"
+                   "FROM work_highlights h\n"
+                   "ORDER BY h.experience_id, h.highlight_id;")
+
+    elif intent == "leadership":
+        text_parts = []
+        if not work_df.empty:
+            mgr = work_df[work_df["team_size_managed"].astype(int) > 0]
+            if not mgr.empty:
+                for _, r in mgr.iterrows():
+                    text_parts.append(f"- **{r['title']}** at {r['company']}: managed a team of **{r['team_size_managed']}**")
+        if not highlights_df.empty:
+            lead_h = highlights_df[highlights_df["category"] == "Leadership"]
+            if not lead_h.empty:
+                text = f"Yes! {name} has leadership experience:\n\n" + "\n".join(text_parts) + "\n\n**Leadership achievements:**"
+                df = lead_h[["company", "highlight", "impact_metric"]].rename(
+                    columns={"company": "Company", "highlight": "Achievement", "impact_metric": "Impact"})
+            else:
+                text = f"{name}'s management experience:\n\n" + "\n".join(text_parts) if text_parts else "No explicit leadership data found."
+        else:
+            text = "\n".join(text_parts) if text_parts else "No leadership data found."
+        sql = ("SELECT w.company, w.title, w.team_size_managed,\n"
+               "       h.highlight, h.impact_metric\n"
+               "FROM work_experience w\n"
+               "LEFT JOIN work_highlights h ON w.experience_id = h.experience_id\n"
+               "WHERE w.team_size_managed > 0 OR h.category = 'Leadership';")
+
+    elif intent == "education":
+        if not edu_df.empty:
+            text = f"**{name}**'s educational background:"
+            df = edu_df[["institution", "degree", "field_of_study", "gpa", "honors", "end_date"]].rename(
+                columns={"institution": "Institution", "degree": "Degree", "field_of_study": "Field",
+                         "gpa": "GPA", "honors": "Honors", "end_date": "Graduated"})
+            sql = ("SELECT institution, degree, field_of_study, gpa, honors, end_date AS graduated\n"
+                   "FROM education\n"
+                   "ORDER BY end_date DESC;")
+
+    elif intent == "certifications":
+        if not certs_df.empty:
+            active = certs_df[certs_df["is_active"].astype(str).str.lower().isin(["true", "1"])]
+            n_active = len(active)
+            text = f"{name} holds **{len(certs_df)} certifications** ({n_active} currently active):"
+            df = certs_df[["certification_name", "issuing_organization", "issue_date", "expiry_date", "is_active"]].rename(
+                columns={"certification_name": "Certification", "issuing_organization": "Issuer",
+                         "issue_date": "Issued", "expiry_date": "Expires", "is_active": "Active"})
+            sql = ("SELECT certification_name, issuing_organization, issue_date, expiry_date,\n"
+                   "       CASE WHEN is_active THEN 'Active' ELSE 'Expired' END AS status\n"
+                   "FROM certifications\n"
+                   "ORDER BY issue_date DESC;")
+
+    elif intent == "projects":
+        if not projects_df.empty:
+            text = f"{name} has worked on **{len(projects_df)} notable projects**:"
+            df = projects_df[["project_name", "role", "technologies_used", "impact"]].rename(
+                columns={"project_name": "Project", "role": "Role",
+                         "technologies_used": "Technologies", "impact": "Impact"})
+            sql = ("SELECT project_name, role, technologies_used, impact\n"
+                   "FROM projects\n"
+                   "ORDER BY start_date DESC;")
+
+    elif intent == "publications":
+        if not pubs_df.empty:
+            text = f"{name} has **{len(pubs_df)} publications/talks**:"
+            df = pubs_df[["title", "publisher", "publication_type", "publication_date"]].rename(
+                columns={"title": "Title", "publisher": "Publisher",
+                         "publication_type": "Type", "publication_date": "Date"})
+            sql = ("SELECT title, publisher, publication_type, publication_date\n"
+                   "FROM publications\n"
+                   "ORDER BY publication_date DESC;")
+
+    elif intent == "industries":
+        if not work_df.empty:
+            w = work_df.copy()
+            w["duration_months"] = pd.to_numeric(w["duration_months"], errors="coerce")
+            ind = w.groupby("industry").agg(
+                total_months=("duration_months", "sum"),
+                roles=("title", "count")
+            ).reset_index()
+            ind["years"] = (ind["total_months"] / 12).round(1)
+            text = f"{name} has experience across **{len(ind)} industries**:"
+            df = ind[["industry", "years", "roles"]].rename(
+                columns={"industry": "Industry", "years": "Years", "roles": "Roles"})
+            sql = ("SELECT industry,\n"
+                   "       ROUND(SUM(duration_months) / 12.0, 1) AS years,\n"
+                   "       COUNT(*) AS roles\n"
+                   "FROM work_experience\n"
+                   "GROUP BY industry\n"
+                   "ORDER BY years DESC;")
+
+    elif intent == "databricks_skills":
+        db_keywords = ["databricks", "spark", "delta", "unity catalog", "delta live", "lakehouse", "mlflow"]
+        if not skills_df.empty:
+            mask = skills_df["skill_name"].str.lower().apply(lambda x: any(k in x.lower() for k in db_keywords))
+            db_skills = skills_df[mask]
+            if not db_skills.empty:
+                text = f"{name}'s **Databricks ecosystem** expertise:"
+                df = db_skills[["skill_name", "proficiency_level", "years_of_experience"]].rename(
+                    columns={"skill_name": "Skill", "proficiency_level": "Proficiency",
+                             "years_of_experience": "Years"})
+            else:
+                text = "No Databricks-specific skills found."
+        if not highlights_df.empty:
+            db_h = highlights_df[highlights_df["highlight"].str.lower().apply(
+                lambda x: any(k in x for k in db_keywords))]
+            if not db_h.empty:
+                text += "\n\n**Related achievements:**"
+                df2 = db_h[["company", "highlight", "impact_metric"]].rename(
+                    columns={"company": "Company", "highlight": "Achievement", "impact_metric": "Impact"})
+                if df is not None:
+                    text += "\n\n**Skills:**"
+                df = df2 if df is None else df
+        sql = ("SELECT skill_name, proficiency_level, years_of_experience\n"
+               "FROM skills\n"
+               "WHERE LOWER(skill_name) LIKE '%databricks%'\n"
+               "   OR LOWER(skill_name) LIKE '%spark%'\n"
+               "   OR LOWER(skill_name) LIKE '%delta%'\n"
+               "   OR LOWER(skill_name) LIKE '%unity catalog%'\n"
+               "   OR LOWER(skill_name) LIKE '%mlflow%';")
+
+    elif intent == "cloud_skills":
+        cloud_kw = ["aws", "azure", "gcp", "google cloud", "cloud"]
+        if not skills_df.empty:
+            mask = skills_df["skill_name"].str.lower().apply(lambda x: any(k in x.lower() for k in cloud_kw))
+            cloud = skills_df[mask]
+            if not cloud.empty:
+                text = f"{name}'s **cloud platform** experience:"
+                df = cloud[["skill_name", "proficiency_level", "years_of_experience"]].rename(
+                    columns={"skill_name": "Platform", "proficiency_level": "Proficiency",
+                             "years_of_experience": "Years"})
+            else:
+                text = "No cloud-specific skills found."
+        sql = ("SELECT skill_name, proficiency_level, years_of_experience\n"
+               "FROM skills\n"
+               "WHERE category = 'Cloud Platform'\n"
+               "ORDER BY years_of_experience DESC;")
+
+    elif intent == "programming":
+        if not skills_df.empty:
+            prog = skills_df[skills_df["category"] == "Programming"]
+            if not prog.empty:
+                text = f"{name}'s **programming languages**:"
+                df = prog[["skill_name", "proficiency_level", "years_of_experience"]].rename(
+                    columns={"skill_name": "Language", "proficiency_level": "Proficiency",
+                             "years_of_experience": "Years"})
+            else:
+                text = "No programming languages found in the skills data."
+        sql = ("SELECT skill_name, proficiency_level, years_of_experience\n"
+               "FROM skills\n"
+               "WHERE category = 'Programming'\n"
+               "ORDER BY years_of_experience DESC;")
+
+    elif intent == "contact":
+        text = (f"**Contact {name}:**\n\n"
+                f"- 📧 Email: {profile.get('email', 'N/A')}\n"
+                f"- 📱 Phone: {profile.get('phone', 'N/A')}\n"
+                f"- 🔗 LinkedIn: {profile.get('linkedin_url', 'N/A')}\n"
+                f"- 💻 GitHub: {profile.get('github_url', 'N/A')}\n"
+                f"- 🌐 Website: {profile.get('website_url', 'N/A')}")
+        sql = "SELECT email, phone, linkedin_url, github_url, website_url\nFROM profile;"
+
+    elif intent == "work_preferences":
+        text = (f"**{name}**'s work preferences:\n\n"
+                f"- 📍 Location: {profile.get('location_city', '')}, {profile.get('location_state', '')}\n"
+                f"- 🏠 Preferred model: **{profile.get('preferred_work_model', 'N/A')}**\n"
+                f"- ✈️ Willing to relocate: **{'Yes' if profile.get('willing_to_relocate') else 'No'}**\n"
+                f"- 🛂 Work authorization: **{profile.get('work_authorization', 'N/A')}**")
+        sql = ("SELECT location_city, location_state, preferred_work_model,\n"
+               "       willing_to_relocate, work_authorization\n"
+               "FROM profile;")
+
+    elif intent == "business_impact":
+        if not highlights_df.empty:
+            biz = highlights_df[highlights_df["category"] == "Business"]
+            if not biz.empty:
+                text = f"{name}'s **business impact** achievements:"
+                df = biz[["company", "title", "highlight", "impact_metric"]].rename(
+                    columns={"company": "Company", "title": "Role",
+                             "highlight": "Achievement", "impact_metric": "Impact"})
+            else:
+                text = "No business-category achievements found. Showing all achievements:"
+                df = highlights_df[["company", "highlight", "category", "impact_metric"]].rename(
+                    columns={"company": "Company", "highlight": "Achievement",
+                             "category": "Category", "impact_metric": "Impact"})
+        sql = ("SELECT company, title, highlight, impact_metric\n"
+               "FROM work_highlights\n"
+               "WHERE category = 'Business'\n"
+               "ORDER BY experience_id;")
+
+    elif intent == "streaming":
+        results = []
+        if not skills_df.empty:
+            stream = skills_df[skills_df["skill_name"].str.lower().apply(
+                lambda x: any(k in x for k in ["kafka", "streaming", "spark"]))]
+            if not stream.empty:
+                results.append(("Skills", stream[["skill_name", "proficiency_level", "years_of_experience"]].rename(
+                    columns={"skill_name": "Skill", "proficiency_level": "Proficiency", "years_of_experience": "Years"})))
+        if not highlights_df.empty:
+            sh = highlights_df[highlights_df["highlight"].str.lower().apply(
+                lambda x: any(k in x for k in ["streaming", "real-time", "real time", "kafka", "event"]))]
+            if not sh.empty:
+                results.append(("Achievements", sh[["company", "highlight", "impact_metric"]].rename(
+                    columns={"company": "Company", "highlight": "Achievement", "impact_metric": "Impact"})))
+        text = f"{name}'s **real-time/streaming** experience:"
+        if results:
+            df = results[0][1]
+        sql = ("SELECT s.skill_name, s.proficiency_level, s.years_of_experience\n"
+               "FROM skills s\n"
+               "WHERE LOWER(s.skill_name) LIKE '%kafka%'\n"
+               "   OR LOWER(s.skill_name) LIKE '%streaming%'\n"
+               "   OR LOWER(s.skill_name) LIKE '%spark%';")
+
+    elif intent == "ml_skills":
+        if not skills_df.empty:
+            ml = skills_df[skills_df["category"] == "AI/ML"]
+            if not ml.empty:
+                text = f"{name}'s **AI/ML** skills:"
+                df = ml[["skill_name", "proficiency_level", "years_of_experience"]].rename(
+                    columns={"skill_name": "Skill", "proficiency_level": "Proficiency",
+                             "years_of_experience": "Years"})
+            else:
+                text = "No AI/ML skills found."
+        sql = ("SELECT skill_name, proficiency_level, years_of_experience\n"
+               "FROM skills\n"
+               "WHERE category = 'AI/ML'\n"
+               "ORDER BY years_of_experience DESC;")
+
+    elif intent == "not_available":
+        text = "Sorry, salary and compensation information is not included in this resume data."
+        sql = ""
+
+    else:
+        # General fallback: search across all text fields
+        q_lower = question.lower()
+        found_items = []
+
+        if not highlights_df.empty:
+            mask = highlights_df["highlight"].str.lower().str.contains(q_lower, na=False)
+            matches = highlights_df[mask]
+            if not matches.empty:
+                found_items.append(("Matching achievements", matches[["company", "highlight", "impact_metric"]].rename(
+                    columns={"company": "Company", "highlight": "Achievement", "impact_metric": "Impact"})))
+
+        if not skills_df.empty:
+            mask = skills_df["skill_name"].str.lower().str.contains(q_lower, na=False)
+            matches = skills_df[mask]
+            if not matches.empty:
+                found_items.append(("Matching skills", matches[["skill_name", "proficiency_level", "years_of_experience"]].rename(
+                    columns={"skill_name": "Skill", "proficiency_level": "Proficiency", "years_of_experience": "Years"})))
+
+        if not projects_df.empty:
+            mask = (projects_df["project_name"].str.lower().str.contains(q_lower, na=False) |
+                    projects_df["technologies_used"].str.lower().str.contains(q_lower, na=False) |
+                    projects_df["description"].str.lower().str.contains(q_lower, na=False))
+            matches = projects_df[mask]
+            if not matches.empty:
+                found_items.append(("Matching projects", matches[["project_name", "role", "impact"]].rename(
+                    columns={"project_name": "Project", "role": "Role", "impact": "Impact"})))
+
+        if found_items:
+            text = f"Here's what I found related to your question:"
+            df = found_items[0][1]
+        else:
+            text = (f"I couldn't find specific information matching that question. "
+                    f"Try asking about **skills**, **experience**, **education**, "
+                    f"**certifications**, **projects**, or **achievements**.\n\n"
+                    f"Example: *\"What are their top skills?\"* or *\"Tell me about their Databricks experience\"*")
+        sql = f"-- Full-text search across resume tables\n-- Query: '{question}'"
+
+    return {"text": text, "sql": sql, "df": df,
+            "conversation_id": "local", "status": "COMPLETED"}
 
 
 # ────────────────────────────────────────────────────────────────
@@ -814,9 +1228,10 @@ QUICK_QUESTIONS = [
 def render_genie_chat():
     st.markdown("""
     <div class="genie-banner">
-        <h3>🧞 Ask Me Anything</h3>
+        <h3>🧞 AI/BI Genie — Ask Me Anything</h3>
         <p>Ask any question about this candidate's career, skills, experience, or qualifications.
-           Powered by Databricks AI/BI Genie with structured resume data.</p>
+           Powered by a structured data model with 9 tables in Unity Catalog format.
+           Each question generates a SQL query and returns results — just like Databricks Genie.</p>
     </div>
     """, unsafe_allow_html=True)
 

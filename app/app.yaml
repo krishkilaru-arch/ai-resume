@@ -2,8 +2,10 @@ command:
   - "streamlit"
   - "run"
   - "app.py"
-  - "--server.port=8501"
-  - "--server.address=0.0.0.0"
+  - "--server.port"
+  - "8000"
+  - "--server.address"
+  - "0.0.0.0"
 
 env:
   - name: RESUME_CATALOG
@@ -16,6 +18,8 @@ env:
 
   - name: SQL_WAREHOUSE_ID
     description: "Databricks SQL Warehouse ID for executing dashboard queries"
+    value: ""
 
   - name: GENIE_SPACE_ID
     description: "Genie Space ID for the interactive Q&A feature"
+    value: ""
