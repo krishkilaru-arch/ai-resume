@@ -1355,31 +1355,53 @@ def render_skills_charts(skills_df):
 
     df["rating"] = df.apply(lambda r: _skill_rating(r.get(prof_col, ""), r.get(yrs_col, 0)), axis=1)
 
-    db_cats = ["Databricks Platform", "Databricks Engineering", "Databricks Analytics", "Databricks ML & AI"]
-    db_df = df[df["category"].isin(db_cats)].sort_values("rating", ascending=True).copy()
+    cat_order = [
+        "1. Data Engineering & Processing",
+        "2. Data Lakehouse & Storage",
+        "3. SQL & Analytics",
+        "4. Machine Learning & AI",
+        "5. Governance & Security",
+        "6. Cloud & Infrastructure",
+        "7. Collaboration & Development",
+    ]
+    cat_color_map = {
+        "1. Data Engineering & Processing": "#1B6B93",
+        "2. Data Lakehouse & Storage":      "#E24A33",
+        "3. SQL & Analytics":               "#2E8B57",
+        "4. Machine Learning & AI":         "#7B2D8E",
+        "5. Governance & Security":         "#D4A017",
+        "6. Cloud & Infrastructure":        "#FF6347",
+        "7. Collaboration & Development":   "#4682B4",
+    }
+    cat_labels = {
+        "1. Data Engineering & Processing": "Data Engineering & Processing",
+        "2. Data Lakehouse & Storage":      "Data Lakehouse & Storage",
+        "3. SQL & Analytics":               "SQL & Analytics",
+        "4. Machine Learning & AI":         "Machine Learning & AI",
+        "5. Governance & Security":         "Governance & Security",
+        "6. Cloud & Infrastructure":        "Cloud & Infrastructure",
+        "7. Collaboration & Development":   "Collaboration & Development",
+    }
 
-    if db_df.empty:
+    chart_df = df[df["category"].isin(cat_order)].copy()
+    if chart_df.empty:
         return
 
-    cat_color_map = {
-        "Databricks Platform": "#E24A33",
-        "Databricks Engineering": "#065A82",
-        "Databricks Analytics": "#FF8C00",
-        "Databricks ML & AI": "#7B2D8E",
-    }
+    chart_df["cat_sort"] = chart_df["category"].map({c: i for i, c in enumerate(cat_order)})
+    chart_df = chart_df.sort_values(["cat_sort", "rating"], ascending=[True, False])
 
     fig = go.Figure()
 
-    for cat, color in cat_color_map.items():
-        cat_df = db_df[db_df["category"] == cat]
+    for cat in cat_order:
+        cat_df = chart_df[chart_df["category"] == cat].sort_values("rating", ascending=True)
         if cat_df.empty:
             continue
         fig.add_trace(go.Bar(
             x=cat_df["rating"],
             y=cat_df["skill_name"],
             orientation="h",
-            name=cat,
-            marker=dict(color=color, line=dict(width=0)),
+            name=cat_labels[cat],
+            marker=dict(color=cat_color_map[cat], line=dict(width=0)),
             text=cat_df["rating"].apply(lambda r: f" {r}/10"),
             textposition="outside",
             textfont=dict(size=11, color="#444", family="Arial"),
@@ -1401,10 +1423,9 @@ def render_skills_charts(skills_df):
     fig.update_yaxes(
         title="",
         tickfont=dict(size=12),
-        autorange="reversed",
     )
     fig.update_layout(
-        height=max(300, len(db_df) * 34 + 80),
+        height=max(500, len(chart_df) * 28 + 100),
         margin=dict(l=10, r=30, t=10, b=40),
         plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
@@ -1413,14 +1434,15 @@ def render_skills_charts(skills_df):
             xanchor="center", x=0.5, title="",
             font=dict(size=11),
         ),
-        bargap=0.25,
+        bargap=0.22,
         font=dict(size=12),
     )
 
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig, use_container_width=True)
 
-    other_df = df[~df["category"].isin(db_cats)].sort_values(["category", "rating"], ascending=[True, False])
+    other_df = df[~df["category"].isin(cat_order)].sort_values(["category", "rating"], ascending=[True, False])
     if not other_df.empty:
+        _html('<div style="font-size:1rem;font-weight:700;color:#1B3A4B;margin-top:16px;margin-bottom:8px;">Additional Skills</div>')
         cats = other_df["category"].unique()
         cols = st.columns(min(len(cats), 3))
         for i, cat in enumerate(cats):
