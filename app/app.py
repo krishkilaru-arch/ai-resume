@@ -1728,15 +1728,11 @@ def main():
     with tab_dashboard:
         render_metrics(profile_df, work_df, skills_df, certs_df)
         render_summary(profile_df)
+        render_education(edu_df)
         render_career_timeline(timeline_df)
         render_skills_charts(skills_df)
         render_experience(work_df, highlights_df)
-
-        col_edu, col_cert = st.columns(2)
-        with col_edu:
-            render_education(edu_df)
-        with col_cert:
-            render_certifications(certs_df)
+        render_certifications(certs_df)
 
         render_projects(projects_df)
         render_publications(pubs_df)
