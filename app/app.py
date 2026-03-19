@@ -1324,6 +1324,24 @@ def render_career_timeline(timeline_df):
     ''')
 
 
+def _skill_rating(prof, years):
+    """Map proficiency + years to a 1-10 rating."""
+    y = float(years) if years else 0
+    if prof == "Expert":
+        if y >= 10:
+            return 10
+        if y >= 5:
+            return 9
+        return 8
+    if prof == "Advanced":
+        if y >= 5:
+            return 7
+        if y >= 3:
+            return 6
+        return 5
+    return 4
+
+
 def render_skills_charts(skills_df):
     if skills_df.empty:
         return
@@ -1332,50 +1350,84 @@ def render_skills_charts(skills_df):
     df = skills_df.copy()
     if "years_of_experience" in df.columns:
         df["years_of_experience"] = pd.to_numeric(df["years_of_experience"], errors="coerce")
+    yrs_col = "years_of_experience" if "years_of_experience" in df.columns else "years_used"
+    prof_col = "proficiency_level" if "proficiency_level" in df.columns else "proficiency"
 
-    col1, col2 = st.columns([3, 2])
+    df["rating"] = df.apply(lambda r: _skill_rating(r.get(prof_col, ""), r.get(yrs_col, 0)), axis=1)
 
-    with col1:
-        tech_df = df[df["category"] != "Soft Skills"].sort_values("years_of_experience", ascending=True)
-        fig = px.bar(
-            tech_df, x="years_of_experience", y="skill_name",
-            color="proficiency_level", orientation="h",
-            color_discrete_map={"Expert": "#065A82", "Advanced": "#1C7C54", "Intermediate": "#F4A261"},
-            labels={"years_of_experience": "Years", "skill_name": "", "proficiency_level": "Level"},
+    cat_colors = {
+        "Databricks Platform": "#E24A33",
+        "Databricks AI/BI": "#FF8C00",
+        "Data Engineering": "#065A82",
+        "AI/ML": "#7B2D8E",
+        "Cloud Platform": "#00838F",
+        "Programming": "#1C7C54",
+        "Database": "#5D4E37",
+        "App Development": "#2196F3",
+        "DevOps": "#607D8B",
+        "Client-Facing": "#F4A261",
+        "Leadership": "#C62828",
+    }
+
+    categories = df["category"].unique().tolist()
+
+    for cat in categories:
+        cat_df = df[df["category"] == cat].sort_values("rating", ascending=True)
+        color = cat_colors.get(cat, "#065A82")
+
+        fig = go.Figure()
+
+        fig.add_trace(go.Bar(
+            x=cat_df["rating"],
+            y=cat_df["skill_name"],
+            orientation="h",
+            marker=dict(
+                color=color,
+                opacity=0.85,
+                line=dict(width=0),
+            ),
+            text=cat_df.apply(
+                lambda r: f"  {r['rating']}/10  ·  {int(r[yrs_col])}y  ·  {r[prof_col]}",
+                axis=1
+            ),
+            textposition="outside",
+            textfont=dict(size=11, color="#444"),
+            hovertemplate=(
+                "<b>%{y}</b><br>"
+                "Rating: %{x}/10<br>"
+                "<extra></extra>"
+            ),
+            showlegend=False,
+        ))
+
+        fig.add_shape(
+            type="line", x0=10, x1=10, y0=-0.5, y1=len(cat_df) - 0.5,
+            line=dict(color="#ddd", width=1, dash="dot"),
+        )
+
+        fig.update_xaxes(
+            range=[0, 13],
+            showticklabels=False,
+            showgrid=False,
+            zeroline=False,
+        )
+        fig.update_yaxes(
+            title="",
+            tickfont=dict(size=11),
+            autorange="reversed",
         )
         fig.update_layout(
-            height=max(300, len(tech_df) * 28 + 60),
-            margin=dict(l=0, r=10, t=10, b=30),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0.5, xanchor="center", title=""),
+            height=max(100, len(cat_df) * 32 + 40),
+            margin=dict(l=10, r=10, t=8, b=8),
             plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(size=11),
+            paper_bgcolor="rgba(0,0,0,0)",
+        )
+
+        _html(
+            f'<div style="margin-top:16px;margin-bottom:4px;font-size:0.88rem;font-weight:700;color:{color};">'
+            f'{cat} ({len(cat_df)})</div>'
         )
         st.plotly_chart(fig, width="stretch")
-
-    with col2:
-        cat_counts = df.groupby("category").size().reset_index(name="count").sort_values("count", ascending=False)
-        fig2 = px.pie(
-            cat_counts, values="count", names="category", hole=0.45,
-            color_discrete_sequence=px.colors.qualitative.Set2,
-        )
-        fig2.update_layout(
-            height=320,
-            margin=dict(l=0, r=0, t=10, b=10),
-            legend=dict(font=dict(size=10)),
-            font=dict(size=11),
-        )
-        fig2.update_traces(textposition="inside", textinfo="label+value")
-        st.plotly_chart(fig2, width="stretch")
-
-        if "proficiency_level" in df.columns:
-            prof_counts = df["proficiency_level"].value_counts().reset_index()
-            prof_counts.columns = ["level", "count"]
-            for _, row in prof_counts.iterrows():
-                color = {"Expert": "#065A82", "Advanced": "#1C7C54", "Intermediate": "#F4A261"}.get(row["level"], "#999")
-                _html(
-                    f"<span style='color:{color}; font-weight:700;'>{row['level']}</span>: "
-                    f"{row['count']} skills",
-                )
 
 
 def render_experience(work_df, highlights_df):
