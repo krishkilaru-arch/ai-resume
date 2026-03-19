@@ -1355,79 +1355,89 @@ def render_skills_charts(skills_df):
 
     df["rating"] = df.apply(lambda r: _skill_rating(r.get(prof_col, ""), r.get(yrs_col, 0)), axis=1)
 
-    cat_colors = {
+    db_cats = ["Databricks Platform", "Databricks AI/BI"]
+    db_df = df[df["category"].isin(db_cats)].sort_values("rating", ascending=True).copy()
+
+    if db_df.empty:
+        return
+
+    db_df["color"] = db_df["category"].map({
         "Databricks Platform": "#E24A33",
         "Databricks AI/BI": "#FF8C00",
-        "Data Engineering": "#065A82",
-        "AI/ML": "#7B2D8E",
-        "Cloud Platform": "#00838F",
-        "Programming": "#1C7C54",
-        "Database": "#5D4E37",
-        "App Development": "#2196F3",
-        "DevOps": "#607D8B",
-        "Client-Facing": "#F4A261",
-        "Leadership": "#C62828",
-    }
+    })
 
-    categories = df["category"].unique().tolist()
+    fig = go.Figure()
 
-    for cat in categories:
-        cat_df = df[df["category"] == cat].sort_values("rating", ascending=True)
-        color = cat_colors.get(cat, "#065A82")
-
-        fig = go.Figure()
-
+    for cat, color in [("Databricks Platform", "#E24A33"), ("Databricks AI/BI", "#FF8C00")]:
+        cat_df = db_df[db_df["category"] == cat]
+        if cat_df.empty:
+            continue
         fig.add_trace(go.Bar(
             x=cat_df["rating"],
             y=cat_df["skill_name"],
             orientation="h",
-            marker=dict(
-                color=color,
-                opacity=0.85,
-                line=dict(width=0),
-            ),
-            text=cat_df.apply(
-                lambda r: f"  {r['rating']}/10  ·  {int(r[yrs_col])}y  ·  {r[prof_col]}",
-                axis=1
-            ),
+            name=cat,
+            marker=dict(color=color, line=dict(width=0)),
+            text=cat_df["rating"].apply(lambda r: f" {r}/10"),
             textposition="outside",
-            textfont=dict(size=11, color="#444"),
+            textfont=dict(size=11, color="#444", family="Arial"),
             hovertemplate=(
                 "<b>%{y}</b><br>"
                 "Rating: %{x}/10<br>"
                 "<extra></extra>"
             ),
-            showlegend=False,
         ))
 
-        fig.add_shape(
-            type="line", x0=10, x1=10, y0=-0.5, y1=len(cat_df) - 0.5,
-            line=dict(color="#ddd", width=1, dash="dot"),
-        )
+    fig.update_xaxes(
+        range=[0, 11.5],
+        dtick=2,
+        title="Rating",
+        titlefont=dict(size=11, color="#888"),
+        tickfont=dict(size=10),
+        gridcolor="rgba(0,0,0,0.05)",
+        zeroline=False,
+    )
+    fig.update_yaxes(
+        title="",
+        tickfont=dict(size=12),
+        autorange="reversed",
+    )
+    fig.update_layout(
+        height=max(300, len(db_df) * 34 + 80),
+        margin=dict(l=10, r=30, t=10, b=40),
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        legend=dict(
+            orientation="h", yanchor="bottom", y=1.02,
+            xanchor="center", x=0.5, title="",
+            font=dict(size=11),
+        ),
+        bargap=0.25,
+        font=dict(size=12),
+    )
 
-        fig.update_xaxes(
-            range=[0, 13],
-            showticklabels=False,
-            showgrid=False,
-            zeroline=False,
-        )
-        fig.update_yaxes(
-            title="",
-            tickfont=dict(size=11),
-            autorange="reversed",
-        )
-        fig.update_layout(
-            height=max(100, len(cat_df) * 32 + 40),
-            margin=dict(l=10, r=10, t=8, b=8),
-            plot_bgcolor="rgba(0,0,0,0)",
-            paper_bgcolor="rgba(0,0,0,0)",
-        )
+    st.plotly_chart(fig, width="stretch")
 
-        _html(
-            f'<div style="margin-top:16px;margin-bottom:4px;font-size:0.88rem;font-weight:700;color:{color};">'
-            f'{cat} ({len(cat_df)})</div>'
-        )
-        st.plotly_chart(fig, width="stretch")
+    other_df = df[~df["category"].isin(db_cats)].sort_values(["category", "rating"], ascending=[True, False])
+    if not other_df.empty:
+        cats = other_df["category"].unique()
+        cols = st.columns(min(len(cats), 3))
+        for i, cat in enumerate(cats):
+            with cols[i % len(cols)]:
+                cat_df = other_df[other_df["category"] == cat]
+                _html(f'<div style="font-size:0.85rem;font-weight:700;color:#1B3A4B;margin-top:12px;margin-bottom:6px;">{cat}</div>')
+                for _, row in cat_df.iterrows():
+                    r = int(row["rating"])
+                    filled = "█" * r + "░" * (10 - r)
+                    prof = row[prof_col]
+                    color = "#065A82" if prof == "Expert" else "#1C7C54" if prof == "Advanced" else "#F4A261"
+                    _html(
+                        f'<div style="font-size:0.78rem;margin-bottom:3px;">'
+                        f'<span style="color:#333;">{row["skill_name"]}</span> '
+                        f'<span style="color:{color};font-family:monospace;font-size:0.7rem;">{filled}</span> '
+                        f'<span style="color:#888;font-size:0.7rem;">{r}/10</span>'
+                        f'</div>'
+                    )
 
 
 def render_experience(work_df, highlights_df):
