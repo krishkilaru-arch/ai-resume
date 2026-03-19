@@ -1333,6 +1333,8 @@ def render_experience(work_df, highlights_df):
             exp_highlights = highlights_df[
                 highlights_df["experience_id"].astype(str) == str(exp_id)
             ]
+            if "highlight_id" in exp_highlights.columns:
+                exp_highlights = exp_highlights.sort_values("highlight_id")
             for _, h in exp_highlights.iterrows():
                 cat = h.get("category", "Technical")
                 badge_cls = f"badge-{cat.lower()}"
