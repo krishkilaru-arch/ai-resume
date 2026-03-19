@@ -1476,7 +1476,7 @@ def render_education(edu_df):
         end_fmt = row["end_dt"].strftime("%Y")
 
         left_pct = ((row["start_dt"] - earliest).days / total_days) * 100
-        width_pct = max(((row["end_dt"] - row["start_dt"]).days / total_days) * 100, 30)
+        width_pct = max(((row["end_dt"] - row["start_dt"]).days / total_days) * 100, 14)
 
         gpa_str = ""
         if gpa:
@@ -1487,25 +1487,25 @@ def render_education(edu_df):
             hover_text += f"&#10;📚 {coursework}"
 
         cards_html += f'''
-        <div style="position:absolute;left:{left_pct}%;width:{width_pct}%;top:0;bottom:0;padding:0 2px;box-sizing:border-box;">
-            <div style="height:100%;background:{color};border-radius:8px;padding:10px 10px 8px;
+        <div style="position:absolute;left:{left_pct}%;width:{width_pct}%;top:0;bottom:0;padding:0 1px;box-sizing:border-box;">
+            <div style="height:100%;background:{color};border-radius:8px;padding:8px 8px 6px;
                         box-shadow:0 2px 8px rgba(0,0,0,0.12);border:1px solid {color};
                         display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;
                         cursor:default;" title="{hover_text}">
                 <div style="overflow:hidden;flex:1;min-height:0;">
-                    <div style="color:#fff;font-weight:700;font-size:0.75rem;line-height:1.3;
+                    <div style="color:#fff;font-weight:700;font-size:0.73rem;line-height:1.3;
                                 word-wrap:break-word;overflow-wrap:break-word;">
                         🎓 {degree} in {field}
                     </div>
-                    <div style="color:rgba(255,255,255,0.85);font-size:0.7rem;margin-top:2px;line-height:1.25;
+                    <div style="color:rgba(255,255,255,0.8);font-size:0.68rem;margin-top:2px;line-height:1.25;
                                 word-wrap:break-word;overflow-wrap:break-word;">
                         {inst}{gpa_str}
                     </div>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:4px;flex-shrink:0;">
-                    <span style="color:rgba(255,255,255,0.65);font-size:0.65rem;">{start_fmt}–{end_fmt}</span>
-                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.62rem;font-weight:700;
-                                 padding:1px 5px;border-radius:4px;">{row["duration_label"]}</span>
+                    <span style="color:rgba(255,255,255,0.65);font-size:0.62rem;">{start_fmt}–{end_fmt}</span>
+                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.6rem;font-weight:700;
+                                 padding:1px 4px;border-radius:4px;">{row["duration_label"]}</span>
                 </div>
             </div>
         </div>'''
@@ -1517,7 +1517,7 @@ def render_education(edu_df):
         )
 
     year_markers = ""
-    for y in range(earliest.year, latest.year + 2, 2):
+    for y in range(earliest.year, latest.year + 2, 3):
         y_date = datetime(y, 1, 1)
         pct = ((y_date - earliest).days / total_days) * 100
         if 0 <= pct <= 100:
@@ -1525,10 +1525,10 @@ def render_education(edu_df):
             year_markers += f'<div style="position:absolute;left:{pct}%;top:0;bottom:0;width:1px;background:rgba(0,0,0,0.05);"></div>'
 
     _html(f'''
-    <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center;">
         {legend_items}
     </div>
-    <div style="position:relative;height:120px;margin:24px 0 16px;padding:0 2px;">
+    <div style="position:relative;height:150px;margin:24px 0 20px;padding:0 2px;">
         {year_markers}
         {cards_html}
     </div>
