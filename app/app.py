@@ -1445,27 +1445,94 @@ def render_education(edu_df):
     if edu_df.empty:
         return
     _html('<div class="section-header">Education</div>')
-    for _, row in edu_df.iterrows():
+
+    df = edu_df.copy()
+    df["start_dt"] = pd.to_datetime(df["start_date"])
+    end_col = "end_date"
+    df["end_dt"] = pd.to_datetime(df[end_col])
+    df["months"] = ((df["end_dt"] - df["start_dt"]).dt.days / 30.44).round().astype(int)
+    df["duration_label"] = df["months"].apply(
+        lambda m: f"{m // 12}y {m % 12}m" if m >= 12 and m % 12 else (f"{m // 12}y" if m >= 12 else f"{m}m")
+    )
+    df = df.sort_values("start_dt", ascending=True)
+
+    earliest = df["start_dt"].min()
+    latest = df["end_dt"].max()
+    total_days = max((latest - earliest).days, 1)
+
+    palette = ["#1C7C54", "#7B2D8E"]
+    cards_html = ""
+    legend_items = ""
+
+    for idx, (_, row) in enumerate(df.iterrows()):
+        color = palette[idx % len(palette)]
+        inst = row.get("institution", "")
+        degree = row.get("degree", "")
+        field = row.get("field_of_study", "")
         gpa = row.get("gpa", "")
         honors = row.get("honors", "")
-        detail_parts = []
-        if gpa:
-            detail_parts.append(f"GPA: {gpa}/4.0")
-        if honors:
-            detail_parts.append(honors)
-        detail = " · ".join(detail_parts)
         coursework = row.get("relevant_coursework", "")
+        start_fmt = row["start_dt"].strftime("%Y")
+        end_fmt = row["end_dt"].strftime("%Y")
 
-        _html(f"""
-        <div class="info-card">
-            <h5>{row.get('degree', '')} in {row.get('field_of_study', '')}</h5>
-            <div style="color:#065A82; font-weight:600; font-size:0.9rem;">
-                {row.get('institution', '')}
+        left_pct = ((row["start_dt"] - earliest).days / total_days) * 100
+        width_pct = max(((row["end_dt"] - row["start_dt"]).days / total_days) * 100, 30)
+
+        gpa_str = ""
+        if gpa:
+            gpa_str = f" · GPA: {gpa}"
+
+        hover_text = f"{degree} in {field}&#10;{inst}&#10;{row['start_dt'].strftime('%b %Y')} — {row['end_dt'].strftime('%b %Y')}&#10;{honors}"
+        if coursework:
+            hover_text += f"&#10;📚 {coursework}"
+
+        cards_html += f'''
+        <div style="position:absolute;left:{left_pct}%;width:{width_pct}%;top:0;bottom:0;padding:0 2px;box-sizing:border-box;">
+            <div style="height:100%;background:{color};border-radius:8px;padding:10px 10px 8px;
+                        box-shadow:0 2px 8px rgba(0,0,0,0.12);border:1px solid {color};
+                        display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;
+                        cursor:default;" title="{hover_text}">
+                <div style="overflow:hidden;flex:1;min-height:0;">
+                    <div style="color:#fff;font-weight:700;font-size:0.75rem;line-height:1.3;
+                                word-wrap:break-word;overflow-wrap:break-word;">
+                        🎓 {degree} in {field}
+                    </div>
+                    <div style="color:rgba(255,255,255,0.85);font-size:0.7rem;margin-top:2px;line-height:1.25;
+                                word-wrap:break-word;overflow-wrap:break-word;">
+                        {inst}{gpa_str}
+                    </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:4px;flex-shrink:0;">
+                    <span style="color:rgba(255,255,255,0.65);font-size:0.65rem;">{start_fmt}–{end_fmt}</span>
+                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.62rem;font-weight:700;
+                                 padding:1px 5px;border-radius:4px;">{row["duration_label"]}</span>
+                </div>
             </div>
-            <div class="detail">📅 {row.get('start_date', '')} — {row.get('end_date', '')} &nbsp;|&nbsp; {detail}</div>
-            {'<div class="detail" style="margin-top:4px;">📚 ' + coursework + '</div>' if coursework else ''}
-        </div>
-        """)
+        </div>'''
+
+        legend_items += (
+            f'<div style="display:flex;align-items:center;gap:4px;font-size:0.78rem;">'
+            f'<span style="display:inline-block;width:10px;height:10px;background:{color};border-radius:2px;flex-shrink:0;"></span>'
+            f'<span style="color:#555;white-space:nowrap;">{inst}</span></div>'
+        )
+
+    year_markers = ""
+    for y in range(earliest.year, latest.year + 2, 2):
+        y_date = datetime(y, 1, 1)
+        pct = ((y_date - earliest).days / total_days) * 100
+        if 0 <= pct <= 100:
+            year_markers += f'<div style="position:absolute;left:{pct}%;top:-16px;transform:translateX(-50%);font-size:0.68rem;color:#999;font-weight:600;">{y}</div>'
+            year_markers += f'<div style="position:absolute;left:{pct}%;top:0;bottom:0;width:1px;background:rgba(0,0,0,0.05);"></div>'
+
+    _html(f'''
+    <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+        {legend_items}
+    </div>
+    <div style="position:relative;height:120px;margin:24px 0 16px;padding:0 2px;">
+        {year_markers}
+        {cards_html}
+    </div>
+    ''')
 
 
 def render_certifications(certs_df):
