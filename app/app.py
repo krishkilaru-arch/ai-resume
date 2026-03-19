@@ -525,8 +525,20 @@ def _genie_ask_api(question, conversation_id=None):
                 space_id=GENIE_SPACE_ID,
                 content=question,
             )
-            conv_id = resp.conversation.id if hasattr(resp, "conversation") else resp.conversation_id
-            msg_id = resp.message.id if hasattr(resp, "message") else resp.message_id
+            conv_id = None
+            msg_id = None
+            if hasattr(resp, "conversation") and resp.conversation:
+                conv_id = getattr(resp.conversation, "id", None) or getattr(resp.conversation, "conversation_id", None)
+            if not conv_id:
+                conv_id = getattr(resp, "conversation_id", None)
+            if hasattr(resp, "message") and resp.message:
+                msg_id = getattr(resp.message, "id", None) or getattr(resp.message, "message_id", None)
+            if not msg_id:
+                msg_id = getattr(resp, "message_id", None)
+            if not conv_id or not msg_id:
+                rd = resp.as_dict() if hasattr(resp, "as_dict") else {}
+                conv_id = conv_id or rd.get("conversation_id") or rd.get("conversation", {}).get("id")
+                msg_id = msg_id or rd.get("message_id") or rd.get("message", {}).get("id")
 
         message = None
         for _ in range(60):
