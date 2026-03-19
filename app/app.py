@@ -1347,10 +1347,12 @@ def render_experience(work_df, highlights_df):
                     </span>
                 </div>"""
 
-        role_html = f'<div style="color:#065A82; font-size:0.95rem; font-weight:500;">{role}</div>' if role and role != title else ""
+        role_html = f'<div style="font-size:0.93rem; margin-top:2px;"><span style="color:#6C757D;">Role at Customer:</span> <span style="color:#065A82; font-weight:600;">{role}</span></div>' if role and role != title else ""
+        title_label = f"Title at {company}" if role and role != title else ""
+        title_line = f'<div style="font-size:0.93rem;"><span style="color:#6C757D;">{title_label}:</span> <span style="font-weight:600;">{title}</span></div>' if title_label else f"<h4>{title}</h4>"
         _html(f"""
         <div class="exp-card">
-            <h4>{title}</h4>
+            {title_line}
             {role_html}
             <div class="subtitle">{company}</div>
             <div class="meta">📍 {location} &nbsp;|&nbsp; 📅 {start} — {end} {badge_html}</div>
