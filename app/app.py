@@ -1479,7 +1479,7 @@ def render_genie_chat():
 
     # Display chat history
     for msg in st.session_state.messages:
-        with st.chat_message(msg["role"], avatar="👤" if msg["role"] == "user" else "🧞"):
+        with st.chat_message(msg["role"], avatar="👤" if msg["role"] == "user" else "🐒"):
             st.markdown(msg["content"])
             if msg.get("df") is not None and not msg["df"].empty:
                 st.dataframe(msg["df"], width="stretch", hide_index=True)
@@ -1500,7 +1500,7 @@ def render_genie_chat():
         with st.chat_message("user", avatar="👤"):
             st.markdown(question)
 
-        with st.chat_message("assistant", avatar="🧞"):
+        with st.chat_message("assistant", avatar="🐒"):
             with st.spinner("Querying resume data..."):
                 result = genie_ask(question, st.session_state.conversation_id)
 
