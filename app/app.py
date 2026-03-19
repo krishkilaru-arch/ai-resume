@@ -590,8 +590,36 @@ def _genie_ask_api(question, conversation_id=None):
         return None
 
 
+_GREETING_WORDS = {"hi", "hello", "hey", "howdy", "hola", "greetings", "sup", "yo", "what's up", "whats up"}
+
+def _is_greeting(question):
+    return question.strip().lower().rstrip("!.,? ") in _GREETING_WORDS
+
+def _greeting_response():
+    return {
+        "text": (
+            "Hey there! I'm **Krish's AI Career Assistant** — think of me as his resume, "
+            "but one that actually talks back (and never exaggerates... well, mostly).\n\n"
+            "I'm powered by **Databricks AI/BI Genie** and I have access to Krish's entire "
+            "career profile — 19+ years of data engineering, Databricks wizardry, and enough "
+            "certifications to wallpaper a small office.\n\n"
+            "**Try asking me things like:**\n"
+            "- \"What are Krish's top skills?\"\n"
+            "- \"Tell me about his Databricks experience\"\n"
+            "- \"Which companies has he worked with?\"\n"
+            "- \"What certifications does he hold?\"\n"
+            "- \"What did he do at Capital Group?\"\n\n"
+            "Go ahead — I don't bite, and I bill way less than a recruiter. 😄"
+        ),
+        "sql": None, "df": None, "conversation_id": None,
+        "status": "COMPLETED", "source": "greeting",
+    }
+
 def genie_ask(question, conversation_id=None):
-    """Try real Genie API first, fall back to local Q&A engine."""
+    """Handle greetings locally, then try Genie API, then fall back to local Q&A."""
+    if _is_greeting(question):
+        return _greeting_response()
+
     api_result = _genie_ask_api(question, conversation_id)
     if api_result and api_result.get("text"):
         api_result["source"] = "genie"
@@ -1392,7 +1420,7 @@ def render_genie_chat():
                 result = genie_ask(question, st.session_state.conversation_id)
 
             source = result.get("source", "local")
-            if source == "genie":
+            if source in ("genie", "greeting"):
                 st.caption("Powered by Databricks AI/BI Genie")
             else:
                 api_err = st.session_state.pop("_genie_api_error", None)
