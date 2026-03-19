@@ -1391,8 +1391,7 @@ def render_skills_charts(skills_df):
     fig.update_xaxes(
         range=[0, 11.5],
         dtick=2,
-        title="Rating",
-        titlefont=dict(size=11, color="#888"),
+        title=dict(text="Rating", font=dict(size=11, color="#888")),
         tickfont=dict(size=10),
         gridcolor="rgba(0,0,0,0.05)",
         zeroline=False,
