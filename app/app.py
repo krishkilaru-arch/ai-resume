@@ -1220,6 +1220,8 @@ def render_career_timeline(timeline_df):
         return
     _html('<div class="section-header">Career Timeline</div>')
 
+    highlights_df = load_table("work_highlights")
+
     df = timeline_df.copy()
     today = datetime.now()
     today_str = today.strftime("%Y-%m-%d")
@@ -1233,94 +1235,104 @@ def render_career_timeline(timeline_df):
     df["is_current"] = df["is_current"].astype(str).str.lower().isin(["true", "1"])
     df = df.sort_values("start_dt", ascending=True)
 
-    earliest = df["start_dt"].min()
-    latest = df["end_dt"].max()
-    total_days = max((latest - earliest).days, 1)
+    palette = ["#065A82", "#E76F00", "#7B2D8E", "#1C7C54", "#C62828", "#00838F"]
+    orgs = df["organization"].unique().tolist()
+    org_colors = {org: palette[i % len(palette)] for i, org in enumerate(orgs)}
 
-    cards_html = ""
-    for idx, (_, row) in enumerate(df.iterrows()):
-        is_work = row["event_type"] == "Work"
+    fig = go.Figure()
+
+    for i, (_, row) in enumerate(df.iterrows()):
         is_current = row["is_current"]
+        is_work = row["event_type"] == "Work"
         icon = "💼" if is_work else "🎓"
-        color = "#065A82" if is_work else "#1C7C54"
-        start_fmt = row["start_dt"].strftime("'%y")
-        end_fmt = "Now" if is_current else row["end_dt"].strftime("'%y")
+        color = org_colors[row["organization"]]
+        start_fmt = row["start_dt"].strftime("%b %Y")
+        end_fmt = "Present" if is_current else row["end_dt"].strftime("%b %Y")
 
-        left_pct = ((row["start_dt"] - earliest).days / total_days) * 100
-        width_pct = max(((row["end_dt"] - row["start_dt"]).days / total_days) * 100, 8)
+        hover_lines = [
+            f"<b>{icon} {row['title']}</b>",
+            f"<b>{row['organization']}</b>",
+            f"📅 {start_fmt} — {end_fmt}  ({row['duration_label']})",
+        ]
+        loc = row.get("location")
+        if loc:
+            hover_lines.append(f"📍 {loc}")
 
-        pulse_css = "animation:tl-pulse 2s infinite;" if is_current else ""
-        current_badge = '<div style="background:#E8F5E9;color:#2E7D32;font-size:0.65rem;font-weight:700;padding:1px 6px;border-radius:8px;margin-top:2px;text-align:center;">CURRENT</div>' if is_current else ""
+        if is_work and not highlights_df.empty:
+            org_highlights = highlights_df[
+                highlights_df["company"].astype(str) == str(row["organization"])
+            ]
+            if not org_highlights.empty:
+                hover_lines.append("<br><b>Key Achievements:</b>")
+                for _, h in org_highlights.head(4).iterrows():
+                    metric = h.get("impact_metric", "")
+                    hover_lines.append(f"  → {metric}")
 
-        org_short = row["organization"]
-        if len(org_short) > 20:
-            org_short = org_short[:18] + "…"
+        hover = "<br>".join(hover_lines)
 
-        title_short = row["title"]
-        if len(title_short) > 30:
-            title_short = title_short[:28] + "…"
+        bar_label = f"{row['title']}<br><i>{row['organization']}</i>"
+        y_label = f"{row['title']}\n({row['organization']})"
 
-        cards_html += f'''
-        <div style="position:absolute;left:{left_pct}%;width:{width_pct}%;top:0;bottom:0;padding:0 2px;box-sizing:border-box;">
-            <div style="height:100%;background:{color};border-radius:8px;padding:10px 10px 8px;
-                        box-shadow:0 2px 8px rgba(0,0,0,0.1);border:2px solid {'#F4A261' if is_current else color};
-                        display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;
-                        position:relative;cursor:default;" title="{row['title']} @ {row['organization']}&#10;{row['start_dt'].strftime('%b %Y')} — {'Present' if is_current else row['end_dt'].strftime('%b %Y')}&#10;Duration: {row['duration_label']}">
-                <div>
-                    <div style="color:rgba(255,255,255,0.95);font-weight:700;font-size:0.78rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                        {icon} {title_short}
-                    </div>
-                    <div style="color:rgba(255,255,255,0.75);font-size:0.7rem;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                        {org_short}
-                    </div>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;">
-                    <span style="color:rgba(255,255,255,0.6);font-size:0.65rem;">{start_fmt}–{end_fmt}</span>
-                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.62rem;font-weight:700;
-                                 padding:1px 5px;border-radius:6px;">{row["duration_label"]}</span>
-                </div>
-                {f'<div style="position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#4CAF50;{pulse_css}"></div>' if is_current else ''}
-            </div>
-        </div>'''
+        fig.add_trace(go.Bar(
+            x=[(row["end_dt"] - row["start_dt"]).days],
+            y=[y_label],
+            base=[row["start_dt"]],
+            orientation="h",
+            marker=dict(
+                color=color,
+                opacity=1.0 if is_current else 0.85,
+                line=dict(width=2, color="white"),
+                pattern=dict(shape="") if is_work else dict(shape="/", solidity=0.15),
+            ),
+            hovertemplate=hover + "<extra></extra>",
+            showlegend=False,
+            text=f"{icon}  {row['duration_label']}",
+            textposition="inside",
+            insidetextanchor="middle",
+            textfont=dict(color="white", size=12, family="Arial"),
+        ))
 
-    year_markers = ""
-    start_year = earliest.year
-    end_year = latest.year + 1
-    for y in range(start_year, end_year + 1, 2):
-        y_date = datetime(y, 1, 1)
-        pct = ((y_date - earliest).days / total_days) * 100
-        if 0 <= pct <= 100:
-            year_markers += f'<div style="position:absolute;left:{pct}%;top:-18px;transform:translateX(-50%);font-size:0.7rem;color:#999;font-weight:600;">{y}</div>'
-            year_markers += f'<div style="position:absolute;left:{pct}%;top:0;bottom:0;width:1px;background:rgba(0,0,0,0.06);"></div>'
+    fig.update_yaxes(
+        autorange="reversed",
+        title="",
+        tickfont=dict(size=11),
+    )
+    fig.update_xaxes(
+        title="",
+        tickformat="%Y",
+        gridcolor="rgba(0,0,0,0.06)",
+        dtick="M24",
+        side="top",
+    )
+    fig.update_layout(
+        height=max(280, len(df) * 60 + 80),
+        margin=dict(l=10, r=20, t=40, b=20),
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        font=dict(size=12),
+        bargap=0.3,
+    )
 
     work_count = len(df[df["event_type"] == "Work"])
     work_yrs = df[df["event_type"] == "Work"]["months"].sum() // 12
 
+    legend_items = ""
+    for org, color in org_colors.items():
+        legend_items += (
+            f'<div style="display:flex;align-items:center;gap:5px;font-size:0.8rem;">'
+            f'<span style="display:inline-block;width:14px;height:14px;background:{color};border-radius:3px;"></span>'
+            f'<span style="color:#555;">{org}</span></div>'
+        )
+
     _html(f'''
-    <style>
-        @keyframes tl-pulse {{
-            0%, 100% {{ opacity: 1; }}
-            50% {{ opacity: 0.4; }}
-        }}
-    </style>
-    <div style="display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;align-items:center;">
-        <div style="display:flex;align-items:center;gap:6px;font-size:0.82rem;">
-            <span style="display:inline-block;width:12px;height:12px;background:#065A82;border-radius:3px;"></span>
-            <span style="color:#555;">Work</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:0.82rem;">
-            <span style="display:inline-block;width:12px;height:12px;background:#1C7C54;border-radius:3px;"></span>
-            <span style="color:#555;">Education</span>
-        </div>
+    <div style="display:flex;gap:14px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+        {legend_items}
         <div style="margin-left:auto;font-size:0.82rem;color:#888;">
-            {work_yrs}+ years across {work_count} roles &nbsp;·&nbsp; {earliest.strftime('%Y')} – Present
+            {work_yrs}+ years across {work_count} roles
         </div>
-    </div>
-    <div style="position:relative;height:110px;margin:28px 0 20px;padding:0 4px;">
-        {year_markers}
-        {cards_html}
     </div>
     ''')
+    st.plotly_chart(fig, width="stretch")
 
 
 def render_skills_charts(skills_df):
