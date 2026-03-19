@@ -1456,9 +1456,7 @@ def render_genie_chat():
     st.markdown("""
     <div class="genie-banner">
         <h3>🐒 Abu — Ask Me Anything About Krish</h3>
-        <p>Ask any question about Krish's career, skills, experience, or qualifications. Powered by Databricks AI/BI Genie 🧞
-           Powered by a structured data model with 9 tables in Unity Catalog format.
-           Each question generates a SQL query and returns results from Krish's career database.</p>
+        <p>Ask any question about Krish's career, skills, experience, or qualifications. Powered by Databricks AI/BI Genie 🧞</p>
     </div>
     """, unsafe_allow_html=True)
 
