@@ -1458,7 +1458,7 @@ def render_genie_chat():
         <h3>🐒 Abu — Ask Me Anything About Krish</h3>
         <p>Ask any question about Krish's career, skills, experience, or qualifications. Powered by Databricks AI/BI Genie 🧞
            Powered by a structured data model with 9 tables in Unity Catalog format.
-           Each question generates a SQL query and returns results — just like Databricks Genie.</p>
+           Each question generates a SQL query and returns results from Krish's career database.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1558,7 +1558,7 @@ def main():
     render_profile_header(profile_df)
 
     # Tabs
-    tab_dashboard, tab_genie = st.tabs(["📊  Resume Dashboard", "🧞  Ask Me Anything"])
+    tab_dashboard, tab_genie = st.tabs(["📊  Resume Dashboard", "🐒  Ask Abu Anything"])
 
     with tab_dashboard:
         render_metrics(profile_df, work_df, skills_df, certs_df)
@@ -1581,7 +1581,7 @@ def main():
         st.markdown(
             "<p style='text-align:center; color:#999; font-size:0.8rem;'>"
             "Powered by Databricks AI/BI · Data model in Unity Catalog · "
-            "Genie-powered Q&A</p>",
+            "Abu-powered Q&A 🐒</p>",
             unsafe_allow_html=True,
         )
 
