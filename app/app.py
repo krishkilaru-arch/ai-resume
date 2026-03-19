@@ -1297,12 +1297,15 @@ def render_career_timeline(timeline_df):
         tickfont=dict(size=12),
     )
 
-    fig.add_vline(
-        x=today, line_width=2, line_dash="dot",
-        line_color="#E74C3C", opacity=0.7,
-        annotation_text="Today",
-        annotation_position="top",
-        annotation_font=dict(size=10, color="#E74C3C"),
+    today_ts = today.timestamp() * 1000
+    fig.add_shape(
+        type="line", x0=today_ts, x1=today_ts, y0=-0.5, y1=len(df) - 0.5,
+        line=dict(color="#E74C3C", width=2, dash="dot"),
+        opacity=0.7, yref="y",
+    )
+    fig.add_annotation(
+        x=today_ts, y=-0.5, text="Today", showarrow=False,
+        font=dict(size=10, color="#E74C3C"), yanchor="bottom", yshift=-18,
     )
 
     for i, (_, row) in enumerate(df.iterrows()):
