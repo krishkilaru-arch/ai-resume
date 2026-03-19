@@ -313,7 +313,7 @@ def _json_to_df(data, table):
             for h in exp.get("highlights", []):
                 rows.append({
                     "highlight_id": hid, "experience_id": i,
-                    "company": exp["company"], "title": exp["title"],
+                    "company": exp["company"], "title": exp.get("title_at_employer", exp.get("title", "")),
                     "highlight": h["description"], "category": h["category"],
                     "impact_metric": h["impact_metric"],
                 })
@@ -327,7 +327,7 @@ def _json_to_df(data, table):
             end = datetime.now() if not exp.get("end_date") else datetime.strptime(exp["end_date"], "%Y-%m-%d")
             rows.append({
                 "experience_id": i, "company": exp["company"],
-                "title": exp["title"], "location": exp["location"],
+                "title": exp.get("title_at_employer", exp.get("title", "")), "location": exp["location"],
                 "employment_type": exp.get("employment_type", "Full-time"),
                 "start_date": exp["start_date"],
                 "end_date": exp.get("end_date") or "Present",
@@ -345,7 +345,7 @@ def _json_to_df(data, table):
         for exp in data.get("work_experience", []):
             rows.append({
                 "timeline_id": tid, "event_type": "Work",
-                "title": exp["title"], "organization": exp["company"],
+                "title": exp.get("title_at_employer", exp.get("title", "")), "organization": exp["company"],
                 "start_date": exp["start_date"],
                 "end_date": exp.get("end_date") or "Present",
                 "is_current": exp.get("is_current", False),
