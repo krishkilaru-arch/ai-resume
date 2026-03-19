@@ -1298,13 +1298,19 @@ def render_experience(work_df, highlights_df):
         return
     st.markdown('<div class="section-header">Work Experience</div>', unsafe_allow_html=True)
 
-    for _, row in work_df.iterrows():
+    sorted_df = work_df.copy()
+    if "start_date" in sorted_df.columns:
+        sorted_df = sorted_df.sort_values("start_date", ascending=False)
+
+    for _, row in sorted_df.iterrows():
         company = row.get("company", "")
         title = row.get("title", "") or row.get("title_at_employer", "")
         role = row.get("role_at_customer", "")
         location = row.get("location", "")
         start = row.get("start_date", "")
-        end = row.get("end_date", "Present")
+        end = row.get("end_date", "") or "Present"
+        if str(end).strip().lower() in ("none", "null", "nan", ""):
+            end = "Present"
         industry = row.get("industry", "")
         team = row.get("team_size_managed", 0)
         desc = row.get("description", "")
