@@ -258,6 +258,7 @@ st.markdown("""
 @st.cache_resource
 def get_workspace_client():
     if not HAS_DATABRICKS_SDK:
+        st.session_state["_wsc_error"] = "databricks-sdk not installed"
         return None
     try:
         host = _get_config("host", "")
@@ -265,7 +266,8 @@ def get_workspace_client():
         if host and token:
             return WorkspaceClient(host=host, token=token)
         return WorkspaceClient()
-    except Exception:
+    except Exception as e:
+        st.session_state["_wsc_error"] = str(e)
         return None
 
 
@@ -1377,7 +1379,8 @@ def render_genie_chat():
                     debug_parts.append("WAREHOUSE_ID not set")
                 w = get_workspace_client()
                 if not w:
-                    debug_parts.append("WorkspaceClient unavailable")
+                    wsc_err = st.session_state.get("_wsc_error", "unknown")
+                    debug_parts.append(f"WorkspaceClient: {wsc_err}")
                 if api_err:
                     debug_parts.append(f"API error: {api_err[:150]}")
                 if debug_parts:
