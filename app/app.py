@@ -1248,8 +1248,8 @@ def render_career_timeline(timeline_df):
         is_current = row["is_current"]
         icon = "💼" if is_work else "🎓"
         color = org_colors[row["organization"]]
-        start_fmt = row["start_dt"].strftime("'%y")
-        end_fmt = "Now" if is_current else row["end_dt"].strftime("'%y")
+        start_fmt = row["start_dt"].strftime("%Y")
+        end_fmt = "Now" if is_current else row["end_dt"].strftime("%Y")
 
         left_pct = ((row["start_dt"] - earliest).days / total_days) * 100
         width_pct = max(((row["end_dt"] - row["start_dt"]).days / total_days) * 100, 8)
