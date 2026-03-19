@@ -203,6 +203,30 @@ def main():
         )""")
     print(f"  {len(data['publications'])} rows")
 
+    # 9. Career Timeline (timeline_id, event_type, title, organization,
+    #    start_date, end_date, is_current, location, description, category)
+    print(">>> career_timeline")
+    run_sql(f"DELETE FROM {FQ}.career_timeline")
+    tid = 1
+    for w in data["work_experience"]:
+        title = w.get("title_at_employer", w.get("title", ""))
+        end_dt = w.get("end_date")
+        run_sql(f"""INSERT INTO {FQ}.career_timeline VALUES (
+            {tid}, 'Work', {esc(title)}, {esc(w['company'])},
+            {esc(w['start_date'])}, {esc(end_dt)}, {str(w['is_current']).lower()},
+            {esc(w.get('location'))}, {esc(w.get('description',''))}, {esc(w.get('industry',''))}
+        )""")
+        tid += 1
+    for e in data["education"]:
+        title = f"{e['degree']} in {e['field_of_study']}"
+        run_sql(f"""INSERT INTO {FQ}.career_timeline VALUES (
+            {tid}, 'Education', {esc(title)}, {esc(e['institution'])},
+            {esc(e['start_date'])}, {esc(e['end_date'])}, false,
+            NULL, {esc(e.get('honors',''))}, 'Academia'
+        )""")
+        tid += 1
+    print(f"  {tid - 1} rows")
+
     print("\n=== ALL TABLES UPDATED ===")
 
 

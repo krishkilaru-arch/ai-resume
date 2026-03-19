@@ -1228,75 +1228,97 @@ def render_career_timeline(timeline_df):
     df["end_dt"] = pd.to_datetime(df["end_calc"])
     df["months"] = ((df["end_dt"] - df["start_dt"]).dt.days / 30.44).round().astype(int)
     df["duration_label"] = df["months"].apply(
-        lambda m: f"{m // 12} yr {'%d mo' % (m % 12) if m % 12 else ''}".strip() if m >= 12 else f"{m} mo"
+        lambda m: f"{m // 12}y {m % 12}m" if m >= 12 and m % 12 else (f"{m // 12}y" if m >= 12 else f"{m}m")
     )
     df["is_current"] = df["is_current"].astype(str).str.lower().isin(["true", "1"])
-    df = df.sort_values("start_dt", ascending=False)
+    df = df.sort_values("start_dt", ascending=True)
 
-    items_html = ""
-    for _, row in df.iterrows():
+    earliest = df["start_dt"].min()
+    latest = df["end_dt"].max()
+    total_days = max((latest - earliest).days, 1)
+
+    cards_html = ""
+    for idx, (_, row) in enumerate(df.iterrows()):
         is_work = row["event_type"] == "Work"
         is_current = row["is_current"]
         icon = "💼" if is_work else "🎓"
         color = "#065A82" if is_work else "#1C7C54"
-        start_fmt = row["start_dt"].strftime("%b %Y")
-        end_fmt = "Present" if is_current else row["end_dt"].strftime("%b %Y")
-        loc = row.get("location") or ""
-        loc_html = f'<span style="color:#888;font-size:0.8rem;">📍 {loc}</span>' if loc else ""
+        start_fmt = row["start_dt"].strftime("'%y")
+        end_fmt = "Now" if is_current else row["end_dt"].strftime("'%y")
 
-        dot_style = (
-            f"background:{color}; box-shadow: 0 0 0 4px {'rgba(6,90,130,0.2)' if is_work else 'rgba(28,124,84,0.2)'};"
-            + (" animation: pulse-dot 2s infinite;" if is_current else "")
-        )
-        current_badge = '<span style="background:#E8F5E9;color:#2E7D32;font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:8px;">CURRENT</span>' if is_current else ""
-        border_color = color if is_current else "#E9ECEF"
+        left_pct = ((row["start_dt"] - earliest).days / total_days) * 100
+        width_pct = max(((row["end_dt"] - row["start_dt"]).days / total_days) * 100, 8)
 
-        items_html += f'''
-        <div style="display:flex; gap:20px; margin-bottom:0; position:relative;">
-            <div style="display:flex;flex-direction:column;align-items:center;min-width:60px;">
-                <div style="width:14px;height:14px;border-radius:50%;{dot_style};flex-shrink:0;margin-top:18px;z-index:2;"></div>
-                <div style="width:2px;flex:1;background:linear-gradient(180deg,{color}22,{color}08);"></div>
-            </div>
-            <div style="flex:1;background:#fff;border:1px solid {border_color};border-left:3px solid {color};border-radius:10px;padding:16px 20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.04);transition:box-shadow 0.2s;">
-                <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">
-                    <span style="font-size:1.15rem;">{icon}</span>
-                    <span style="font-weight:700;color:#1B3A4B;font-size:1rem;">{row["title"]}</span>
-                    {current_badge}
+        pulse_css = "animation:tl-pulse 2s infinite;" if is_current else ""
+        current_badge = '<div style="background:#E8F5E9;color:#2E7D32;font-size:0.65rem;font-weight:700;padding:1px 6px;border-radius:8px;margin-top:2px;text-align:center;">CURRENT</div>' if is_current else ""
+
+        org_short = row["organization"]
+        if len(org_short) > 20:
+            org_short = org_short[:18] + "…"
+
+        title_short = row["title"]
+        if len(title_short) > 30:
+            title_short = title_short[:28] + "…"
+
+        cards_html += f'''
+        <div style="position:absolute;left:{left_pct}%;width:{width_pct}%;top:0;bottom:0;padding:0 2px;box-sizing:border-box;">
+            <div style="height:100%;background:{color};border-radius:8px;padding:10px 10px 8px;
+                        box-shadow:0 2px 8px rgba(0,0,0,0.1);border:2px solid {'#F4A261' if is_current else color};
+                        display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;
+                        position:relative;cursor:default;" title="{row['title']} @ {row['organization']}&#10;{row['start_dt'].strftime('%b %Y')} — {'Present' if is_current else row['end_dt'].strftime('%b %Y')}&#10;Duration: {row['duration_label']}">
+                <div>
+                    <div style="color:rgba(255,255,255,0.95);font-weight:700;font-size:0.78rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                        {icon} {title_short}
+                    </div>
+                    <div style="color:rgba(255,255,255,0.75);font-size:0.7rem;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                        {org_short}
+                    </div>
                 </div>
-                <div style="color:{color};font-weight:600;font-size:0.9rem;margin-top:2px;">{row["organization"]}</div>
-                <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;align-items:center;">
-                    <span style="color:#555;font-size:0.82rem;">📅 {start_fmt} — {end_fmt}</span>
-                    <span style="background:{color}15;color:{color};font-size:0.78rem;font-weight:700;padding:2px 10px;border-radius:12px;border:1px solid {color}30;">⏱ {row["duration_label"]}</span>
-                    {loc_html}
+                <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;">
+                    <span style="color:rgba(255,255,255,0.6);font-size:0.65rem;">{start_fmt}–{end_fmt}</span>
+                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.62rem;font-weight:700;
+                                 padding:1px 5px;border-radius:6px;">{row["duration_label"]}</span>
                 </div>
+                {f'<div style="position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#4CAF50;{pulse_css}"></div>' if is_current else ''}
             </div>
         </div>'''
 
-    total_yrs = df["months"].sum() // 12
+    year_markers = ""
+    start_year = earliest.year
+    end_year = latest.year + 1
+    for y in range(start_year, end_year + 1, 2):
+        y_date = datetime(y, 1, 1)
+        pct = ((y_date - earliest).days / total_days) * 100
+        if 0 <= pct <= 100:
+            year_markers += f'<div style="position:absolute;left:{pct}%;top:-18px;transform:translateX(-50%);font-size:0.7rem;color:#999;font-weight:600;">{y}</div>'
+            year_markers += f'<div style="position:absolute;left:{pct}%;top:0;bottom:0;width:1px;background:rgba(0,0,0,0.06);"></div>'
+
+    work_count = len(df[df["event_type"] == "Work"])
     work_yrs = df[df["event_type"] == "Work"]["months"].sum() // 12
 
     _html(f'''
     <style>
-        @keyframes pulse-dot {{
-            0%, 100% {{ box-shadow: 0 0 0 4px rgba(6,90,130,0.2); }}
-            50% {{ box-shadow: 0 0 0 8px rgba(6,90,130,0.1); }}
+        @keyframes tl-pulse {{
+            0%, 100% {{ opacity: 1; }}
+            50% {{ opacity: 0.4; }}
         }}
     </style>
-    <div style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;">
-        <div style="display:flex;align-items:center;gap:6px;font-size:0.85rem;">
-            <span style="display:inline-block;width:12px;height:12px;background:#065A82;border-radius:50%;"></span>
-            <span style="color:#555;">Work Experience</span>
+    <div style="display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;align-items:center;">
+        <div style="display:flex;align-items:center;gap:6px;font-size:0.82rem;">
+            <span style="display:inline-block;width:12px;height:12px;background:#065A82;border-radius:3px;"></span>
+            <span style="color:#555;">Work</span>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:0.85rem;">
-            <span style="display:inline-block;width:12px;height:12px;background:#1C7C54;border-radius:50%;"></span>
+        <div style="display:flex;align-items:center;gap:6px;font-size:0.82rem;">
+            <span style="display:inline-block;width:12px;height:12px;background:#1C7C54;border-radius:3px;"></span>
             <span style="color:#555;">Education</span>
         </div>
-        <div style="margin-left:auto;font-size:0.85rem;color:#888;">
-            {work_yrs}+ years professional experience across {len(df[df["event_type"]=="Work"])} roles
+        <div style="margin-left:auto;font-size:0.82rem;color:#888;">
+            {work_yrs}+ years across {work_count} roles &nbsp;·&nbsp; {earliest.strftime('%Y')} – Present
         </div>
     </div>
-    <div style="padding-left:4px;">
-        {items_html}
+    <div style="position:relative;height:110px;margin:28px 0 20px;padding:0 4px;">
+        {year_markers}
+        {cards_html}
     </div>
     ''')
 
