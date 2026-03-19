@@ -201,8 +201,20 @@ _html("""
     .cert-badges-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 14px;
+        align-items: center;
+        gap: 10px;
+        margin-top: 16px;
+    }
+    .cert-badge-img {
+        height: 72px;
+        width: auto;
+        border-radius: 6px;
+        transition: transform 0.2s ease;
+        cursor: pointer;
+        filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+    }
+    .cert-badge-img:hover {
+        transform: scale(1.15);
     }
     .cert-badge {
         background: rgba(255,255,255,0.15);
@@ -210,7 +222,7 @@ _html("""
         color: #fff;
         padding: 4px 12px;
         border-radius: 20px;
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         font-weight: 500;
         white-space: nowrap;
         backdrop-filter: blur(4px);
@@ -1196,18 +1208,35 @@ def render_profile_header(profile_df, certs_df=None):
     if email:
         links_html += f'<a href="mailto:{email}">{email}</a>'
 
+    BADGE_IMAGES = {
+        "data engineer associate": "https://www.databricks.com/sites/default/files/2025-10/associate-badge-de.png?v=1761149691",
+        "data engineer professional": "https://www.databricks.com/sites/default/files/2025-10/professional-badge-de.png?v=1761143167",
+        "machine learning associate": "https://www.databricks.com/sites/default/files/2025-10/Associate-badge-ML.png?v=1761077024",
+        "generative ai engineer associate": "https://www.databricks.com/sites/default/files/2025-10/associate-badge-gen-ai.png?v=1761153880",
+    }
+
     badges_html = ""
     if certs_df is not None and not certs_df.empty:
         org_col = "issuing_organization" if "issuing_organization" in certs_df.columns else "issuing_org"
         name_col = "certification_name" if "certification_name" in certs_df.columns else "name"
         db_certs = certs_df[certs_df[org_col].str.lower() == "databricks"]
         if not db_certs.empty:
-            badge_items = ""
+            image_badges = ""
+            text_badges = ""
             for _, cert in db_certs.iterrows():
                 cert_name = cert.get(name_col, "")
-                short = cert_name.replace("Databricks Certified ", "").replace("Partner Training - ", "").replace("Academy Accreditation - ", "").replace("Knowledge Badge - ", "")
-                badge_items += f'<span class="cert-badge" title="{cert_name}">🏅 {short}</span>'
-            badges_html = f'<div class="cert-badges-row">{badge_items}</div>'
+                cert_lower = cert_name.lower().replace("databricks certified ", "")
+                img_url = None
+                for key, url in BADGE_IMAGES.items():
+                    if key in cert_lower:
+                        img_url = url
+                        break
+                if img_url:
+                    image_badges += f'<img src="{img_url}" alt="{cert_name}" title="{cert_name}" class="cert-badge-img" />'
+                else:
+                    short = cert_name.replace("Databricks Certified ", "").replace("Partner Training - ", "").replace("Academy Accreditation - ", "").replace("Knowledge Badge - ", "")
+                    text_badges += f'<span class="cert-badge" title="{cert_name}">🏅 {short}</span>'
+            badges_html = f'<div class="cert-badges-row">{image_badges}{text_badges}</div>'
 
     _html(f"""
     <div class="profile-header">
