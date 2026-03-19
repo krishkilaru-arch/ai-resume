@@ -1355,20 +1355,22 @@ def render_skills_charts(skills_df):
 
     df["rating"] = df.apply(lambda r: _skill_rating(r.get(prof_col, ""), r.get(yrs_col, 0)), axis=1)
 
-    db_cats = ["Databricks Platform", "Databricks AI/BI"]
+    db_cats = ["Databricks Platform", "Databricks Engineering", "Databricks Analytics", "Databricks ML & AI"]
     db_df = df[df["category"].isin(db_cats)].sort_values("rating", ascending=True).copy()
 
     if db_df.empty:
         return
 
-    db_df["color"] = db_df["category"].map({
+    cat_color_map = {
         "Databricks Platform": "#E24A33",
-        "Databricks AI/BI": "#FF8C00",
-    })
+        "Databricks Engineering": "#065A82",
+        "Databricks Analytics": "#FF8C00",
+        "Databricks ML & AI": "#7B2D8E",
+    }
 
     fig = go.Figure()
 
-    for cat, color in [("Databricks Platform", "#E24A33"), ("Databricks AI/BI", "#FF8C00")]:
+    for cat, color in cat_color_map.items():
         cat_df = db_df[db_df["category"] == cat]
         if cat_df.empty:
             continue
