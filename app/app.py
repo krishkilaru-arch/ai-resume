@@ -454,7 +454,7 @@ _INTENT_PATTERNS = [
     (["all skill", "skill", "what skills", "list skill", "proficien"], "all_skills"),
     (["experience with", "how many years", "years of experience with", "how long", "worked with"], "skill_lookup"),
     (["career progression", "career journey", "career timeline", "career path", "career history", "progression", "timeline"], "timeline"),
-    (["work experience", "job history", "employment", "work history", "where have they worked", "previous job", "past role"], "work_history"),
+    (["work experience", "job history", "employment", "work history", "where has krish worked", "where have they worked", "previous job", "past role"], "work_history"),
     (["achievement", "accomplish", "impact", "highlight", "result", "deliver"], "achievements"),
     (["leadership", "manage", "team", "led", "lead", "mentor", "direct report"], "leadership"),
     (["education", "degree", "university", "school", "college", "academic", "studied", "gpa", "major"], "education"),
@@ -1135,7 +1135,7 @@ def _genie_ask_local(question):
             text = (f"I couldn't find specific information matching that question. "
                     f"Try asking about **skills**, **experience**, **education**, "
                     f"**certifications**, **projects**, or **achievements**.\n\n"
-                    f"Example: *\"What are their top skills?\"* or *\"Tell me about their Databricks experience\"*")
+                    f"Example: *\"What are Krish's top skills?\"* or *\"Tell me about Krish's Databricks experience\"*")
         sql = f"-- Full-text search across resume tables\n-- Query: '{question}'"
 
     return {"text": text, "sql": sql, "df": df,
@@ -1441,22 +1441,22 @@ def render_publications(pubs_df):
 # ────────────────────────────────────────────────────────────────
 
 QUICK_QUESTIONS = [
-    "Tell me about this candidate",
-    "What are their top technical skills?",
-    "What is their current role?",
-    "Show their career progression",
-    "What certifications do they hold?",
-    "Do they have leadership experience?",
-    "What industries have they worked in?",
-    "What was their most impactful project?",
+    "Tell me about Krish Kilaru",
+    "What are Krish's top technical skills?",
+    "What is Krish's current role?",
+    "Show Krish's career progression",
+    "What certifications does Krish hold?",
+    "Does Krish have leadership experience?",
+    "What industries has Krish worked in?",
+    "What was Krish's most impactful project?",
 ]
 
 
 def render_genie_chat():
     st.markdown("""
     <div class="genie-banner">
-        <h3>🧞 AI/BI Genie — Ask Me Anything</h3>
-        <p>Ask any question about this candidate's career, skills, experience, or qualifications.
+        <h3>🐒 Abu — Ask Me Anything About Krish</h3>
+        <p>Ask any question about Krish's career, skills, experience, or qualifications. Powered by Databricks AI/BI Genie 🧞
            Powered by a structured data model with 9 tables in Unity Catalog format.
            Each question generates a SQL query and returns results — just like Databricks Genie.</p>
     </div>
