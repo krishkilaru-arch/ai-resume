@@ -27,10 +27,18 @@ except ImportError:
 # Configuration
 # ────────────────────────────────────────────────────────────────
 
-CATALOG = os.getenv("RESUME_CATALOG", "resume_catalog")
-SCHEMA = os.getenv("RESUME_SCHEMA", "career_profile")
-WAREHOUSE_ID = os.getenv("SQL_WAREHOUSE_ID", "")
-GENIE_SPACE_ID = os.getenv("GENIE_SPACE_ID", "")
+def _get_config(key, default=""):
+    """Read config from Streamlit secrets (cloud), env vars (Databricks App), or default."""
+    try:
+        return st.secrets["databricks"][key]
+    except Exception:
+        pass
+    return os.getenv(key.upper(), default)
+
+CATALOG = _get_config("catalog", "workspace")
+SCHEMA = _get_config("schema", "career_profile")
+WAREHOUSE_ID = _get_config("warehouse_id", "")
+GENIE_SPACE_ID = _get_config("genie_space_id", "")
 def _find_data_file():
     """Locate resume_data.json in both local dev and deployed Databricks App layouts."""
     candidates = [
@@ -252,6 +260,10 @@ def get_workspace_client():
     if not HAS_DATABRICKS_SDK:
         return None
     try:
+        host = _get_config("host", "")
+        token = _get_config("token", "")
+        if host and token:
+            return WorkspaceClient(host=host, token=token)
         return WorkspaceClient()
     except Exception:
         return None
@@ -488,7 +500,79 @@ def _extract_skill_name(question):
     return None
 
 
+def _genie_ask_api(question, conversation_id=None):
+    """Try real Databricks Genie API. Returns result dict or None if unavailable."""
+    w = get_workspace_client()
+    if not w or not GENIE_SPACE_ID:
+        return None
+
+    try:
+        if conversation_id:
+            resp = w.genie.create_message(
+                space_id=GENIE_SPACE_ID,
+                conversation_id=conversation_id,
+                content=question,
+            )
+            conv_id = conversation_id
+            msg_id = resp.id
+        else:
+            resp = w.genie.start_conversation(
+                space_id=GENIE_SPACE_ID,
+                content=question,
+            )
+            conv_id = resp.conversation.id if hasattr(resp, "conversation") else resp.conversation_id
+            msg_id = resp.message.id if hasattr(resp, "message") else resp.message_id
+
+        message = None
+        for _ in range(60):
+            message = w.genie.get_message(GENIE_SPACE_ID, conv_id, msg_id)
+            status = message.status if hasattr(message, "status") else None
+            if status and status.value in ("COMPLETED", "FAILED", "CANCELLED", "QUERY_RESULT_EXPIRED"):
+                break
+            time.sleep(1)
+
+        answer_text = ""
+        sql_query = None
+        result_df = None
+
+        if message and message.attachments:
+            for att in message.attachments:
+                if hasattr(att, "text") and att.text:
+                    answer_text = att.text.content
+                if hasattr(att, "query") and att.query:
+                    sql_query = att.query.query
+                    try:
+                        qr = w.genie.get_message_query_result(GENIE_SPACE_ID, conv_id, msg_id)
+                        if qr and hasattr(qr, "statement_response") and qr.statement_response:
+                            sr = qr.statement_response
+                            cols = [c.name for c in sr.manifest.schema.columns]
+                            rows = sr.result.data_array if sr.result else []
+                            result_df = pd.DataFrame(rows, columns=cols)
+                    except Exception:
+                        pass
+
+        if not answer_text and message:
+            answer_text = getattr(message, "content", "") or ""
+
+        return {
+            "text": answer_text, "sql": sql_query,
+            "df": result_df, "conversation_id": conv_id,
+            "status": message.status.value if message and message.status else "COMPLETED",
+        }
+    except Exception:
+        return None
+
+
 def genie_ask(question, conversation_id=None):
+    """Try real Genie API first, fall back to local Q&A engine."""
+    api_result = _genie_ask_api(question, conversation_id)
+    if api_result and api_result.get("text"):
+        return api_result
+
+    return _genie_ask_local(question)
+
+
+def _genie_ask_local(question):
     """Local Genie-style Q&A: detect intent, generate SQL, query DataFrames."""
     data = load_resume_json()
     if not data:
