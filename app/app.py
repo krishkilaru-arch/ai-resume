@@ -329,7 +329,9 @@ def _json_to_df(data, table):
             end = datetime.now() if not exp.get("end_date") else datetime.strptime(exp["end_date"], "%Y-%m-%d")
             rows.append({
                 "experience_id": i, "company": exp["company"],
-                "title": exp.get("title_at_employer", exp.get("title", "")), "location": exp["location"],
+                "title": exp.get("title_at_employer", exp.get("title", "")),
+                "role_at_customer": exp.get("role_at_customer", ""),
+                "location": exp["location"],
                 "employment_type": exp.get("employment_type", "Full-time"),
                 "start_date": exp["start_date"],
                 "end_date": exp.get("end_date") or "Present",
@@ -1298,7 +1300,8 @@ def render_experience(work_df, highlights_df):
 
     for _, row in work_df.iterrows():
         company = row.get("company", "")
-        title = row.get("title", "")
+        title = row.get("title", "") or row.get("title_at_employer", "")
+        role = row.get("role_at_customer", "")
         location = row.get("location", "")
         start = row.get("start_date", "")
         end = row.get("end_date", "Present")
@@ -1330,9 +1333,11 @@ def render_experience(work_df, highlights_df):
                     </span>
                 </div>"""
 
+        role_html = f'<div style="color:#065A82; font-size:0.95rem; font-weight:500;">{role}</div>' if role and role != title else ""
         st.markdown(f"""
         <div class="exp-card">
             <h4>{title}</h4>
+            {role_html}
             <div class="subtitle">{company}</div>
             <div class="meta">📍 {location} &nbsp;|&nbsp; 📅 {start} — {end} {badge_html}</div>
             <div style="color:#444; font-size:0.9rem; margin-bottom:8px;">{desc}</div>
