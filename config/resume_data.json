@@ -309,6 +309,7 @@
     {"skill_name": "Lakehouse Architecture Design", "category": "Databricks Platform", "proficiency": "Expert", "years_used": 5},
     {"skill_name": "Predictive Optimization", "category": "Databricks Platform", "proficiency": "Advanced", "years_used": 2},
     {"skill_name": "Databricks Marketplace", "category": "Databricks Platform", "proficiency": "Advanced", "years_used": 2},
+    {"skill_name": "Databricks Asset Bundles (DABs)", "category": "Databricks Platform", "proficiency": "Advanced", "years_used": 2},
     {"skill_name": "Databricks REST API & SDK", "category": "Databricks Platform", "proficiency": "Advanced", "years_used": 3},
     {"skill_name": "Databricks Genie (NL Interface)", "category": "Databricks AI/BI", "proficiency": "Expert", "years_used": 2},
     {"skill_name": "AI/BI Dashboards (AI-assisted)", "category": "Databricks AI/BI", "proficiency": "Expert", "years_used": 2},
