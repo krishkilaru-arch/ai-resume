@@ -503,81 +503,90 @@ def _extract_skill_name(question):
 
 
 def _genie_ask_api(question, conversation_id=None):
-    """Try real Databricks Genie API. Returns result dict or None if unavailable."""
-    w = get_workspace_client()
-    if not w or not GENIE_SPACE_ID:
+    """Call Databricks Genie via REST API (avoids SDK version issues)."""
+    import requests as _req
+
+    host = _get_config("host", "")
+    token = _get_config("token", "")
+    if not host or not token or not GENIE_SPACE_ID:
         return None
 
     if conversation_id == "local":
         conversation_id = None
 
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+    base = f"{host.rstrip('/')}/api/2.0/genie/spaces/{GENIE_SPACE_ID}"
+
     try:
         if conversation_id:
-            resp = w.genie.create_message(
-                space_id=GENIE_SPACE_ID,
-                conversation_id=conversation_id,
-                content=question,
-            )
+            r = _req.post(f"{base}/conversations/{conversation_id}/messages",
+                          headers=headers, json={"content": question}, timeout=30)
+            r.raise_for_status()
+            d = r.json()
             conv_id = conversation_id
-            msg_id = resp.id
+            msg_id = d.get("message_id") or d.get("id")
         else:
-            resp = w.genie.start_conversation(
-                space_id=GENIE_SPACE_ID,
-                content=question,
-            )
-            conv_id = None
-            msg_id = None
-            if hasattr(resp, "conversation") and resp.conversation:
-                conv_id = getattr(resp.conversation, "id", None) or getattr(resp.conversation, "conversation_id", None)
-            if not conv_id:
-                conv_id = getattr(resp, "conversation_id", None)
-            if hasattr(resp, "message") and resp.message:
-                msg_id = getattr(resp.message, "id", None) or getattr(resp.message, "message_id", None)
-            if not msg_id:
-                msg_id = getattr(resp, "message_id", None)
-            if not conv_id or not msg_id:
-                rd = resp.as_dict() if hasattr(resp, "as_dict") else {}
-                conv_id = conv_id or rd.get("conversation_id") or rd.get("conversation", {}).get("id")
-                msg_id = msg_id or rd.get("message_id") or rd.get("message", {}).get("id")
+            r = _req.post(f"{base}/start-conversation",
+                          headers=headers, json={"content": question}, timeout=30)
+            r.raise_for_status()
+            d = r.json()
+            conv_id = d.get("conversation_id") or d.get("conversation", {}).get("id")
+            msg_id = d.get("message_id") or d.get("message", {}).get("id")
 
-        message = None
+        if not conv_id or not msg_id:
+            st.session_state["_genie_api_error"] = f"Missing IDs: conv={conv_id}, msg={msg_id}"
+            return None
+
+        msg_url = f"{base}/conversations/{conv_id}/messages/{msg_id}"
+        msg_data = None
         for _ in range(60):
-            message = w.genie.get_message(GENIE_SPACE_ID, conv_id, msg_id)
-            status = message.status if hasattr(message, "status") else None
-            if status and status.value in ("COMPLETED", "FAILED", "CANCELLED", "QUERY_RESULT_EXPIRED"):
-                break
             time.sleep(1)
+            r2 = _req.get(msg_url, headers=headers, timeout=30)
+            r2.raise_for_status()
+            msg_data = r2.json()
+            status = msg_data.get("status", "")
+            if status in ("COMPLETED", "FAILED", "CANCELLED", "QUERY_RESULT_EXPIRED",
+                          "EXECUTING_QUERY", "ASKING_AI"):
+                if status in ("COMPLETED", "FAILED", "CANCELLED", "QUERY_RESULT_EXPIRED"):
+                    break
+                has_text = any("text" in a for a in msg_data.get("attachments", []))
+                if has_text:
+                    break
 
         answer_text = ""
         sql_query = None
         result_df = None
 
-        if message and message.attachments:
-            for att in message.attachments:
-                if hasattr(att, "text") and att.text:
-                    answer_text = att.text.content
-                if hasattr(att, "query") and att.query:
-                    sql_query = att.query.query
+        for att in msg_data.get("attachments", []):
+            if "text" in att:
+                answer_text += att["text"].get("content", "") + "\n"
+            if "query" in att:
+                sql_query = att["query"].get("query", "")
+                row_count = att["query"].get("query_result_metadata", {}).get("row_count", 0)
+                if row_count > 0:
                     try:
-                        qr = w.genie.get_message_query_result(GENIE_SPACE_ID, conv_id, msg_id)
-                        if qr and hasattr(qr, "statement_response") and qr.statement_response:
-                            sr = qr.statement_response
-                            cols = [c.name for c in sr.manifest.schema.columns]
-                            rows = sr.result.data_array if sr.result else []
+                        qr_url = f"{msg_url}/query-result"
+                        qr = _req.get(qr_url, headers=headers, timeout=30)
+                        qr.raise_for_status()
+                        qr_data = qr.json()
+                        sr = qr_data.get("statement_response", {})
+                        cols = [c["name"] for c in sr.get("manifest", {}).get("schema", {}).get("columns", [])]
+                        rows = sr.get("result", {}).get("data_array", [])
+                        if cols and rows:
                             result_df = pd.DataFrame(rows, columns=cols)
                     except Exception:
                         pass
 
-        if not answer_text and message:
-            answer_text = getattr(message, "content", "") or ""
+        if not answer_text:
+            answer_text = msg_data.get("content", "")
 
         return {
-            "text": answer_text, "sql": sql_query,
+            "text": answer_text.strip(), "sql": sql_query,
             "df": result_df, "conversation_id": conv_id,
-            "status": message.status.value if message and message.status else "COMPLETED",
+            "status": msg_data.get("status", "COMPLETED"),
         }
     except Exception as e:
-        st.session_state["_genie_api_error"] = str(e)
+        st.session_state["_genie_api_error"] = f"{type(e).__name__}: {e}"
         return None
 
 
