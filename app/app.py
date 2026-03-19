@@ -1120,7 +1120,7 @@ def render_career_timeline(timeline_df):
         font=dict(size=12),
         plot_bgcolor="rgba(0,0,0,0)",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 
 def render_skills_charts(skills_df):
@@ -1149,7 +1149,7 @@ def render_skills_charts(skills_df):
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(size=11),
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with col2:
         cat_counts = df.groupby("category").size().reset_index(name="count").sort_values("count", ascending=False)
@@ -1164,7 +1164,7 @@ def render_skills_charts(skills_df):
             font=dict(size=11),
         )
         fig2.update_traces(textposition="inside", textinfo="label+value")
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width="stretch")
 
         if "proficiency_level" in df.columns:
             prof_counts = df["proficiency_level"].value_counts().reset_index()
@@ -1358,7 +1358,7 @@ def render_genie_chat():
     st.markdown("**Suggested questions:**")
     btn_cols = st.columns(4)
     for i, q in enumerate(QUICK_QUESTIONS):
-        if btn_cols[i % 4].button(q, key=f"quick_{i}", use_container_width=True):
+        if btn_cols[i % 4].button(q, key=f"quick_{i}", width="stretch"):
             st.session_state.pending_question = q
             st.rerun()
 
@@ -1369,7 +1369,7 @@ def render_genie_chat():
         with st.chat_message(msg["role"], avatar="👤" if msg["role"] == "user" else "🧞"):
             st.markdown(msg["content"])
             if msg.get("df") is not None and not msg["df"].empty:
-                st.dataframe(msg["df"], use_container_width=True, hide_index=True)
+                st.dataframe(msg["df"], width="stretch", hide_index=True)
             if msg.get("sql"):
                 with st.expander("View generated SQL"):
                     st.code(msg["sql"], language="sql")
@@ -1412,7 +1412,7 @@ def render_genie_chat():
 
             st.markdown(result["text"])
             if result.get("df") is not None and not result["df"].empty:
-                st.dataframe(result["df"], use_container_width=True, hide_index=True)
+                st.dataframe(result["df"], width="stretch", hide_index=True)
             if result.get("sql"):
                 with st.expander("View generated SQL"):
                     st.code(result["sql"], language="sql")
