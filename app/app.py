@@ -23,6 +23,13 @@ try:
 except ImportError:
     pass
 
+def _html(content):
+    """Render HTML content using st.html (Streamlit 1.33+) with fallback."""
+    if hasattr(st, "html"):
+        st.html(content)
+    else:
+        _html(content)
+
 # ────────────────────────────────────────────────────────────────
 # Configuration
 # ────────────────────────────────────────────────────────────────
@@ -80,7 +87,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-st.markdown("""
+_html("""
 <style>
     /* Hide default Streamlit chrome for cleaner look */
     #MainMenu {visibility: hidden;}
@@ -248,7 +255,7 @@ st.markdown("""
     .genie-banner h3 { margin: 0 0 6px 0; }
     .genie-banner p { margin: 0; opacity: 0.85; font-size: 0.9rem; }
 </style>
-""", unsafe_allow_html=True)
+""")
 
 
 # ────────────────────────────────────────────────────────────────
@@ -1169,14 +1176,14 @@ def render_profile_header(profile_df):
     if email:
         links_html += f'<a href="mailto:{email}">{email}</a>'
 
-    st.markdown(f"""
+    _html(f"""
     <div class="profile-header">
         <h1>{name}</h1>
         <div class="headline">{headline}</div>
         <div class="location">📍 {location}</div>
         <div class="links" style="margin-top:10px;">{links_html}</div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
 
 def render_metrics(profile_df, work_df, skills_df, certs_df):
@@ -1203,15 +1210,15 @@ def render_summary(profile_df):
         return
     summary = profile_df.iloc[0].get("summary", "")
     if summary:
-        st.markdown('<div class="section-header">Professional Summary</div>', unsafe_allow_html=True)
-        st.markdown(f"<p style='font-size:0.95rem; line-height:1.7; color:#333;'>{summary}</p>",
-                    unsafe_allow_html=True)
+        _html('<div class="section-header">Professional Summary</div>')
+        _html(f"<p style='font-size:0.95rem; line-height:1.7; color:#333;'>{summary}</p>"
+                    )
 
 
 def render_career_timeline(timeline_df):
     if timeline_df.empty:
         return
-    st.markdown('<div class="section-header">Career Timeline</div>', unsafe_allow_html=True)
+    _html('<div class="section-header">Career Timeline</div>')
 
     df = timeline_df.copy()
     today_str = datetime.now().strftime("%Y-%m-%d")
@@ -1241,7 +1248,7 @@ def render_career_timeline(timeline_df):
 def render_skills_charts(skills_df):
     if skills_df.empty:
         return
-    st.markdown('<div class="section-header">Skills & Expertise</div>', unsafe_allow_html=True)
+    _html('<div class="section-header">Skills & Expertise</div>')
 
     df = skills_df.copy()
     if "years_of_experience" in df.columns:
@@ -1286,17 +1293,16 @@ def render_skills_charts(skills_df):
             prof_counts.columns = ["level", "count"]
             for _, row in prof_counts.iterrows():
                 color = {"Expert": "#065A82", "Advanced": "#1C7C54", "Intermediate": "#F4A261"}.get(row["level"], "#999")
-                st.markdown(
+                _html(
                     f"<span style='color:{color}; font-weight:700;'>{row['level']}</span>: "
                     f"{row['count']} skills",
-                    unsafe_allow_html=True,
                 )
 
 
 def render_experience(work_df, highlights_df):
     if work_df.empty:
         return
-    st.markdown('<div class="section-header">Work Experience</div>', unsafe_allow_html=True)
+    _html('<div class="section-header">Work Experience</div>')
 
     sorted_df = work_df.copy()
     if "start_date" in sorted_df.columns:
@@ -1340,7 +1346,7 @@ def render_experience(work_df, highlights_df):
                 </div>"""
 
         role_html = f'<div style="color:#065A82; font-size:0.95rem; font-weight:500;">{role}</div>' if role and role != title else ""
-        st.markdown(f"""
+        _html(f"""
         <div class="exp-card">
             <h4>{title}</h4>
             {role_html}
@@ -1349,13 +1355,13 @@ def render_experience(work_df, highlights_df):
             <div style="color:#444; font-size:0.9rem; margin-bottom:8px;">{desc}</div>
             {highlights_html}
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
 
 def render_education(edu_df):
     if edu_df.empty:
         return
-    st.markdown('<div class="section-header">Education</div>', unsafe_allow_html=True)
+    _html('<div class="section-header">Education</div>')
     for _, row in edu_df.iterrows():
         gpa = row.get("gpa", "")
         honors = row.get("honors", "")
@@ -1367,7 +1373,7 @@ def render_education(edu_df):
         detail = " · ".join(detail_parts)
         coursework = row.get("relevant_coursework", "")
 
-        st.markdown(f"""
+        _html(f"""
         <div class="info-card">
             <h5>{row.get('degree', '')} in {row.get('field_of_study', '')}</h5>
             <div style="color:#065A82; font-weight:600; font-size:0.9rem;">
@@ -1376,20 +1382,20 @@ def render_education(edu_df):
             <div class="detail">📅 {row.get('start_date', '')} — {row.get('end_date', '')} &nbsp;|&nbsp; {detail}</div>
             {'<div class="detail" style="margin-top:4px;">📚 ' + coursework + '</div>' if coursework else ''}
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
 
 def render_certifications(certs_df):
     if certs_df.empty:
         return
-    st.markdown('<div class="section-header">Certifications</div>', unsafe_allow_html=True)
+    _html('<div class="section-header">Certifications</div>')
     for _, row in certs_df.iterrows():
         active_str = str(row.get("is_active", "")).lower()
         is_active = active_str in ("true", "1")
         status = "✅ Active" if is_active else "⏰ Expired"
         status_color = "#1C7C54" if is_active else "#DC3545"
 
-        st.markdown(f"""
+        _html(f"""
         <div class="info-card">
             <h5>{row.get('certification_name', '')}</h5>
             <div class="detail">
@@ -1398,19 +1404,19 @@ def render_certifications(certs_df):
                 <span style="color:{status_color}; font-weight:600;">{status}</span>
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
 
 def render_projects(projects_df):
     if projects_df.empty:
         return
-    st.markdown('<div class="section-header">Key Projects</div>', unsafe_allow_html=True)
+    _html('<div class="section-header">Key Projects</div>')
 
     cols = st.columns(min(len(projects_df), 3))
     for i, (_, row) in enumerate(projects_df.iterrows()):
         with cols[i % len(cols)]:
             status = "🔄 Active" if str(row.get("is_current", "")).lower() in ("true", "1") else "✅ Complete"
-            st.markdown(f"""
+            _html(f"""
             <div class="info-card" style="min-height:200px;">
                 <h5>{row.get('project_name', '')}</h5>
                 <div style="font-size:0.82rem; color:#065A82; font-weight:600; margin-bottom:6px;">
@@ -1424,18 +1430,18 @@ def render_projects(projects_df):
                     🛠 {row.get('technologies_used', '')}
                 </div>
             </div>
-            """, unsafe_allow_html=True)
+            """)
 
 
 def render_publications(pubs_df):
     if pubs_df.empty:
         return
-    st.markdown('<div class="section-header">Publications & Talks</div>', unsafe_allow_html=True)
+    _html('<div class="section-header">Publications & Talks</div>')
     for _, row in pubs_df.iterrows():
         url = row.get("url", "")
         title = row.get("title", "")
         link_html = f'<a href="{url}" target="_blank">{title}</a>' if url else title
-        st.markdown(f"""
+        _html(f"""
         <div class="info-card">
             <h5>{link_html}</h5>
             <div class="detail">
@@ -1444,7 +1450,7 @@ def render_publications(pubs_df):
                 📝 {row.get('publication_type', '')}
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
 
 # ────────────────────────────────────────────────────────────────
@@ -1464,12 +1470,12 @@ QUICK_QUESTIONS = [
 
 
 def render_genie_chat():
-    st.markdown("""
+    _html("""
     <div class="genie-banner">
         <h3>🐒 Abu — Ask Me Anything About Krish</h3>
         <p>Ask any question about Krish's career, skills, experience, or qualifications. Powered by Databricks AI/BI Genie 🧞</p>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
@@ -1586,12 +1592,11 @@ def main():
         render_publications(pubs_df)
 
         # Footer
-        st.markdown("---")
+        _html("---")
         st.markdown(
             "<p style='text-align:center; color:#999; font-size:0.8rem;'>"
             "Powered by Databricks AI/BI · Data model in Unity Catalog · "
             "Abu-powered Q&A 🐒</p>",
-            unsafe_allow_html=True,
         )
 
     with tab_genie:
