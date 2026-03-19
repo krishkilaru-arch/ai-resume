@@ -198,6 +198,26 @@ _html("""
         opacity: 0.75;
         margin-top: 8px;
     }
+    .cert-badges-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+    }
+    .cert-badge {
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.3);
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        white-space: nowrap;
+        backdrop-filter: blur(4px);
+    }
+    .cert-badge:hover {
+        background: rgba(255,255,255,0.28);
+    }
     .profile-header .links a {
         color: #B8D4E3;
         text-decoration: none;
@@ -1155,7 +1175,7 @@ def _genie_ask_local(question):
 # Dashboard Components
 # ────────────────────────────────────────────────────────────────
 
-def render_profile_header(profile_df):
+def render_profile_header(profile_df, certs_df=None):
     if profile_df.empty:
         return
     p = profile_df.iloc[0]
@@ -1176,12 +1196,26 @@ def render_profile_header(profile_df):
     if email:
         links_html += f'<a href="mailto:{email}">{email}</a>'
 
+    badges_html = ""
+    if certs_df is not None and not certs_df.empty:
+        org_col = "issuing_organization" if "issuing_organization" in certs_df.columns else "issuing_org"
+        name_col = "certification_name" if "certification_name" in certs_df.columns else "name"
+        db_certs = certs_df[certs_df[org_col].str.lower() == "databricks"]
+        if not db_certs.empty:
+            badge_items = ""
+            for _, cert in db_certs.iterrows():
+                cert_name = cert.get(name_col, "")
+                short = cert_name.replace("Databricks Certified ", "").replace("Partner Training - ", "").replace("Academy Accreditation - ", "").replace("Knowledge Badge - ", "")
+                badge_items += f'<span class="cert-badge" title="{cert_name}">🏅 {short}</span>'
+            badges_html = f'<div class="cert-badges-row">{badge_items}</div>'
+
     _html(f"""
     <div class="profile-header">
         <h1>{name}</h1>
         <div class="headline">{headline}</div>
         <div class="location">📍 {location}</div>
         <div class="links" style="margin-top:10px;">{links_html}</div>
+        {badges_html}
     </div>
     """)
 
@@ -1805,7 +1839,7 @@ def main():
     timeline_df = load_table("career_timeline")
 
     # Header
-    render_profile_header(profile_df)
+    render_profile_header(profile_df, certs_df)
 
     # Tabs
     tab_dashboard, tab_genie = st.tabs(["📊  Resume Dashboard", "🐒  Ask Abu Anything"])
