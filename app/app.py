@@ -1252,7 +1252,7 @@ def render_career_timeline(timeline_df):
         end_fmt = "Now" if is_current else row["end_dt"].strftime("%Y")
 
         left_pct = ((row["start_dt"] - earliest).days / total_days) * 100
-        width_pct = max(((row["end_dt"] - row["start_dt"]).days / total_days) * 100, 8)
+        width_pct = max(((row["end_dt"] - row["start_dt"]).days / total_days) * 100, 14)
 
         pulse_css = "animation:tl-pulse 2s infinite;" if is_current else ""
         border = f"border:2px solid #F4A261;" if is_current else f"border:1px solid {color};"
@@ -1264,13 +1264,13 @@ def render_career_timeline(timeline_df):
                         display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;
                         position:relative;cursor:default;"
                  title="{row['title']}&#10;{row['organization']}&#10;{row['start_dt'].strftime('%b %Y')} — {'Present' if is_current else row['end_dt'].strftime('%b %Y')}&#10;Duration: {row['duration_label']}">
-                <div style="overflow:hidden;">
-                    <div style="color:#fff;font-weight:700;font-size:0.72rem;line-height:1.25;
-                                display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+                <div style="overflow:hidden;flex:1;min-height:0;">
+                    <div style="color:#fff;font-weight:700;font-size:0.73rem;line-height:1.3;
+                                word-wrap:break-word;overflow-wrap:break-word;">
                         {icon} {row["title"]}
                     </div>
-                    <div style="color:rgba(255,255,255,0.8);font-size:0.68rem;margin-top:2px;line-height:1.2;
-                                display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+                    <div style="color:rgba(255,255,255,0.8);font-size:0.68rem;margin-top:2px;line-height:1.25;
+                                word-wrap:break-word;overflow-wrap:break-word;">
                         {row["organization"]}
                     </div>
                 </div>
@@ -1317,7 +1317,7 @@ def render_career_timeline(timeline_df):
             {work_yrs}+ years across {work_count} roles
         </div>
     </div>
-    <div style="position:relative;height:130px;margin:24px 0 20px;padding:0 2px;">
+    <div style="position:relative;height:150px;margin:24px 0 20px;padding:0 2px;">
         {year_markers}
         {cards_html}
     </div>
