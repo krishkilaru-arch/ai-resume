@@ -1867,24 +1867,24 @@ def render_education(edu_df):
 
         cards_html += f'''
         <div style="position:absolute;left:{left_pct}%;width:{width_pct}%;top:0;bottom:0;padding:0 1px;box-sizing:border-box;">
-            <div style="height:100%;background:{color};border-radius:8px;padding:8px 8px 6px;
-                        box-shadow:0 2px 8px rgba(0,0,0,0.12);border:1px solid {color};
+            <div style="height:100%;background:{color};border-radius:6px;padding:5px 6px 4px;
+                        box-shadow:0 2px 6px rgba(0,0,0,0.1);border:1px solid {color};
                         display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;
                         cursor:default;" title="{hover_text}">
                 <div style="overflow:hidden;flex:1;min-height:0;">
-                    <div style="color:#fff;font-weight:700;font-size:0.73rem;line-height:1.3;
-                                word-wrap:break-word;overflow-wrap:break-word;">
+                    <div style="color:#fff;font-weight:700;font-size:0.62rem;line-height:1.2;
+                                white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                         🎓 {degree} in {field}
                     </div>
-                    <div style="color:rgba(255,255,255,0.8);font-size:0.68rem;margin-top:2px;line-height:1.25;
-                                word-wrap:break-word;overflow-wrap:break-word;">
+                    <div style="color:rgba(255,255,255,0.8);font-size:0.58rem;margin-top:1px;line-height:1.2;
+                                white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                         {inst}{gpa_str}
                     </div>
                 </div>
-                <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:4px;flex-shrink:0;">
-                    <span style="color:rgba(255,255,255,0.65);font-size:0.62rem;">{start_fmt}–{end_fmt}</span>
-                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.6rem;font-weight:700;
-                                 padding:1px 4px;border-radius:4px;">{row["duration_label"]}</span>
+                <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:2px;flex-shrink:0;">
+                    <span style="color:rgba(255,255,255,0.65);font-size:0.56rem;">{start_fmt}–{end_fmt}</span>
+                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.54rem;font-weight:700;
+                                 padding:1px 3px;border-radius:3px;">{row["duration_label"]}</span>
                 </div>
             </div>
         </div>'''
@@ -1907,7 +1907,7 @@ def render_education(edu_df):
     <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center;">
         {legend_items}
     </div>
-    <div style="position:relative;height:150px;margin:24px 0 20px;padding:0 2px;">
+    <div style="position:relative;height:80px;margin:20px 0 16px;padding:0 2px;">
         {year_markers}
         {cards_html}
     </div>
