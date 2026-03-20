@@ -84,11 +84,35 @@ CATEGORY_COLORS = {
 # ────────────────────────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="Interactive AI Resume",
+    page_title="Krish Kilaru — Databricks Solutions Architect | AI Resume",
     page_icon="🧠",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+
+if "dark_mode" not in st.session_state:
+    st.session_state.dark_mode = False
+
+if st.session_state.dark_mode:
+    _html("""<style>
+        .stApp, .main, [data-testid="stAppViewContainer"] { background-color: #0E1117 !important; color: #FAFAFA !important; }
+        .block-container { color: #FAFAFA !important; }
+        div[data-testid="stMetric"] { background: #1E2530 !important; border-color: #2D3748 !important; }
+        div[data-testid="stMetric"] label { color: #A0AEC0 !important; }
+        div[data-testid="stMetric"] [data-testid="stMetricValue"] { color: #E2E8F0 !important; }
+        .section-header { color: #63B3ED !important; border-color: #3182CE !important; }
+        .exp-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .exp-card h3 { color: #E2E8F0 !important; }
+        .exp-card .highlight { color: #CBD5E0 !important; }
+        .info-card { background: #1E2530 !important; border-color: #2D3748 !important; color: #CBD5E0 !important; }
+        .sk-card { background: #1E2530 !important; }
+        .sk-card .sk-name { color: #CBD5E0 !important; }
+        .sk-bar-bg { background: #2D3748 !important; }
+        p, span, div { color: inherit; }
+        [data-testid="stTabs"] [data-baseweb="tab-list"] { background: linear-gradient(135deg,#1a1a2e,#16213e) !important; }
+        [data-testid="stTabs"] button[role="tab"] { color: #A0AEC0 !important; }
+        [data-testid="stTabs"] button[role="tab"][aria-selected="true"] { color: #fff !important; }
+    </style>""")
 
 _html("""
 <style>
@@ -1104,10 +1128,23 @@ def _smalltalk_response(question):
         "conversation_id": None, "status": "COMPLETED", "source": "greeting",
     }
 
+def _get_time_greeting():
+    """Return time-of-day greeting based on server time (US Eastern approx)."""
+    hour = datetime.now().hour
+    if 5 <= hour < 12:
+        return "Good morning"
+    if 12 <= hour < 17:
+        return "Good afternoon"
+    if 17 <= hour < 21:
+        return "Good evening"
+    return "Hey there, night owl"
+
+
 def _greeting_response():
+    time_greet = _get_time_greeting()
     return {
         "text": (
-            "Hey there! I'm **Abu** 🐒 — Krish's trusty sidekick, here to guide you through "
+            f"**{time_greet}!** I'm **Abu** 🐒 — Krish's trusty sidekick, here to guide you through "
             "the cave of wonders that is his career!\n\n"
             "I'm powered by the **Databricks AI/BI Genie** 🧞 (yes, *that* Genie — phenomenal "
             "cosmic powers, itty-bitty SQL warehouse), and I have access to Krish's entire "
@@ -1682,7 +1719,7 @@ def render_profile_header(profile_df, certs_df=None):
 
 
 def render_metrics(profile_df, work_df, skills_df, certs_df, clients_df=None):
-    yrs = profile_df.iloc[0].get("years_of_experience", "—") if not profile_df.empty else "—"
+    yrs = int(profile_df.iloc[0].get("years_of_experience", 0)) if not profile_df.empty else 0
     total_certs = len(certs_df) if not certs_df.empty else 0
     total_skills = len(skills_df) if not skills_df.empty else 0
     expert_skills = 0
@@ -1691,12 +1728,46 @@ def render_metrics(profile_df, work_df, skills_df, certs_df, clients_df=None):
         expert_skills = len(skills_df[skills_df[prof_col] == "Expert"])
     clients_count = len(clients_df) if clients_df is not None and not clients_df.empty else 0
 
-    c1, c2, c3, c4, c5 = st.columns(5)
-    c1.metric("Years Experience", yrs)
-    c2.metric("Clients Served", clients_count)
-    c3.metric("Total Skills", total_skills)
-    c4.metric("Expert Skills", expert_skills)
-    c5.metric("Certifications", total_certs)
+    metrics = [
+        ("Years Experience", yrs, "#1B6B93"),
+        ("Clients Served", clients_count, "#E24A33"),
+        ("Total Skills", total_skills, "#2E8B57"),
+        ("Expert Skills", expert_skills, "#7B2D8E"),
+        ("Certifications", total_certs, "#D4A017"),
+    ]
+
+    cards = ""
+    for label, value, color in metrics:
+        cards += f"""
+        <div style="flex:1; min-width:120px; background:{'#1E2530' if st.session_state.get('dark_mode') else '#fff'};
+                    border:1px solid {'#2D3748' if st.session_state.get('dark_mode') else '#E9ECEF'};
+                    border-radius:12px; padding:16px 20px; text-align:center;
+                    box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+            <div style="color:{'#A0AEC0' if st.session_state.get('dark_mode') else '#6C757D'};
+                        font-size:0.8rem; margin-bottom:4px;">{label}</div>
+            <div class="countup" data-target="{value}"
+                 style="font-size:1.8rem; font-weight:700; color:{color};">0</div>
+        </div>"""
+
+    _html(f"""
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+        {cards}
+    </div>
+    <script>
+        document.querySelectorAll('.countup').forEach(el => {{
+            const target = parseInt(el.dataset.target);
+            if (target === 0) {{ el.textContent = '0'; return; }}
+            const duration = 1200;
+            const step = Math.max(1, Math.floor(duration / target));
+            let current = 0;
+            const timer = setInterval(() => {{
+                current += Math.ceil(target / (duration / 16));
+                if (current >= target) {{ current = target; clearInterval(timer); }}
+                el.textContent = current;
+            }}, 16);
+        }});
+    </script>
+    """)
 
 
 def render_summary(profile_df):
@@ -2688,6 +2759,33 @@ def inject_analytics():
     """, height=0)
 
 
+def inject_seo_meta():
+    """Inject Open Graph & SEO meta tags for rich link previews on LinkedIn/Slack."""
+    st.components.v1.html("""
+    <script>
+        if (!document.querySelector('meta[property="og:title"]')) {
+            var metas = [
+                {p:'og:title', c:'Krish Kilaru — Databricks Solutions Architect | Interactive AI Resume'},
+                {p:'og:description', c:'19+ years in data engineering. 10 Databricks certifications. Explore skills, projects, and ask Abu the AI chatbot anything.'},
+                {p:'og:type', c:'website'},
+                {p:'og:url', c:'https://thedatabrickster.streamlit.app'},
+                {p:'og:image', c:'https://www.databricks.com/sites/default/files/2025-10/professional-badge-de.png?v=1761143167'},
+                {n:'description', c:'Interactive AI-powered resume of Krish Kilaru — Databricks Solutions Architect with 19+ years of data engineering experience. Features a Genie-powered Q&A chatbot.'},
+                {n:'author', c:'Krish Kilaru'},
+                {n:'keywords', c:'Databricks, Solutions Architect, Data Engineer, Resume, AI Resume, Krish Kilaru, Unity Catalog, Delta Lake'}
+            ];
+            metas.forEach(function(m) {
+                var tag = document.createElement('meta');
+                if (m.p) tag.setAttribute('property', m.p);
+                if (m.n) tag.setAttribute('name', m.n);
+                tag.setAttribute('content', m.c);
+                document.head.appendChild(tag);
+            });
+        }
+    </script>
+    """, height=0)
+
+
 # ────────────────────────────────────────────────────────────────
 # Main App
 # ────────────────────────────────────────────────────────────────
@@ -2704,6 +2802,18 @@ def main():
     pubs_df = load_table("publications")
     timeline_df = load_table("career_timeline")
     clients_df = load_table("clients")
+
+    # Dark mode toggle (top-right)
+    toggle_col1, toggle_col2 = st.columns([9, 1])
+    with toggle_col2:
+        if st.toggle("🌙", value=st.session_state.dark_mode, help="Dark mode"):
+            if not st.session_state.dark_mode:
+                st.session_state.dark_mode = True
+                st.rerun()
+        else:
+            if st.session_state.dark_mode:
+                st.session_state.dark_mode = False
+                st.rerun()
 
     # Header
     render_profile_header(profile_df, certs_df)
@@ -2782,6 +2892,7 @@ def main():
         render_about_app()
 
     inject_analytics()
+    inject_seo_meta()
 
 
 def render_about_app():
