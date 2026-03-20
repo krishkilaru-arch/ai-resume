@@ -472,25 +472,28 @@ _html("""
         }
         .profile-header-inner {
             flex-direction: column;
-            align-items: flex-start;
-            gap: 14px;
+            align-items: center;
+            gap: 12px;
         }
         .profile-header h1 {
             font-size: 1.4rem;
+            text-align: center;
         }
         .profile-header .headline {
             font-size: 0.78rem;
+            text-align: center;
         }
         .profile-header .location {
             font-size: 0.75rem;
+            text-align: center;
         }
         .profile-photo {
             width: 80px;
             height: 80px;
-            align-self: center;
         }
         .profile-info-col {
             width: 100%;
+            text-align: center;
         }
         .cert-images-col {
             justify-content: center;
@@ -501,11 +504,15 @@ _html("""
         }
         .profile-header .links {
             justify-content: center;
-            gap: 2px;
+            gap: 3px;
+            text-align: center;
         }
         .profile-header .links a,
         .profile-header .links span {
             font-size: 0.7rem;
+        }
+        .profile-header .links br {
+            display: none;
         }
         .profile-header .links img.social-icon {
             width: 14px;
