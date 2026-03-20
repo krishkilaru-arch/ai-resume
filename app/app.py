@@ -1905,8 +1905,11 @@ def render_skills_charts(skills_df):
 
         skills_rows = ""
         for _, row in cat_df.iterrows():
-            r = int(row["rating"])
-            pct = r * 10
+            yrs = row.get(yrs_col, 0)
+            yrs_val = int(float(yrs)) if yrs else 0
+            prof = row.get(prof_col, "")
+            max_yrs = 15
+            pct = min(int((yrs_val / max_yrs) * 100), 100)
             name = row["skill_name"]
             skills_rows += f"""
             <div class="sk-row">
@@ -1914,7 +1917,7 @@ def render_skills_charts(skills_df):
                 <div class="sk-bar-bg">
                     <div class="sk-bar-fill" style="width:{pct}%;background:{color};"></div>
                 </div>
-                <span class="sk-val">{r}/10</span>
+                <span class="sk-val">{yrs_val}y · {prof}</span>
             </div>"""
 
         cards_html += f"""
@@ -1956,7 +1959,7 @@ def render_skills_charts(skills_df):
             background: #F0F2F5; border-radius: 3px; overflow: hidden;
         }}
         .sk-bar-fill {{ height: 100%; border-radius: 3px; transition: width 0.5s ease; }}
-        .sk-val {{ font-size: 0.7rem; color: #888; min-width: 28px; text-align: right; }}
+        .sk-val {{ font-size: 0.65rem; color: #888; min-width: 72px; text-align: right; white-space: nowrap; }}
     </style>
     """)
 
@@ -1971,15 +1974,18 @@ def render_skills_charts(skills_df):
             icon = other_icons.get(cat, "💡")
             skills_rows = ""
             for _, row in cat_df.iterrows():
-                r = int(row["rating"])
-                pct = r * 10
+                yrs = row.get(yrs_col, 0)
+                yrs_val = int(float(yrs)) if yrs else 0
+                prof = row.get(prof_col, "")
+                max_yrs = 15
+                pct = min(int((yrs_val / max_yrs) * 100), 100)
                 skills_rows += f"""
                 <div class="sk-row">
                     <span class="sk-name">{row["skill_name"]}</span>
                     <div class="sk-bar-bg">
                         <div class="sk-bar-fill" style="width:{pct}%;background:{color};"></div>
                     </div>
-                    <span class="sk-val">{r}/10</span>
+                    <span class="sk-val">{yrs_val}y · {prof}</span>
                 </div>"""
             other_cards += f"""
             <div class="sk-card">
