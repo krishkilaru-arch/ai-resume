@@ -879,7 +879,7 @@ _RECRUITER_FAQ = [
         "answer": (
             "For Krish's current availability and notice period, please reach out directly:\n\n"
             "- 📧 Email: thedatabrickster@gmail.com\n"
-            "- 📱 Phone: 6363626272\n"
+            "- 📱 Phone: 63 63 62 62 63\n"
             "- 📅 Book a meeting: https://calendly.com/thedatabrickster\n\n"
             "Krish is currently working as **Associate Director, Data & AI** at **Lumenalta** (since July 2024)."
         ),
