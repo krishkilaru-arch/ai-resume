@@ -1749,25 +1749,25 @@ def render_metrics(profile_df, work_df, skills_df, certs_df, clients_df=None):
                  style="font-size:1.8rem; font-weight:700; color:{color};">0</div>
         </div>"""
 
-    _html(f"""
-    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+    st.components.v1.html(f"""
+    <div style="display:flex; gap:12px; flex-wrap:wrap; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
         {cards}
     </div>
     <script>
-        document.querySelectorAll('.countup').forEach(el => {{
-            const target = parseInt(el.dataset.target);
+        document.querySelectorAll('.countup').forEach(function(el) {{
+            var target = parseInt(el.getAttribute('data-target'));
             if (target === 0) {{ el.textContent = '0'; return; }}
-            const duration = 1200;
-            const step = Math.max(1, Math.floor(duration / target));
-            let current = 0;
-            const timer = setInterval(() => {{
-                current += Math.ceil(target / (duration / 16));
+            var duration = 1200;
+            var current = 0;
+            var increment = Math.ceil(target / (duration / 16));
+            var timer = setInterval(function() {{
+                current += increment;
                 if (current >= target) {{ current = target; clearInterval(timer); }}
                 el.textContent = current;
             }}, 16);
         }});
     </script>
-    """)
+    """, height=110)
 
 
 def render_summary(profile_df):
