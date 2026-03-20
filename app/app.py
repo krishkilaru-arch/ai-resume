@@ -1883,89 +1883,12 @@ def render_metrics(profile_df, work_df, skills_df, certs_df, clients_df=None):
         ("Certifications", total_certs, "#D4A017"),
     ]
 
-    dark = st.session_state.get('dark_mode', False)
-    bg = '#1E2530' if dark else '#fff'
-    border = '#2D3748' if dark else '#E9ECEF'
-    label_color = '#A0AEC0' if dark else '#6C757D'
-
-    cards = ""
-    for label, value, color in metrics:
-        cards += f"""
-        <div class="metric-card">
-            <div class="metric-label">{label}</div>
-            <div class="countup" data-target="{value}" style="color:{color};">0</div>
-        </div>"""
-
-    st.components.v1.html(f"""
-    <style>
-        * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }}
-        .metrics-grid {{
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-        }}
-        .metric-card {{
-            background: {bg};
-            border: 1px solid {border};
-            border-radius: 12px;
-            padding: 14px 10px;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-        }}
-        .metric-label {{
-            color: {label_color};
-            font-size: 0.75rem;
-            margin-bottom: 4px;
-        }}
-        .countup {{
-            font-size: 1.6rem;
-            font-weight: 700;
-        }}
-        @media (max-width: 768px) {{
-            .metrics-grid {{
-                grid-template-columns: repeat(3, 1fr);
-            }}
-            .metric-label {{ font-size: 0.65rem; }}
-            .countup {{ font-size: 1.3rem; }}
-            .metric-card {{ padding: 10px 6px; }}
-        }}
-        @media (max-width: 400px) {{
-            .metrics-grid {{
-                grid-template-columns: repeat(2, 1fr);
-            }}
-        }}
-    </style>
-    <div class="metrics-grid">
-        {cards}
-    </div>
-    <script>
-        document.querySelectorAll('.countup').forEach(function(el) {{
-            var target = parseInt(el.getAttribute('data-target'));
-            if (target === 0) {{ el.textContent = '0'; return; }}
-            var duration = 1200;
-            var current = 0;
-            var increment = Math.ceil(target / (duration / 16));
-            var timer = setInterval(function() {{
-                current += increment;
-                if (current >= target) {{ current = target; clearInterval(timer); }}
-                el.textContent = current;
-            }}, 16);
-        }});
-    </script>
-    <script>
-        function resizeFrame() {{
-            var el = document.querySelector('.metrics-grid');
-            if (el && window.frameElement) {{
-                window.frameElement.style.height = (el.scrollHeight + 16) + 'px';
-            }}
-        }}
-        window.addEventListener('load', resizeFrame);
-        window.addEventListener('resize', resizeFrame);
-        setTimeout(resizeFrame, 100);
-        setTimeout(resizeFrame, 500);
-    </script>
-    """, height=180, scrolling=False)
+    c1, c2, c3, c4, c5 = st.columns(5)
+    c1.metric("Years Experience", yrs)
+    c2.metric("Clients Served", clients_count)
+    c3.metric("Total Skills", total_skills)
+    c4.metric("Expert Skills", expert_skills)
+    c5.metric("Certifications", total_certs)
 
 
 def render_summary(profile_df):
