@@ -189,13 +189,13 @@ _html("""
         letter-spacing: -0.5px;
     }
     .profile-header .headline {
-        font-size: 1.25rem;
+        font-size: 0.95rem;
         opacity: 0.9;
         margin-top: 6px;
         font-weight: 400;
     }
     .profile-header .location {
-        font-size: 1rem;
+        font-size: 0.88rem;
         opacity: 0.8;
         margin-top: 8px;
     }
@@ -312,11 +312,31 @@ _html("""
         border-radius: 12px;
         font-weight: 500;
     }
-    .profile-header .links a {
+    .profile-header .links {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    .profile-header .links a, .profile-header .links span {
         color: #B8D4E3;
         text-decoration: none;
-        margin-right: 20px;
-        font-size: 1rem;
+        font-size: 0.82rem;
+        white-space: nowrap;
+    }
+    .profile-header .links .sep {
+        color: rgba(255,255,255,0.3);
+        font-size: 0.75rem;
+    }
+    .profile-header .links img.social-icon {
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+        filter: brightness(0) invert(0.8);
+        transition: filter 0.2s;
+    }
+    .profile-header .links a:hover img.social-icon {
+        filter: brightness(0) invert(1);
     }
     .profile-header .links a.calendly-btn {
         background: #fff;
@@ -1350,19 +1370,20 @@ def render_profile_header(profile_df, certs_df=None):
 
     usergroup = p.get("usergroup_url", "")
 
+    sep = '<span class="sep">|</span>'
     links_parts = []
     if linkedin:
-        links_parts.append(f'<a href="{linkedin}" target="_blank">🔗 LinkedIn</a>')
+        links_parts.append(f'<a href="{linkedin}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" class="social-icon" alt="LinkedIn" title="LinkedIn"></a>')
     if github:
-        links_parts.append(f'<a href="{github}" target="_blank">💻 GitHub</a>')
+        links_parts.append(f'<a href="{github}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" class="social-icon" alt="GitHub" title="GitHub"></a>')
     if usergroup:
-        links_parts.append(f'<a href="{usergroup}" target="_blank">🧱 First Coast Databricks User Group</a>')
+        links_parts.append(f'<a href="{usergroup}" target="_blank">🧱 First Coast DUG</a>')
     if email:
         links_parts.append(f'<a href="mailto:{email}">📧 {email}</a>')
     if phone:
         links_parts.append(f'<span>📱 {phone}</span>')
 
-    links_html = " &nbsp;|&nbsp; ".join(links_parts)
+    links_html = f' {sep} '.join(links_parts)
 
     photo_html = ""
     photo_path = Path(__file__).parent.parent / "images" / "KrishImage.png"
