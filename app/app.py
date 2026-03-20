@@ -1612,64 +1612,88 @@ def render_skills_charts(skills_df):
         "9. Cloud & Infrastructure":        "#FF9800",
         "10. DevOps & Deployment":          "#607D8B",
     }
-    cat_labels = {k: k.split(". ", 1)[1] for k in cat_order}
+    cat_icons = {
+        "1. Data Engineering & Pipelines":  "⚙️",
+        "2. Lakehouse & Data Platform":     "🏠",
+        "3. SQL, Analytics & BI":           "📊",
+        "4. AI / Machine Learning":         "🤖",
+        "5. Generative AI & Agents":        "🔥",
+        "6. Data Governance & Catalog":     "🔒",
+        "7. Apps, Interfaces & Access":     "📱",
+        "8. Databases & New Storage":       "💾",
+        "9. Cloud & Infrastructure":        "☁️",
+        "10. DevOps & Deployment":          "🚀",
+    }
 
     chart_df = df[df["category"].isin(cat_order)].copy()
     if chart_df.empty:
         return
 
-    chart_df["cat_sort"] = chart_df["category"].map({c: i for i, c in enumerate(cat_order)})
-    chart_df = chart_df.sort_values(["cat_sort", "rating"], ascending=[True, False])
-
-    fig = go.Figure()
-
+    cards_html = ""
     for cat in cat_order:
-        cat_df = chart_df[chart_df["category"] == cat].sort_values("rating", ascending=True)
+        cat_df = chart_df[chart_df["category"] == cat].sort_values("rating", ascending=False)
         if cat_df.empty:
             continue
-        fig.add_trace(go.Bar(
-            x=cat_df["rating"],
-            y=cat_df["skill_name"],
-            orientation="h",
-            name=cat_labels[cat],
-            marker=dict(color=cat_color_map[cat], line=dict(width=0)),
-            text=cat_df["rating"].apply(lambda r: f" {r}/10"),
-            textposition="outside",
-            textfont=dict(size=11, color="#444", family="Arial"),
-            hovertemplate=(
-                "<b>%{y}</b><br>"
-                "Rating: %{x}/10<br>"
-                "<extra></extra>"
-            ),
-        ))
+        color = cat_color_map[cat]
+        icon = cat_icons[cat]
+        label = cat.split(". ", 1)[1]
 
-    fig.update_xaxes(
-        range=[0, 11.5],
-        dtick=2,
-        title=dict(text="Rating", font=dict(size=11, color="#888")),
-        tickfont=dict(size=10),
-        gridcolor="rgba(0,0,0,0.05)",
-        zeroline=False,
-    )
-    fig.update_yaxes(
-        title="",
-        tickfont=dict(size=12),
-    )
-    fig.update_layout(
-        height=max(500, len(chart_df) * 28 + 100),
-        margin=dict(l=10, r=30, t=10, b=40),
-        plot_bgcolor="rgba(0,0,0,0)",
-        paper_bgcolor="rgba(0,0,0,0)",
-        legend=dict(
-            orientation="h", yanchor="bottom", y=1.02,
-            xanchor="center", x=0.5, title="",
-            font=dict(size=11),
-        ),
-        bargap=0.22,
-        font=dict(size=12),
-    )
+        skills_rows = ""
+        for _, row in cat_df.iterrows():
+            r = int(row["rating"])
+            pct = r * 10
+            name = row["skill_name"]
+            skills_rows += f"""
+            <div class="sk-row">
+                <span class="sk-name">{name}</span>
+                <div class="sk-bar-bg">
+                    <div class="sk-bar-fill" style="width:{pct}%;background:{color};"></div>
+                </div>
+                <span class="sk-val">{r}/10</span>
+            </div>"""
 
-    st.plotly_chart(fig, use_container_width=True)
+        cards_html += f"""
+        <div class="sk-card">
+            <div class="sk-header" style="border-left:4px solid {color};">
+                <span class="sk-icon">{icon}</span>
+                <span class="sk-title">{label}</span>
+            </div>
+            {skills_rows}
+        </div>"""
+
+    _html(f"""
+    <div class="sk-grid">{cards_html}</div>
+    <style>
+        .sk-grid {{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 8px; }}
+        @media (max-width: 768px) {{ .sk-grid {{ grid-template-columns: 1fr; }} }}
+        .sk-card {{
+            background: #fff; border: 1px solid #E8EDF1; border-radius: 12px;
+            padding: 16px; transition: box-shadow 0.2s;
+        }}
+        .sk-card:hover {{ box-shadow: 0 4px 14px rgba(0,0,0,0.08); }}
+        .sk-header {{
+            display: flex; align-items: center; gap: 8px;
+            padding: 0 0 10px 8px; margin-bottom: 10px;
+            border-bottom: 1px solid #F0F2F5;
+        }}
+        .sk-icon {{ font-size: 1.1rem; }}
+        .sk-title {{ font-size: 0.88rem; font-weight: 700; color: #1B3A4B; }}
+        .sk-row {{
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 6px;
+        }}
+        .sk-name {{
+            font-size: 0.78rem; color: #444; min-width: 0; flex: 1;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }}
+        .sk-bar-bg {{
+            width: 80px; min-width: 80px; height: 6px;
+            background: #F0F2F5; border-radius: 3px; overflow: hidden;
+        }}
+        .sk-bar-fill {{ height: 100%; border-radius: 3px; transition: width 0.5s ease; }}
+        .sk-val {{ font-size: 0.7rem; color: #888; min-width: 28px; text-align: right; }}
+    </style>
+    """)
 
     other_df = df[~df["category"].isin(cat_order)].sort_values(["category", "rating"], ascending=[True, False])
     if not other_df.empty:
