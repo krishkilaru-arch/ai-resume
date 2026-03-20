@@ -1412,23 +1412,22 @@ def render_profile_header(profile_df, certs_df=None):
     """)
 
 
-def render_metrics(profile_df, work_df, skills_df, certs_df):
+def render_metrics(profile_df, work_df, skills_df, certs_df, clients_df=None):
     yrs = profile_df.iloc[0].get("years_of_experience", "—") if not profile_df.empty else "—"
-    companies = len(work_df) if not work_df.empty else 0
+    total_certs = len(certs_df) if not certs_df.empty else 0
     total_skills = len(skills_df) if not skills_df.empty else 0
     expert_skills = 0
-    if not skills_df.empty and "proficiency_level" in skills_df.columns:
-        expert_skills = len(skills_df[skills_df["proficiency_level"] == "Expert"])
-    active_certs = 0
-    if not certs_df.empty and "is_active" in certs_df.columns:
-        active_certs = len(certs_df[certs_df["is_active"].astype(str).str.lower().isin(["true", "1"])])
+    prof_col = "proficiency_level" if "proficiency_level" in skills_df.columns else "proficiency"
+    if not skills_df.empty and prof_col in skills_df.columns:
+        expert_skills = len(skills_df[skills_df[prof_col] == "Expert"])
+    clients_count = len(clients_df) if clients_df is not None and not clients_df.empty else 0
 
     c1, c2, c3, c4, c5 = st.columns(5)
     c1.metric("Years Experience", yrs)
-    c2.metric("Companies", companies)
+    c2.metric("Clients Served", clients_count)
     c3.metric("Total Skills", total_skills)
     c4.metric("Expert Skills", expert_skills)
-    c5.metric("Certifications", active_certs)
+    c5.metric("Certifications", total_certs)
 
 
 def render_summary(profile_df):
@@ -2240,7 +2239,7 @@ def main():
     tab_dashboard, tab_genie = st.tabs(["📊  Resume Dashboard", "🐒  Ask Abu Anything"])
 
     with tab_dashboard:
-        render_metrics(profile_df, work_df, skills_df, certs_df)
+        render_metrics(profile_df, work_df, skills_df, certs_df, clients_df)
         render_summary(profile_df)
         render_education(edu_df)
         render_career_timeline(timeline_df)
