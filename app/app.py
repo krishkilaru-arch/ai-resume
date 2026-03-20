@@ -107,7 +107,22 @@ if st.session_state.dark_mode:
         .info-card { background: #1E2530 !important; border-color: #2D3748 !important; color: #CBD5E0 !important; }
         .sk-card { background: #1E2530 !important; }
         .sk-card .sk-name { color: #CBD5E0 !important; }
+        .sk-card .sk-title { color: #E2E8F0 !important; }
+        .sk-card .sk-val { color: #A0AEC0 !important; }
         .sk-bar-bg { background: #2D3748 !important; }
+        .exp-card h4 { color: #E2E8F0 !important; }
+        .exp-card .subtitle { color: #63B3ED !important; }
+        .exp-card .meta { color: #A0AEC0 !important; }
+        .exp-card .badge { opacity: 0.9; }
+        .client-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .client-name { color: #E2E8F0 !important; }
+        .pub-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .pub-title { color: #E2E8F0 !important; }
+        .pub-meta { color: #A0AEC0 !important; }
+        .proj-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .proj-title { color: #E2E8F0 !important; }
+        .proj-desc { color: #CBD5E0 !important; }
+        .proj-role { color: #63B3ED !important; }
         p, span, div { color: inherit; }
         [data-testid="stTabs"] [data-baseweb="tab-list"] { background: linear-gradient(135deg,#1a1a2e,#16213e) !important; }
         [data-testid="stTabs"] button[role="tab"] { color: #A0AEC0 !important; }
@@ -586,6 +601,41 @@ _html("""
         }
         .genie-banner p {
             font-size: 0.85rem;
+        }
+
+        /* Improve color contrast on mobile */
+        .exp-card .meta {
+            color: #444 !important;
+        }
+        .exp-card .highlight {
+            color: #111 !important;
+        }
+        .exp-card .subtitle {
+            color: #044A6E !important;
+        }
+        .sk-val {
+            color: #555 !important;
+        }
+        .sk-name {
+            color: #222 !important;
+        }
+        .sk-title {
+            color: #111 !important;
+        }
+        .info-card .detail {
+            color: #444 !important;
+        }
+        .client-name {
+            color: #111 !important;
+        }
+        .pub-meta {
+            color: #444 !important;
+        }
+        .proj-desc {
+            color: #333 !important;
+        }
+        .proj-role {
+            color: #044A6E !important;
         }
     }
 
