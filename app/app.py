@@ -1485,25 +1485,25 @@ def render_career_timeline(timeline_df):
 
         cards_html += f'''
         <div style="position:absolute;left:{left_pct}%;width:{width_pct}%;top:0;bottom:0;padding:0 1px;box-sizing:border-box;">
-            <div style="height:100%;background:{color};border-radius:8px;padding:8px 8px 6px;
-                        box-shadow:0 2px 8px rgba(0,0,0,0.12);{border}
+            <div style="height:100%;background:{color};border-radius:6px;padding:5px 6px 4px;
+                        box-shadow:0 2px 6px rgba(0,0,0,0.1);{border}
                         display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;
                         position:relative;cursor:default;"
                  title="{row['title']}&#10;{row['organization']}&#10;{row['start_dt'].strftime('%b %Y')} — {'Present' if is_current else row['end_dt'].strftime('%b %Y')}&#10;Duration: {row['duration_label']}">
                 <div style="overflow:hidden;flex:1;min-height:0;">
-                    <div style="color:#fff;font-weight:700;font-size:0.73rem;line-height:1.3;
-                                word-wrap:break-word;overflow-wrap:break-word;">
+                    <div style="color:#fff;font-weight:700;font-size:0.62rem;line-height:1.2;
+                                white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                         {icon} {row["title"]}
                     </div>
-                    <div style="color:rgba(255,255,255,0.8);font-size:0.68rem;margin-top:2px;line-height:1.25;
-                                word-wrap:break-word;overflow-wrap:break-word;">
+                    <div style="color:rgba(255,255,255,0.8);font-size:0.58rem;margin-top:1px;line-height:1.2;
+                                white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                         {row["organization"]}
                     </div>
                 </div>
-                <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:4px;flex-shrink:0;">
-                    <span style="color:rgba(255,255,255,0.65);font-size:0.62rem;">{start_fmt}–{end_fmt}</span>
-                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.6rem;font-weight:700;
-                                 padding:1px 4px;border-radius:4px;">{row["duration_label"]}</span>
+                <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:2px;flex-shrink:0;">
+                    <span style="color:rgba(255,255,255,0.65);font-size:0.56rem;">{start_fmt}–{end_fmt}</span>
+                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.54rem;font-weight:700;
+                                 padding:1px 3px;border-radius:3px;">{row["duration_label"]}</span>
                 </div>
                 {f'<div style="position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:#4CAF50;{pulse_css}"></div>' if is_current else ''}
             </div>
@@ -1543,7 +1543,7 @@ def render_career_timeline(timeline_df):
             {work_yrs}+ years across {work_count} roles
         </div>
     </div>
-    <div style="position:relative;height:150px;margin:24px 0 20px;padding:0 2px;">
+    <div style="position:relative;height:80px;margin:20px 0 16px;padding:0 2px;">
         {year_markers}
         {cards_html}
     </div>
