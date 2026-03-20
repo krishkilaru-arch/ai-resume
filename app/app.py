@@ -1009,7 +1009,7 @@ _RECRUITER_FAQ = [
         ),
     },
     {
-        "keywords": ["strengths", "strong suit", "what is krish good at", "core competenc", "key strengths", "best at"],
+        "keywords": ["strengths", "strong suit", "what is krish good at", "core competenc", "key strengths", "best at", "top skills", "top skill", "best skill", "main skill", "key skill", "strongest skill"],
         "answer": (
             "**Krish's core strengths:**\n\n"
             "1. **Databricks Platform Mastery** — 10 certifications, 6+ years hands-on across engineering, analytics, ML, and governance\n"
@@ -1331,7 +1331,9 @@ def genie_ask(question, conversation_id=None):
             "please ask a question about", "available tables",
             "don't have", "do not have", "not in the data",
         ]
-        if any(phrase in genie_text for phrase in genie_unhelpful):
+        genie_df = api_result.get("df")
+        genie_empty = genie_df is not None and hasattr(genie_df, "empty") and genie_df.empty
+        if genie_empty or any(phrase in genie_text for phrase in genie_unhelpful):
             faq_fallback = _check_recruiter_faq(question)
             if faq_fallback:
                 faq_fallback["source"] = "faq"
