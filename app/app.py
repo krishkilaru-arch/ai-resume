@@ -138,7 +138,7 @@ _html("""
     }
     div[data-testid="stMetric"] label {
         color: #6C757D;
-        font-size: 0.85rem;
+        font-size: 0.95rem;
     }
     div[data-testid="stMetric"] [data-testid="stMetricValue"] {
         color: #1B3A4B;
@@ -149,7 +149,7 @@ _html("""
     /* Section headers */
     .section-header {
         color: #1B3A4B;
-        font-size: 1.3rem;
+        font-size: 1.45rem;
         font-weight: 700;
         margin-top: 1.5rem;
         margin-bottom: 0.5rem;
@@ -215,13 +215,13 @@ _html("""
         letter-spacing: -0.5px;
     }
     .profile-header .headline {
-        font-size: 0.95rem;
+        font-size: 1.05rem;
         opacity: 0.9;
         margin-top: 6px;
         font-weight: 400;
     }
     .profile-header .location {
-        font-size: 0.88rem;
+        font-size: 0.98rem;
         opacity: 0.8;
         margin-top: 8px;
     }
@@ -274,7 +274,7 @@ _html("""
         color: #fff;
         padding: 4px 12px;
         border-radius: 20px;
-        font-size: 0.72rem;
+        font-size: 0.85rem;
         font-weight: 500;
         white-space: nowrap;
         backdrop-filter: blur(4px);
@@ -325,14 +325,14 @@ _html("""
         margin-bottom: 10px;
     }
     .client-name {
-        font-size: 0.82rem;
+        font-size: 0.92rem;
         font-weight: 600;
         color: #1B3A4B;
         margin-bottom: 6px;
         line-height: 1.2;
     }
     .client-domain {
-        font-size: 0.68rem;
+        font-size: 0.8rem;
         color: #fff;
         padding: 2px 10px;
         border-radius: 12px;
@@ -347,12 +347,12 @@ _html("""
     .profile-header .links a, .profile-header .links span {
         color: #B8D4E3;
         text-decoration: none;
-        font-size: 0.82rem;
+        font-size: 0.92rem;
         white-space: nowrap;
     }
     .profile-header .links .sep {
         color: rgba(255,255,255,0.3);
-        font-size: 0.75rem;
+        font-size: 0.85rem;
     }
     .profile-header .links img.social-icon {
         width: 18px;
@@ -370,7 +370,7 @@ _html("""
         font-weight: 700;
         padding: 6px 16px;
         border-radius: 20px;
-        font-size: 0.82rem;
+        font-size: 0.92rem;
         transition: all 0.25s ease;
         box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
@@ -393,11 +393,11 @@ _html("""
     .info-card h5 {
         color: #1B3A4B;
         margin: 0 0 4px 0;
-        font-size: 0.95rem;
+        font-size: 1.05rem;
     }
     .info-card .detail {
         color: #6C757D;
-        font-size: 0.85rem;
+        font-size: 0.95rem;
     }
 
     /* Tabs styling */
@@ -443,7 +443,7 @@ _html("""
         border-radius: 20px;
         padding: 6px 14px;
         margin: 4px;
-        font-size: 0.82rem;
+        font-size: 0.92rem;
         color: #065A82;
         cursor: pointer;
         background: #F8F9FA;
@@ -456,7 +456,7 @@ _html("""
         margin-bottom: 20px;
     }
     .genie-banner h3 { margin: 0 0 6px 0; }
-    .genie-banner p { margin: 0; opacity: 0.85; font-size: 0.9rem; }
+    .genie-banner p { margin: 0; opacity: 0.85; font-size: 1.0rem; }
 
     /* ─── Mobile Responsive ─── */
     @media (max-width: 768px) {
@@ -480,11 +480,11 @@ _html("""
             text-align: center;
         }
         .profile-header .headline {
-            font-size: 0.78rem;
+            font-size: 0.88rem;
             text-align: center;
         }
         .profile-header .location {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             text-align: center;
         }
         .profile-photo {
@@ -509,7 +509,7 @@ _html("""
         }
         .profile-header .links a,
         .profile-header .links span {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
         }
         .profile-header .links br {
             display: none;
@@ -520,7 +520,7 @@ _html("""
         }
 
         .section-header {
-            font-size: 1rem;
+            font-size: 1.15rem;
             margin-top: 1rem;
         }
 
@@ -532,7 +532,7 @@ _html("""
         }
         .stTabs [data-baseweb="tab"] {
             padding: 8px 10px;
-            font-size: 0.72rem;
+            font-size: 0.82rem;
         }
 
         /* Experience cards */
@@ -540,10 +540,10 @@ _html("""
             padding: 14px;
         }
         .exp-card h3 {
-            font-size: 0.95rem;
+            font-size: 1.05rem;
         }
         .exp-card .highlight {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
         }
 
         /* Skills grid */
@@ -554,10 +554,10 @@ _html("""
             margin-bottom: 8px;
         }
         .sk-name {
-            font-size: 0.72rem !important;
+            font-size: 0.82rem !important;
         }
         .sk-val {
-            font-size: 0.58rem !important;
+            font-size: 0.7rem !important;
             min-width: 60px !important;
         }
 
@@ -570,7 +570,7 @@ _html("""
             padding: 10px 6px 8px;
         }
         .client-name {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
         }
         .client-logo, .client-logo-fallback {
             height: 36px;
@@ -585,7 +585,7 @@ _html("""
             font-size: 0.9rem;
         }
         .genie-banner p {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
         }
     }
 
@@ -594,14 +594,14 @@ _html("""
             font-size: 1.15rem;
         }
         .profile-header .headline {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
         }
         .cert-badge-img {
             height: 45px;
         }
         .stTabs [data-baseweb="tab"] {
             padding: 6px 8px;
-            font-size: 0.65rem;
+            font-size: 0.75rem;
         }
     }
 </style>
@@ -1911,11 +1911,11 @@ def render_metrics(profile_df, work_df, skills_df, certs_df, clients_df=None):
             text-align: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }}
-        .ml {{ font-size: 0.78rem; margin-bottom: 4px; }}
-        .mv {{ font-size: 1.7rem; font-weight: 700; }}
+        .ml {{ font-size: 0.9rem; margin-bottom: 4px; }}
+        .mv {{ font-size: 1.8rem; font-weight: 700; }}
         @media (max-width: 768px) {{
             .mg {{ grid-template-columns: repeat(3, 1fr); }}
-            .ml {{ font-size: 0.65rem; }}
+            .ml {{ font-size: 0.75rem; }}
             .mv {{ font-size: 1.2rem; }}
             .mc {{ padding: 10px 6px; border-radius: 8px; }}
         }}
@@ -1995,18 +1995,18 @@ def render_career_timeline(timeline_df):
                         position:relative;cursor:default;"
                  title="{row['title']}&#10;{row['organization']}&#10;{row['start_dt'].strftime('%b %Y')} — {'Present' if is_current else row['end_dt'].strftime('%b %Y')}&#10;Duration: {row['duration_label']}">
                 <div style="overflow:hidden;flex:1;min-height:0;">
-                    <div style="color:#fff;font-weight:700;font-size:0.73rem;line-height:1.3;
+                    <div style="color:#fff;font-weight:700;font-size:0.85rem;line-height:1.3;
                                 word-wrap:break-word;overflow-wrap:break-word;">
                         {icon} {row["title"]}
                     </div>
-                    <div style="color:rgba(255,255,255,0.8);font-size:0.68rem;margin-top:2px;line-height:1.25;
+                    <div style="color:rgba(255,255,255,0.8);font-size:0.78rem;margin-top:2px;line-height:1.25;
                                 word-wrap:break-word;overflow-wrap:break-word;">
                         {row["organization"]}
                     </div>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:4px;flex-shrink:0;">
-                    <span style="color:rgba(255,255,255,0.65);font-size:0.62rem;">{start_fmt}–{end_fmt}</span>
-                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.6rem;font-weight:700;
+                    <span style="color:rgba(255,255,255,0.65);font-size:0.72rem;">{start_fmt}–{end_fmt}</span>
+                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.7rem;font-weight:700;
                                  padding:1px 4px;border-radius:4px;">{row["duration_label"]}</span>
                 </div>
                 {f'<div style="position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:#4CAF50;{pulse_css}"></div>' if is_current else ''}
@@ -2017,11 +2017,11 @@ def render_career_timeline(timeline_df):
     cum = 0.0
     for (_, row), w in zip(df.iterrows(), widths):
         start_y = row["start_dt"].strftime("%Y")
-        year_markers += f'<div style="position:absolute;left:{cum}%;top:-16px;font-size:0.68rem;color:#999;font-weight:600;">{start_y}</div>'
+        year_markers += f'<div style="position:absolute;left:{cum}%;top:-16px;font-size:0.8rem;color:#999;font-weight:600;">{start_y}</div>'
         cum += w
     last_row = df.iloc[-1]
     end_label = "Now" if last_row["is_current"] else last_row["end_dt"].strftime("%Y")
-    year_markers += f'<div style="position:absolute;right:0;top:-16px;font-size:0.68rem;color:#999;font-weight:600;">{end_label}</div>'
+    year_markers += f'<div style="position:absolute;right:0;top:-16px;font-size:0.8rem;color:#999;font-weight:600;">{end_label}</div>'
 
     work_count = len(df[df["event_type"] == "Work"])
     work_yrs = df[df["event_type"] == "Work"]["months"].sum() // 12
@@ -2029,7 +2029,7 @@ def render_career_timeline(timeline_df):
     legend_items = ""
     for org, color in org_colors.items():
         legend_items += (
-            f'<div style="display:flex;align-items:center;gap:4px;font-size:0.78rem;">'
+            f'<div style="display:flex;align-items:center;gap:4px;font-size:0.9rem;">'
             f'<span style="display:inline-block;width:10px;height:10px;background:{color};border-radius:2px;flex-shrink:0;"></span>'
             f'<span style="color:#555;white-space:nowrap;">{org}</span></div>'
         )
@@ -2043,7 +2043,7 @@ def render_career_timeline(timeline_df):
     </style>
     <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center;">
         {legend_items}
-        <div style="margin-left:auto;font-size:0.8rem;color:#888;">
+        <div style="margin-left:auto;font-size:0.9rem;color:#888;">
             {work_yrs}+ years across {work_count} roles
         </div>
     </div>
@@ -2415,25 +2415,25 @@ def render_education(edu_df):
                         display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;
                         cursor:default;" title="{hover_text}">
                 <div style="overflow:hidden;flex:1;min-height:0;">
-                    <div style="color:#fff;font-weight:700;font-size:0.73rem;line-height:1.3;
+                    <div style="color:#fff;font-weight:700;font-size:0.85rem;line-height:1.3;
                                 word-wrap:break-word;overflow-wrap:break-word;">
                         🎓 {degree} in {field}
                     </div>
-                    <div style="color:rgba(255,255,255,0.8);font-size:0.68rem;margin-top:2px;line-height:1.25;
+                    <div style="color:rgba(255,255,255,0.8);font-size:0.78rem;margin-top:2px;line-height:1.25;
                                 word-wrap:break-word;overflow-wrap:break-word;">
                         {inst}{gpa_str}
                     </div>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:4px;flex-shrink:0;">
-                    <span style="color:rgba(255,255,255,0.65);font-size:0.62rem;">{start_fmt}–{end_fmt}</span>
-                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.6rem;font-weight:700;
+                    <span style="color:rgba(255,255,255,0.65);font-size:0.72rem;">{start_fmt}–{end_fmt}</span>
+                    <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.7rem;font-weight:700;
                                  padding:1px 4px;border-radius:4px;">{row["duration_label"]}</span>
                 </div>
             </div>
         </div>'''
 
         legend_items += (
-            f'<div style="display:flex;align-items:center;gap:4px;font-size:0.78rem;">'
+            f'<div style="display:flex;align-items:center;gap:4px;font-size:0.9rem;">'
             f'<span style="display:inline-block;width:10px;height:10px;background:{color};border-radius:2px;flex-shrink:0;"></span>'
             f'<span style="color:#555;white-space:nowrap;">{inst}</span></div>'
         )
@@ -2443,7 +2443,7 @@ def render_education(edu_df):
         y_date = datetime(y, 1, 1)
         pct = ((y_date - earliest).days / total_days) * 100
         if 0 <= pct <= 100:
-            year_markers += f'<div style="position:absolute;left:{pct}%;top:-16px;transform:translateX(-50%);font-size:0.68rem;color:#999;font-weight:600;">{y}</div>'
+            year_markers += f'<div style="position:absolute;left:{pct}%;top:-16px;transform:translateX(-50%);font-size:0.8rem;color:#999;font-weight:600;">{y}</div>'
             year_markers += f'<div style="position:absolute;left:{pct}%;top:0;bottom:0;width:1px;background:rgba(0,0,0,0.05);"></div>'
 
     _html(f'''
@@ -2497,7 +2497,7 @@ def render_projects(projects_df):
         tech_pills = "".join(f'<span class="proj-tech">{t.strip()}</span>' for t in techs.split(",") if t.strip())
 
         url = row.get("url", "")
-        link_html = f'<a href="{url}" target="_blank" style="font-size:0.78rem;color:#065A82;text-decoration:none;font-weight:600;">▶️ Watch Presentation</a>' if url else ""
+        link_html = f'<a href="{url}" target="_blank" style="font-size:0.9rem;color:#065A82;text-decoration:none;font-weight:600;">▶️ Watch Presentation</a>' if url else ""
 
         cards += f"""
         <div class="proj-card">
@@ -2528,26 +2528,26 @@ def render_projects(projects_df):
         .proj-card:hover {{ transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }}
         .proj-header {{ display: flex; align-items: center; justify-content: space-between; }}
         .proj-status {{
-            font-size: 0.72rem; font-weight: 700; padding: 3px 10px;
+            font-size: 0.85rem; font-weight: 700; padding: 3px 10px;
             border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px;
         }}
         .proj-active {{ background: #E8F5E9; color: #2E7D32; }}
         .proj-complete {{ background: #E3F2FD; color: #1565C0; }}
         .proj-client {{
-            font-size: 0.78rem; font-weight: 600; color: #065A82;
+            font-size: 0.9rem; font-weight: 600; color: #065A82;
             background: #F0F7FA; padding: 3px 10px; border-radius: 20px;
         }}
-        .proj-title {{ font-size: 0.95rem; font-weight: 700; color: #1B3A4B; line-height: 1.3; }}
-        .proj-role {{ font-size: 0.82rem; color: #065A82; font-weight: 600; }}
-        .proj-desc {{ font-size: 0.84rem; color: #555; line-height: 1.45; }}
+        .proj-title {{ font-size: 1.08rem; font-weight: 700; color: #1B3A4B; line-height: 1.3; }}
+        .proj-role {{ font-size: 0.95rem; color: #065A82; font-weight: 600; }}
+        .proj-desc {{ font-size: 0.95rem; color: #555; line-height: 1.45; }}
         .proj-impact {{
-            font-size: 0.82rem; color: #1C7C54; line-height: 1.4;
+            font-size: 0.95rem; color: #1C7C54; line-height: 1.4;
             background: #F0FFF4; padding: 8px 12px; border-radius: 8px; border-left: 3px solid #1C7C54;
         }}
         .proj-impact-label {{ font-weight: 700; }}
         .proj-techs {{ display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }}
         .proj-tech {{
-            font-size: 0.7rem; background: #F4F6F8; color: #555;
+            font-size: 0.82rem; background: #F4F6F8; color: #555;
             padding: 2px 8px; border-radius: 12px; border: 1px solid #E0E4E8;
         }}
     </style>
@@ -2622,12 +2622,12 @@ def render_publications(pubs_df):
         }}
         .pub-content {{ flex: 1; min-width: 0; }}
         .pub-title {{
-            font-size: 0.92rem; font-weight: 600; color: #1B3A4B;
+            font-size: 1.02rem; font-weight: 600; color: #1B3A4B;
             text-decoration: none; line-height: 1.35; display: block;
         }}
         a.pub-title:hover {{ color: #065A82; }}
         .pub-meta {{
-            font-size: 0.78rem; color: #6C757D; margin-top: 6px;
+            font-size: 0.9rem; color: #6C757D; margin-top: 6px;
             display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
         }}
         .pub-type {{ font-weight: 600; }}
@@ -3035,7 +3035,7 @@ def main():
         # Footer
         _html(
             "<hr style='border:none; border-top:1px solid #E8EDF1; margin:30px 0 10px;'>"
-            "<p style='text-align:center; color:#999; font-size:0.8rem;'>"
+            "<p style='text-align:center; color:#999; font-size:0.9rem;'>"
             "Powered by Databricks AI/BI · Data model in Unity Catalog · "
             "Abu-powered Q&A 🐒</p>"
         )
@@ -3057,7 +3057,7 @@ def main():
         _html(f"""
         <div style="text-align:center; margin-bottom:16px;">
             <h3 style="color:#1B3A4B; margin-bottom:4px;">📅 Schedule a Meeting with Krish</h3>
-            <p style="color:#6C757D; font-size:0.9rem;">Pick a time that works for you — let's connect!</p>
+            <p style="color:#6C757D; font-size:1.0rem;">Pick a time that works for you — let's connect!</p>
         </div>
         """)
         st.components.v1.iframe(f"{calendly_url}?hide_gdpr_banner=1", height=700, scrolling=True)
@@ -3066,7 +3066,7 @@ def main():
         _html("""
         <div style="text-align:center; margin-bottom:20px;">
             <h3 style="color:#1B3A4B; margin-bottom:6px;">📄 Download Krish's Resume</h3>
-            <p style="color:#6C757D; font-size:0.9rem;">
+            <p style="color:#6C757D; font-size:1.0rem;">
                 Get a clean, ATS-friendly PDF version of this resume for your records or to share with hiring managers.
             </p>
         </div>
@@ -3086,7 +3086,7 @@ def main():
         _html("""
         <div style="margin-top:24px; background:#F8F9FA; border-radius:12px; padding:20px 24px;
                     border:1px solid #E8EDF1; text-align:center;">
-            <p style="color:#6C757D; font-size:0.82rem; margin:0;">
+            <p style="color:#6C757D; font-size:0.95rem; margin:0;">
                 💡 <strong>Tip:</strong> This PDF is auto-generated from the same data that powers this interactive resume.
                 For the full experience — including the AI chatbot, skills visualizations, and project details —
                 share the link: <a href="https://thedatabrickster.streamlit.app" style="color:#065A82;">thedatabrickster.streamlit.app</a>
@@ -3120,8 +3120,8 @@ def render_about_app():
         _html("""
         <div style="background:linear-gradient(135deg,#1B3A4B 0%,#065A82 100%); color:white;
                     border-radius:14px; padding:24px 28px; height:100%;">
-            <h3 style="margin:0 0 16px; font-size:1.15rem;">📐 Architecture</h3>
-            <div style="font-size:0.88rem; line-height:1.7; opacity:0.95;">
+            <h3 style="margin:0 0 16px; font-size:1.25rem;">📐 Architecture</h3>
+            <div style="font-size:1.0rem; line-height:1.7; opacity:0.95;">
                 <p style="margin:0 0 10px;">All resume data lives as <strong>Delta tables</strong> in
                 <strong>Databricks Unity Catalog</strong>, following the Lakehouse pattern.</p>
                 <p style="margin:0 0 10px;">The app queries tables via the <strong>Databricks SQL Statement Execution API</strong>,
@@ -3136,8 +3136,8 @@ def render_about_app():
         _html("""
         <div style="background:linear-gradient(135deg,#0D7C66 0%,#1A9E78 100%); color:white;
                     border-radius:14px; padding:24px 28px; height:100%;">
-            <h3 style="margin:0 0 16px; font-size:1.15rem;">🔄 Data Flow</h3>
-            <div style="font-size:0.88rem; line-height:1.7; opacity:0.95;">
+            <h3 style="margin:0 0 16px; font-size:1.25rem;">🔄 Data Flow</h3>
+            <div style="font-size:1.0rem; line-height:1.7; opacity:0.95;">
                 <p style="margin:0 0 6px;"><strong>1.</strong> Resume data authored in <code style="background:rgba(255,255,255,0.2); padding:1px 5px; border-radius:4px;">resume_data.json</code></p>
                 <p style="margin:0 0 6px;"><strong>2.</strong> Pushed to Delta tables via SQL Statement Execution API</p>
                 <p style="margin:0 0 6px;"><strong>3.</strong> Genie Space configured with table instructions &amp; comments</p>
@@ -3184,8 +3184,8 @@ def render_about_app():
         <div style="flex:1; background:white; border-radius:12px; padding:18px 20px;
                     border-left:4px solid {color}; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
             <div style="font-size:1.3rem; margin-bottom:6px;">{icon}</div>
-            <div style="font-weight:700; color:#1B3A4B; font-size:0.9rem; margin-bottom:4px;">{name}</div>
-            <div style="color:#6C757D; font-size:0.78rem; line-height:1.4;">{desc}</div>
+            <div style="font-weight:700; color:#1B3A4B; font-size:1.0rem; margin-bottom:4px;">{name}</div>
+            <div style="color:#6C757D; font-size:0.9rem; line-height:1.4;">{desc}</div>
         </div>
         '''
     rows_html += "</div>"
@@ -3197,16 +3197,16 @@ def render_about_app():
     _html("""
     <div style="max-width:900px; margin:0 auto;">
         <div style="background:#F8F9FA; border-radius:14px; padding:24px 28px; border:1px solid #E8EDF1;">
-            <h3 style="color:#1B3A4B; margin:0 0 14px; font-size:1.05rem;">💡 Why Build a Resume This Way?</h3>
+            <h3 style="color:#1B3A4B; margin:0 0 14px; font-size:1.15rem;">💡 Why Build a Resume This Way?</h3>
             <div style="display:flex; gap:20px; flex-wrap:wrap;">
                 <div style="flex:1; min-width:200px;">
-                    <p style="color:#495057; font-size:0.85rem; line-height:1.6; margin:0;">
+                    <p style="color:#495057; font-size:0.95rem; line-height:1.6; margin:0;">
                         <strong>For recruiters:</strong> Instead of a static PDF, you get an interactive experience —
                         ask Abu any question, explore skills visually, and book a meeting in one click.
                     </p>
                 </div>
                 <div style="flex:1; min-width:200px;">
-                    <p style="color:#495057; font-size:0.85rem; line-height:1.6; margin:0;">
+                    <p style="color:#495057; font-size:0.95rem; line-height:1.6; margin:0;">
                         <strong>As a showcase:</strong> This app <em>is</em> the portfolio. It demonstrates
                         Databricks, Unity Catalog, Genie, Delta Lake, Streamlit, and full-stack data app
                         development — the exact skills Krish brings to every engagement.
@@ -3221,7 +3221,7 @@ def render_about_app():
     <div style="max-width:900px; margin:16px auto 0;">
         <div style="background:linear-gradient(135deg,#2C3E50,#3498DB); border-radius:14px;
                     padding:20px 28px; color:white; text-align:center;">
-            <p style="margin:0; font-size:0.88rem; opacity:0.9;">
+            <p style="margin:0; font-size:1.0rem; opacity:0.9;">
                 🐒 <strong>Fun fact:</strong> Abu answers recruiter questions using a 3-tier system —
                 <strong>Curated FAQ</strong> (instant) → <strong>Databricks Genie API</strong> (SQL generation) →
                 <strong>Local Q&amp;A Engine</strong> (keyword search across all resume data).
