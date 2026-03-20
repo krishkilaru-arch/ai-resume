@@ -1225,10 +1225,10 @@ def render_profile_header(profile_df, certs_df=None):
         links_html += f'<a href="mailto:{email}">{email}</a>'
 
     CERT_BADGES = [
-        ("Databricks Certified Data Engineer Professional", "https://www.databricks.com/sites/default/files/2025-10/professional-badge-de.png?v=1761143167"),
         ("Databricks Certified Data Engineer Associate", "https://www.databricks.com/sites/default/files/2025-10/associate-badge-de.png?v=1761149691"),
-        ("Databricks Certified Generative AI Engineer Associate", "https://www.databricks.com/sites/default/files/2025-10/associate-badge-gen-ai.png?v=1761153880"),
+        ("Databricks Certified Data Engineer Professional", "https://www.databricks.com/sites/default/files/2025-10/professional-badge-de.png?v=1761143167"),
         ("Databricks Certified Machine Learning Associate", "https://www.databricks.com/sites/default/files/2025-10/Associate-badge-ML.png?v=1761077024"),
+        ("Databricks Certified Generative AI Engineer Associate", "https://www.databricks.com/sites/default/files/2025-10/associate-badge-gen-ai.png?v=1761153880"),
     ]
 
     image_badges_html = ""
