@@ -2176,14 +2176,14 @@ def render_skills_charts(skills_df):
             padding: 0 0 10px 8px; margin-bottom: 10px;
             border-bottom: 1px solid #F0F2F5;
         }}
-        .sk-icon {{ font-size: 1.1rem; }}
-        .sk-title {{ font-size: 0.88rem; font-weight: 700; color: #1B3A4B; }}
+        .sk-icon {{ font-size: 1.3rem; }}
+        .sk-title {{ font-size: 1.05rem; font-weight: 700; color: #1B3A4B; }}
         .sk-row {{
             display: flex; align-items: center; gap: 8px;
             margin-bottom: 6px;
         }}
         .sk-name {{
-            font-size: 0.78rem; color: #444; min-width: 0; flex: 1;
+            font-size: 0.92rem; color: #444; min-width: 0; flex: 1;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }}
         .sk-bar-bg {{
@@ -2191,7 +2191,7 @@ def render_skills_charts(skills_df):
             background: #F0F2F5; border-radius: 3px; overflow: hidden;
         }}
         .sk-bar-fill {{ height: 100%; border-radius: 3px; transition: width 0.5s ease; }}
-        .sk-val {{ font-size: 0.65rem; color: #888; min-width: 72px; text-align: right; white-space: nowrap; }}
+        .sk-val {{ font-size: 0.78rem; color: #888; min-width: 80px; text-align: right; white-space: nowrap; }}
     </style>
     """)
 
