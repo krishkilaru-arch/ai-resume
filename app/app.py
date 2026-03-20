@@ -2753,10 +2753,8 @@ def render_testimonials():
 # ────────────────────────────────────────────────────────────────
 
 def inject_analytics():
-    st.components.v1.html("""
-    <script data-goatcounter="https://thedatabrickster.goatcounter.com/count"
-            async src="//gc.zgo.at/count.js"></script>
-    """, height=0)
+    """Inject a visible visitor counter badge in the footer."""
+    pass
 
 
 def inject_seo_meta():
@@ -2833,13 +2831,18 @@ def main():
         render_publications(pubs_df)
         render_testimonials()
 
-        # Footer
-        _html(
-            "<hr style='border:none; border-top:1px solid #E8EDF1; margin:30px 0 10px;'>"
-            "<p style='text-align:center; color:#999; font-size:0.8rem;'>"
-            "Powered by Databricks AI/BI · Data model in Unity Catalog · "
-            "Abu-powered Q&A 🐒</p>"
-        )
+        # Footer with visitor counter
+        st.components.v1.html("""
+        <hr style="border:none; border-top:1px solid #E8EDF1; margin:30px 0 10px;">
+        <div style="text-align:center;">
+            <p style="color:#999; font-size:0.8rem; margin-bottom:8px;">
+                Powered by Databricks AI/BI · Data model in Unity Catalog · Abu-powered Q&A 🐒
+            </p>
+            <img src="https://visitor-badge.laobi.icu/badge?page_id=thedatabrickster.streamlit.app"
+                 alt="visitor count"
+                 style="height:22px; vertical-align:middle;" />
+        </div>
+        """, height=80)
 
     with tab_genie:
         render_genie_chat()
