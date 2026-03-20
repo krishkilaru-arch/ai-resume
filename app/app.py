@@ -2753,8 +2753,11 @@ def render_testimonials():
 # ────────────────────────────────────────────────────────────────
 
 def inject_analytics():
-    """Inject a visible visitor counter badge in the footer."""
-    pass
+    """GoatCounter — privacy-friendly backend analytics."""
+    st.components.v1.html("""
+    <script data-goatcounter="https://thedatabrickster.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+    """, height=0)
 
 
 def inject_seo_meta():
