@@ -2834,18 +2834,20 @@ def main():
         render_publications(pubs_df)
         render_testimonials()
 
-        # Footer with visitor counter
-        st.components.v1.html("""
-        <hr style="border:none; border-top:1px solid #E8EDF1; margin:30px 0 10px;">
-        <div style="text-align:center;">
-            <p style="color:#999; font-size:0.8rem; margin-bottom:8px;">
-                Powered by Databricks AI/BI · Data model in Unity Catalog · Abu-powered Q&A 🐒
-            </p>
-            <img src="https://visitor-badge.laobi.icu/badge?page_id=thedatabrickster.streamlit.app"
-                 alt="visitor count"
-                 style="height:22px; vertical-align:middle;" />
-        </div>
-        """, height=80)
+        # Footer
+        _html(
+            "<hr style='border:none; border-top:1px solid #E8EDF1; margin:30px 0 10px;'>"
+            "<p style='text-align:center; color:#999; font-size:0.8rem;'>"
+            "Powered by Databricks AI/BI · Data model in Unity Catalog · "
+            "Abu-powered Q&A 🐒</p>"
+        )
+        # Visitor counter
+        st.markdown(
+            '<div style="text-align:center;">'
+            '<img src="https://visitor-badge.laobi.icu/badge?page_id=thedatabrickster.streamlit.app" alt="visitors" />'
+            '</div>',
+            unsafe_allow_html=True,
+        )
 
     with tab_genie:
         render_genie_chat()
