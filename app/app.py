@@ -2709,7 +2709,7 @@ def main():
     render_profile_header(profile_df, certs_df)
 
     # Tabs
-    tab_dashboard, tab_genie, tab_meeting, tab_about = st.tabs(["📊  Resume Dashboard", "🐒  Ask Abu Anything", "📅  Book a Meeting", "🛠  How This Was Built"])
+    tab_dashboard, tab_genie, tab_meeting, tab_pdf, tab_about = st.tabs(["📊  Resume Dashboard", "🐒  Ask Abu Anything", "📅  Book a Meeting", "📄  Download Resume", "🛠  How This Was Built"])
 
     with tab_dashboard:
         render_metrics(profile_df, work_df, skills_df, certs_df, clients_df)
@@ -2722,20 +2722,6 @@ def main():
         render_projects(projects_df)
         render_publications(pubs_df)
         render_testimonials()
-
-        # PDF Download
-        data = load_resume_json()
-        if data:
-            pdf_bytes = generate_pdf(data)
-            dl_col1, dl_col2, dl_col3 = st.columns([1, 2, 1])
-            with dl_col2:
-                st.download_button(
-                    label="📄 Download Resume as PDF",
-                    data=pdf_bytes,
-                    file_name="Krish_Kilaru_Resume.pdf",
-                    mime="application/pdf",
-                    use_container_width=True,
-                )
 
         # Footer
         _html(
@@ -2759,6 +2745,38 @@ def main():
         </div>
         """)
         st.components.v1.iframe(f"{calendly_url}?hide_gdpr_banner=1", height=700, scrolling=True)
+
+    with tab_pdf:
+        _html("""
+        <div style="text-align:center; margin-bottom:20px;">
+            <h3 style="color:#1B3A4B; margin-bottom:6px;">📄 Download Krish's Resume</h3>
+            <p style="color:#6C757D; font-size:0.9rem;">
+                Get a clean, ATS-friendly PDF version of this resume for your records or to share with hiring managers.
+            </p>
+        </div>
+        """)
+        data = load_resume_json()
+        if data:
+            pdf_bytes = generate_pdf(data)
+            dl_col1, dl_col2, dl_col3 = st.columns([1, 2, 1])
+            with dl_col2:
+                st.download_button(
+                    label="📄 Download Resume as PDF",
+                    data=pdf_bytes,
+                    file_name="Krish_Kilaru_Resume.pdf",
+                    mime="application/pdf",
+                    use_container_width=True,
+                )
+        _html("""
+        <div style="margin-top:24px; background:#F8F9FA; border-radius:12px; padding:20px 24px;
+                    border:1px solid #E8EDF1; text-align:center;">
+            <p style="color:#6C757D; font-size:0.82rem; margin:0;">
+                💡 <strong>Tip:</strong> This PDF is auto-generated from the same data that powers this interactive resume.
+                For the full experience — including the AI chatbot, skills visualizations, and project details —
+                share the link: <a href="https://thedatabrickster.streamlit.app" style="color:#065A82;">thedatabrickster.streamlit.app</a>
+            </p>
+        </div>
+        """)
 
     with tab_about:
         render_about_app()
