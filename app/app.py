@@ -1377,7 +1377,7 @@ def render_profile_header(profile_df, certs_df=None):
     if github:
         nav_parts.append(f'<a href="{github}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" class="social-icon" alt="GitHub" title="GitHub"></a>')
     if usergroup:
-        nav_parts.append(f'<a href="{usergroup}" target="_blank">🧱 First Coast DUG</a>')
+        nav_parts.append(f'<a href="{usergroup}" target="_blank">🧱 First Coast Databricks User Group</a>')
     nav_html = f' {sep} '.join(nav_parts)
 
     contact_parts = []
