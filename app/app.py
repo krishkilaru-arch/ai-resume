@@ -2124,75 +2124,53 @@ def render_genie_chat():
     if "conversation_id" not in st.session_state:
         st.session_state.conversation_id = None
 
-    # Quick question buttons
+    # Input at the top
+    input_col, btn_col = st.columns([6, 1])
+    with input_col:
+        user_input = st.text_input(
+            "Ask Abu",
+            placeholder="Ask anything about Krish's career, skills, or experience...",
+            key="genie_input",
+            label_visibility="collapsed",
+        )
+    with btn_col:
+        send_clicked = st.button("Ask 🐒", type="primary", use_container_width=True)
+
+    # Suggested questions
     st.markdown("**Suggested questions:**")
     btn_cols = st.columns(4)
     for i, q in enumerate(QUICK_QUESTIONS):
-        if btn_cols[i % 4].button(q, key=f"quick_{i}", width="stretch"):
+        if btn_cols[i % 4].button(q, key=f"quick_{i}", use_container_width=True):
             st.session_state.pending_question = q
             st.rerun()
 
     st.divider()
 
-    # Display chat history
-    for msg in st.session_state.messages:
-        with st.chat_message(msg["role"], avatar="👤" if msg["role"] == "user" else "🐒"):
-            st.markdown(msg["content"])
-            if msg.get("df") is not None and not msg["df"].empty:
-                st.dataframe(msg["df"], width="stretch", hide_index=True)
-            if msg.get("sql"):
-                with st.expander("View generated SQL"):
-                    st.code(msg["sql"], language="sql")
-
     # Handle pending question from button click
     pending = st.session_state.pop("pending_question", None)
+    question = pending or (user_input if send_clicked else None)
 
-    # Chat input
-    user_input = st.chat_input("Ask anything about my career, skills, or experience...")
-
-    question = pending or user_input
     if question:
+        with st.spinner("🐒 Abu is thinking..."):
+            result = genie_ask(question, st.session_state.conversation_id)
+
+        st.session_state.conversation_id = result.get("conversation_id")
         st.session_state.messages.append({"role": "user", "content": question})
-
-        with st.chat_message("user", avatar="👤"):
-            st.markdown(question)
-
-        with st.chat_message("assistant", avatar="🐒"):
-            with st.spinner("Querying resume data..."):
-                result = genie_ask(question, st.session_state.conversation_id)
-
-            source = result.get("source", "local")
-            if source in ("genie", "greeting"):
-                st.caption("Powered by Databricks AI/BI Genie")
-            else:
-                api_err = st.session_state.pop("_genie_api_error", None)
-                debug_parts = []
-                if not GENIE_SPACE_ID:
-                    debug_parts.append("GENIE_SPACE_ID not set")
-                if not WAREHOUSE_ID:
-                    debug_parts.append("WAREHOUSE_ID not set")
-                w = get_workspace_client()
-                if not w:
-                    wsc_err = st.session_state.get("_wsc_error", "unknown")
-                    debug_parts.append(f"WorkspaceClient: {wsc_err}")
-                if api_err:
-                    debug_parts.append(f"API error: {api_err[:150]}")
-                if debug_parts:
-                    st.caption(f"Local Q&A fallback ({'; '.join(debug_parts)})")
-
-            st.markdown(result["text"])
-            if result.get("df") is not None and not result["df"].empty:
-                st.dataframe(result["df"], width="stretch", hide_index=True)
-            if result.get("sql"):
-                with st.expander("View generated SQL"):
-                    st.code(result["sql"], language="sql")
-
-            st.session_state.conversation_id = result.get("conversation_id")
-
         st.session_state.messages.append({
             "role": "assistant", "content": result["text"],
             "df": result.get("df"), "sql": result.get("sql"),
+            "source": result.get("source", "local"),
         })
+
+    # Display chat history (newest first)
+    for msg in reversed(st.session_state.messages):
+        with st.chat_message(msg["role"], avatar="👤" if msg["role"] == "user" else "🐒"):
+            st.markdown(msg["content"])
+            if msg.get("df") is not None and not msg["df"].empty:
+                st.dataframe(msg["df"], use_container_width=True, hide_index=True)
+            if msg.get("sql"):
+                with st.expander("View generated SQL"):
+                    st.code(msg["sql"], language="sql")
 
 
 # ────────────────────────────────────────────────────────────────
