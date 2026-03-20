@@ -2228,7 +2228,7 @@ def main():
     render_profile_header(profile_df, certs_df)
 
     # Tabs
-    tab_dashboard, tab_genie = st.tabs(["📊  Resume Dashboard", "🐒  Ask Abu Anything"])
+    tab_dashboard, tab_genie, tab_meeting = st.tabs(["📊  Resume Dashboard", "🐒  Ask Abu Anything", "📅  Book a Meeting"])
 
     with tab_dashboard:
         render_metrics(profile_df, work_df, skills_df, certs_df, clients_df)
@@ -2251,6 +2251,18 @@ def main():
 
     with tab_genie:
         render_genie_chat()
+
+    with tab_meeting:
+        calendly_url = "https://calendly.com/thedatabrickster"
+        if not profile_df.empty:
+            calendly_url = profile_df.iloc[0].get("calendly_url", calendly_url) or calendly_url
+        _html(f"""
+        <div style="text-align:center; margin-bottom:16px;">
+            <h3 style="color:#1B3A4B; margin-bottom:4px;">📅 Schedule a Meeting with Krish</h3>
+            <p style="color:#6C757D; font-size:0.9rem;">Pick a time that works for you — let's connect!</p>
+        </div>
+        """)
+        st.components.v1.iframe(f"{calendly_url}?hide_gdpr_banner=1", height=700, scrolling=True)
 
 
 if __name__ == "__main__":
