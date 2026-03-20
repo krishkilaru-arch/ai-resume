@@ -1431,8 +1431,7 @@ def render_summary(profile_df):
     summary = profile_df.iloc[0].get("summary", "")
     if summary:
         _html('<div class="section-header">Professional Summary</div>')
-        _html(f"<p style='font-size:0.95rem; line-height:1.7; color:#333;'>{summary}</p>"
-                    )
+        _html(f"<p style='font-size:0.95rem; line-height:1.7; color:#333; text-align:justify;'>{summary}</p>")
 
 
 def render_career_timeline(timeline_df):
