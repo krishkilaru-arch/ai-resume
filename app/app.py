@@ -2119,12 +2119,20 @@ def render_genie_chat():
     </div>
     """)
 
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
     if "conversation_id" not in st.session_state:
         st.session_state.conversation_id = None
+    if "last_qa" not in st.session_state:
+        st.session_state.last_qa = None
 
-    # Input at the top
+    # Suggested questions at the top
+    st.markdown("**Suggested questions:**")
+    btn_cols = st.columns(4)
+    for i, q in enumerate(QUICK_QUESTIONS):
+        if btn_cols[i % 4].button(q, key=f"quick_{i}", use_container_width=True):
+            st.session_state.pending_question = q
+            st.rerun()
+
+    # Input field below suggestions
     input_col, btn_col = st.columns([6, 1])
     with input_col:
         user_input = st.text_input(
@@ -2135,14 +2143,6 @@ def render_genie_chat():
         )
     with btn_col:
         send_clicked = st.button("Ask 🐒", type="primary", use_container_width=True)
-
-    # Suggested questions
-    st.markdown("**Suggested questions:**")
-    btn_cols = st.columns(4)
-    for i, q in enumerate(QUICK_QUESTIONS):
-        if btn_cols[i % 4].button(q, key=f"quick_{i}", use_container_width=True):
-            st.session_state.pending_question = q
-            st.rerun()
 
     st.divider()
 
@@ -2155,22 +2155,25 @@ def render_genie_chat():
             result = genie_ask(question, st.session_state.conversation_id)
 
         st.session_state.conversation_id = result.get("conversation_id")
-        st.session_state.messages.append({"role": "user", "content": question})
-        st.session_state.messages.append({
-            "role": "assistant", "content": result["text"],
-            "df": result.get("df"), "sql": result.get("sql"),
-            "source": result.get("source", "local"),
-        })
+        st.session_state.last_qa = {
+            "question": question,
+            "answer": result["text"],
+            "df": result.get("df"),
+            "sql": result.get("sql"),
+        }
 
-    # Display chat history (newest first)
-    for msg in reversed(st.session_state.messages):
-        with st.chat_message(msg["role"], avatar="👤" if msg["role"] == "user" else "🐒"):
-            st.markdown(msg["content"])
-            if msg.get("df") is not None and not msg["df"].empty:
-                st.dataframe(msg["df"], use_container_width=True, hide_index=True)
-            if msg.get("sql"):
+    # Show only the latest Q&A
+    if st.session_state.last_qa:
+        qa = st.session_state.last_qa
+        with st.chat_message("user", avatar="👤"):
+            st.markdown(qa["question"])
+        with st.chat_message("assistant", avatar="🐒"):
+            st.markdown(qa["answer"])
+            if qa.get("df") is not None and not qa["df"].empty:
+                st.dataframe(qa["df"], use_container_width=True, hide_index=True)
+            if qa.get("sql"):
                 with st.expander("View generated SQL"):
-                    st.code(msg["sql"], language="sql")
+                    st.code(qa["sql"], language="sql")
 
 
 # ────────────────────────────────────────────────────────────────
