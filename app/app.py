@@ -528,6 +528,7 @@ def _json_to_df(data, table):
             rows.append({
                 "project_id": i, "project_name": p["name"],
                 "description": p["description"], "role": p["role"],
+                "client": p.get("client", ""),
                 "technologies_used": p["technologies"],
                 "start_date": p["start_date"],
                 "end_date": p.get("end_date") or "Present",
