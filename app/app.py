@@ -256,6 +256,62 @@ _html("""
     .cert-badge:hover {
         background: rgba(255,255,255,0.28);
     }
+    /* Client logo grid */
+    .clients-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 16px;
+        margin-top: 8px;
+    }
+    .client-card {
+        background: #fff;
+        border: 1px solid #E8EDF1;
+        border-radius: 12px;
+        padding: 16px 10px 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .client-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    .client-logo {
+        height: 48px;
+        width: auto;
+        max-width: 100px;
+        object-fit: contain;
+        margin-bottom: 10px;
+    }
+    .client-logo-fallback {
+        height: 48px;
+        width: 48px;
+        border-radius: 50%;
+        background: #1B3A4B;
+        color: #fff;
+        font-size: 1.3rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    .client-name {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #1B3A4B;
+        margin-bottom: 6px;
+        line-height: 1.2;
+    }
+    .client-domain {
+        font-size: 0.68rem;
+        color: #fff;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-weight: 500;
+    }
     .profile-header .links a {
         color: #B8D4E3;
         text-decoration: none;
@@ -454,6 +510,15 @@ def _json_to_df(data, table):
                 "issue_date": c["issue_date"],
                 "expiry_date": c.get("expiry_date"),
                 "is_active": active,
+            })
+        return pd.DataFrame(rows)
+
+    if table == "clients":
+        rows = []
+        for i, c in enumerate(raw, 1):
+            rows.append({
+                "client_id": i, "client_name": c["name"],
+                "domain": c["domain"], "logo_url": c.get("logo", ""),
             })
         return pd.DataFrame(rows)
 
@@ -1566,6 +1631,43 @@ def render_skills_charts(skills_df):
                     )
 
 
+def render_clients(clients_df):
+    if clients_df.empty:
+        return
+    _html('<div class="section-header">Clients & Industries</div>')
+
+    domain_colors = {
+        "Financial": "#1B6B93",
+        "Insurance": "#2E8B57",
+        "Mortgage": "#E24A33",
+        "Mortgage Insurance": "#D4A017",
+        "Manufacturing": "#FF6347",
+        "Healthcare": "#7B2D8E",
+        "Healthcare IT": "#9B59B6",
+        "Technology": "#4682B4",
+        "Government": "#6C757D",
+        "Retail": "#FF8C00",
+        "Pro Serv": "#065A82",
+    }
+
+    cards = ""
+    for _, row in clients_df.iterrows():
+        name = row.get("client_name", "")
+        domain = row.get("domain", "")
+        logo = row.get("logo_url", "")
+        color = domain_colors.get(domain, "#1B3A4B")
+        cards += f"""
+        <div class="client-card">
+            <img src="{logo}" alt="{name}" class="client-logo"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="client-logo-fallback" style="display:none;">{name[0]}</div>
+            <div class="client-name">{name}</div>
+            <span class="client-domain" style="background:{color};">{domain}</span>
+        </div>"""
+
+    _html(f'<div class="clients-grid">{cards}</div>')
+
+
 def render_experience(work_df, highlights_df):
     if work_df.empty:
         return
@@ -1906,6 +2008,7 @@ def main():
     projects_df = load_table("projects")
     pubs_df = load_table("publications")
     timeline_df = load_table("career_timeline")
+    clients_df = load_table("clients")
 
     # Header
     render_profile_header(profile_df, certs_df)
@@ -1919,6 +2022,7 @@ def main():
         render_education(edu_df)
         render_career_timeline(timeline_df)
         render_skills_charts(skills_df)
+        render_clients(clients_df)
         render_experience(work_df, highlights_df)
         render_certifications(certs_df)
 
