@@ -340,11 +340,38 @@ _html("""
 
     /* Tabs styling */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
+        gap: 12px;
+        background: linear-gradient(135deg, #F0F7FA 0%, #E8F5E9 100%);
+        padding: 8px 12px;
+        border-radius: 14px;
+        border: 1px solid #DEE2E6;
+        justify-content: center;
     }
     .stTabs [data-baseweb="tab"] {
-        padding: 10px 24px;
-        font-weight: 600;
+        padding: 12px 32px;
+        font-weight: 700;
+        font-size: 1.05rem;
+        border-radius: 10px;
+        color: #1B3A4B;
+        background: transparent;
+        border: none;
+        transition: all 0.25s ease;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        background: rgba(6, 90, 130, 0.08);
+        color: #065A82;
+    }
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #065A82, #1C7C54) !important;
+        color: #fff !important;
+        box-shadow: 0 4px 12px rgba(6, 90, 130, 0.3);
+        border-radius: 10px;
+    }
+    .stTabs [data-baseweb="tab-highlight"] {
+        display: none;
+    }
+    .stTabs [data-baseweb="tab-border"] {
+        display: none;
     }
 
     /* Chat enhancements */
