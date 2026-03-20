@@ -13,6 +13,7 @@ import plotly.graph_objects as go
 import json
 import os
 import time
+import base64
 from pathlib import Path
 from datetime import datetime, timedelta
 
@@ -203,6 +204,15 @@ _html("""
         justify-content: space-between;
         align-items: center;
         gap: 24px;
+    }
+    .profile-photo {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid rgba(255,255,255,0.5);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        flex-shrink: 0;
     }
     .profile-info-col {
         flex: 1;
@@ -1224,6 +1234,12 @@ def render_profile_header(profile_df, certs_df=None):
     if email:
         links_html += f'<a href="mailto:{email}">{email}</a>'
 
+    photo_html = ""
+    photo_path = Path(__file__).parent.parent / "images" / "KrishImage.png"
+    if photo_path.exists():
+        b64 = base64.b64encode(photo_path.read_bytes()).decode()
+        photo_html = f'<img src="data:image/png;base64,{b64}" alt="{name}" class="profile-photo" />'
+
     CERT_BADGES = [
         ("Databricks Certified Data Engineer Associate", "https://www.databricks.com/sites/default/files/2025-10/associate-badge-de.png?v=1761149691"),
         ("Databricks Certified Data Engineer Professional", "https://www.databricks.com/sites/default/files/2025-10/professional-badge-de.png?v=1761143167"),
@@ -1259,6 +1275,7 @@ def render_profile_header(profile_df, certs_df=None):
     _html(f"""
     <div class="profile-header">
         <div class="profile-header-inner">
+            {photo_html}
             <div class="profile-info-col">
                 <h1>{name}</h1>
                 <div class="headline">{headline}</div>
