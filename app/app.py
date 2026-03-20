@@ -2755,8 +2755,22 @@ def render_testimonials():
 def inject_analytics():
     """GoatCounter — privacy-friendly backend analytics."""
     st.components.v1.html("""
-    <script data-goatcounter="https://thedatabrickster.goatcounter.com/count"
-            async src="//gc.zgo.at/count.js"></script>
+    <script>
+        var gc = document.createElement('script');
+        gc.src = 'https://gc.zgo.at/count.js';
+        gc.async = true;
+        gc.dataset.goatcounter = 'https://thedatabrickster.goatcounter.com/count';
+        gc.dataset.goatcounterSettings = JSON.stringify({
+            path: '/resume',
+            title: 'Krish Kilaru - AI Resume',
+            referrer: document.referrer || 'direct'
+        });
+        document.head.appendChild(gc);
+
+        // Fallback: pixel-based tracking if JS blocked
+        var img = new Image();
+        img.src = 'https://thedatabrickster.goatcounter.com/count?p=/resume&t=Krish+Kilaru+-+AI+Resume&r=' + encodeURIComponent(document.referrer);
+    </script>
     """, height=0)
 
 
