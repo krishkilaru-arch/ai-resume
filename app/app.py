@@ -2672,7 +2672,17 @@ def render_genie_chat():
         st.session_state.last_qa = None
 
     # Suggested questions at the top
-    st.markdown("**Suggested questions:**")
+    st.markdown("""
+    <style>
+    div[data-testid="stHorizontalBlock"] button[kind="secondary"] {
+        min-height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    </style>
+    **Suggested questions:**
+    """, unsafe_allow_html=True)
     row1 = st.columns(4)
     for i, q in enumerate(QUICK_QUESTIONS[:4]):
         if row1[i].button(q, key=f"quick_{i}", use_container_width=True):
