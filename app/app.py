@@ -1354,6 +1354,9 @@ def render_profile_header(profile_df, certs_df=None):
         links_html += f'<a href="mailto:{email}">{email}</a>'
     if website:
         links_html += f'<a href="{website}">Website</a>'
+    usergroup = p.get("usergroup_url", "")
+    if usergroup:
+        links_html += f'<a href="{usergroup}" target="_blank">🧱 First Coast DUG</a>'
     if calendly:
         links_html += f'<a href="{calendly}" class="calendly-btn" target="_blank">📅 Book a Meeting</a>'
 
