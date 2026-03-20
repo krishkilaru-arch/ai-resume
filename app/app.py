@@ -1954,16 +1954,18 @@ def render_metrics(profile_df, work_df, skills_df, certs_df, clients_df=None):
         }});
     </script>
     <script>
-        window.addEventListener('load', function() {{
-            var h = document.querySelector('.metrics-grid').offsetHeight + 10;
-            window.frameElement.style.height = h + 'px';
-        }});
-        window.addEventListener('resize', function() {{
-            var h = document.querySelector('.metrics-grid').offsetHeight + 10;
-            window.frameElement.style.height = h + 'px';
-        }});
+        function resizeFrame() {{
+            var el = document.querySelector('.metrics-grid');
+            if (el && window.frameElement) {{
+                window.frameElement.style.height = (el.scrollHeight + 16) + 'px';
+            }}
+        }}
+        window.addEventListener('load', resizeFrame);
+        window.addEventListener('resize', resizeFrame);
+        setTimeout(resizeFrame, 100);
+        setTimeout(resizeFrame, 500);
     </script>
-    """, height=90, scrolling=False)
+    """, height=180, scrolling=False)
 
 
 def render_summary(profile_df):
