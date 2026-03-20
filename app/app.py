@@ -1345,17 +1345,22 @@ def render_profile_header(profile_df, certs_df=None):
     calendly = p.get("calendly_url", "")
     website = p.get("website_url", "")
 
+    phone = p.get("phone", "")
+
     links_html = ""
     if linkedin:
         links_html += f'<a href="{linkedin}">LinkedIn</a>'
     if github:
         links_html += f'<a href="{github}">GitHub</a>'
-    if email:
-        links_html += f'<a href="mailto:{email}">{email}</a>'
     usergroup = p.get("usergroup_url", "")
     if usergroup:
         links_html += f'<a href="{usergroup}" target="_blank">🧱 First Coast DUG</a>'
-    
+
+    contact_html = ""
+    if email:
+        contact_html += f'<span>📧 <a href="mailto:{email}">{email}</a></span>'
+    if phone:
+        contact_html += f'<span>📱 {phone}</span>'
 
     photo_html = ""
     photo_path = Path(__file__).parent.parent / "images" / "KrishImage.png"
@@ -1393,6 +1398,7 @@ def render_profile_header(profile_df, certs_df=None):
                 <div class="headline">{headline}</div>
                 <div class="location">📍 {location}</div>
                 <div class="links" style="margin-top:10px;">{links_html}</div>
+                <div class="contact-row" style="margin-top:6px;display:flex;gap:20px;font-size:0.82rem;color:#B8D4E3;">{contact_html}</div>
                 {text_row}
             </div>
             {right_col}
