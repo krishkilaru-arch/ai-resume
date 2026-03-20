@@ -670,6 +670,241 @@ _INTENT_PATTERNS = [
     (["ml", "machine learning", "mlflow", "model", "ai ", "artificial intelligence", "feature store"], "ml_skills"),
 ]
 
+# ── Recruiter FAQ: keyword triggers → (answer, suggested_sql) ──
+_RECRUITER_FAQ = [
+    {
+        "keywords": ["why should we hire", "why hire", "why krish", "why is krish a good fit", "why this candidate", "what makes krish special", "what sets krish apart", "differentiator", "differentiate", "standout", "stand out", "unique about"],
+        "answer": (
+            "**Why Krish?** Here are the top reasons:\n\n"
+            "1. **Proven Deal Winner** — Delivered a live Databricks AI/BI Genie demo that won the Capital Group engagement against Accenture, KPMG, Capgemini, and Infosys.\n"
+            "2. **19 Years of Data Engineering** — Deep expertise across Databricks, AWS, Hadoop, Spark, and the full modern data stack.\n"
+            "3. **10 Databricks Certifications** — Including Data Engineer Professional, ML Associate, and GenAI Engineer Associate.\n"
+            "4. **Built a CoE from Scratch** — Established a Databricks Center of Excellence at Lumenalta, trained 50+ engineers, and achieved Silver Partner status.\n"
+            "5. **Pre-Sales & Architecture** — 6+ years translating complex technical capabilities into business outcomes for executive stakeholders.\n"
+            "6. **Published Thought Leader** — Author of whitepapers and technical articles on Genie, RAG, dbt vs Databricks, and more.\n"
+            "7. **Community Builder** — Admin of the First Coast Databricks User Group (Jacksonville, FL).\n"
+            "8. **Enterprise Client Portfolio** — TD Bank, Moody's, J&J, Capital Group, Rocket Mortgage, Wells Fargo, BCBS, and more.\n"
+            "9. **Conference Speaker** — Presented serverless architecture at AWS re:Invent."
+        ),
+    },
+    {
+        "keywords": ["biggest achievement", "greatest accomplishment", "proudest moment", "best accomplishment", "most impressive", "biggest win"],
+        "answer": (
+            "**Krish's biggest achievement:**\n\n"
+            "Delivered a live Databricks AI/BI Genie demo during the Capital Group pre-sales engagement that **won the deal against Accenture, KPMG, Capgemini, and Infosys** — four of the largest consulting firms in the world. "
+            "The POC with the Quants team was then converted into a full enterprise Databricks onboarding project for Capital Group's Enterprise Data Office.\n\n"
+            "Other notable highlights:\n"
+            "- Built a Databricks Center of Excellence from zero, certifying 50+ engineers\n"
+            "- Presented serverless architecture at **AWS re:Invent**\n"
+            "- Achieved **3x throughput improvement** for J&J's Spark pipelines\n"
+            "- Delivered **40% query time reduction** for Guardian Life\n"
+            "- Led Essent Mortgage's 15-year legacy migration: **50% faster processing, 35% cost savings**"
+        ),
+    },
+    {
+        "keywords": ["notice period", "availability", "when can krish start", "when can he start", "start date", "available to start", "how soon", "when available", "joining date"],
+        "answer": (
+            "For Krish's current availability and notice period, please reach out directly:\n\n"
+            "- 📧 Email: thedatabrickster@gmail.com\n"
+            "- 📱 Phone: 6363626272\n"
+            "- 📅 Book a meeting: https://calendly.com/thedatabrickster\n\n"
+            "Krish is currently working as **Associate Director, Data & AI** at **Lumenalta** (since July 2024)."
+        ),
+    },
+    {
+        "keywords": ["visa", "work authorization", "work permit", "sponsorship", "green card", "h1b", "h-1b", "h1-b", "immigration", "authorized to work", "eligible to work", "legally"],
+        "answer": (
+            "**Work Authorization:** Canadian Citizen, Green Card EAD (GC expected May 2026).\n\n"
+            "Krish is authorized to work in the United States and does not require visa sponsorship."
+        ),
+    },
+    {
+        "keywords": ["willing to relocate", "open to relocation", "relocate", "move to", "based out of", "work from"],
+        "answer": (
+            "**Location:** Jacksonville, FL\n\n"
+            "**Willing to relocate:** Yes\n\n"
+            "**Preferred work model:** Hybrid\n\n"
+            "Krish is open to relocation and flexible on work arrangements."
+        ),
+    },
+    {
+        "keywords": ["how many years databricks", "databricks experience", "years in databricks", "long with databricks", "databricks expertise"],
+        "answer": (
+            "Krish has **6+ years of hands-on Databricks experience** across multiple enterprise clients:\n\n"
+            "- **Capital Group** — AI/BI Dashboards, Genie, Quant model migration\n"
+            "- **TD Bank** — Glue-to-Databricks migration, Unity Catalog, Ingestion/ETL frameworks\n"
+            "- **Guardian Life** — Databricks environment optimization, 40% query time reduction\n"
+            "- **J&J** — Spark pipeline optimization, 3x throughput improvement\n"
+            "- **FIS Global** — Terraform-based Databricks infrastructure provisioning\n\n"
+            "He holds **4 Databricks certifications**: Data Engineer Associate, Data Engineer Professional, ML Associate, and GenAI Engineer Associate, plus 6 additional Databricks accreditations."
+        ),
+    },
+    {
+        "keywords": ["what clients", "which clients", "which companies", "client list", "client portfolio", "who has krish worked", "companies worked", "customers served"],
+        "answer": (
+            "Krish has served **20+ enterprise clients** across Financial Services, Insurance, Healthcare, Manufacturing, Government, and Technology:\n\n"
+            "**Databricks Engagements:** Capital Group, TD Bank, Guardian Life, J&J, FIS Global, BondCliQ\n\n"
+            "**AWS Engagements:** Moody's (presented at AWS re:Invent), Essent Mortgage, Rocket Mortgage\n\n"
+            "**Other Enterprise Clients:** BCBS IL, Nissan North America, Wells Fargo, Horace Mann, "
+            "Illinois Board of Education, Illinois Office of Comptroller, CareFusion, Caterpillar, Henkel, Microsoft, SuperValu\n\n"
+            "**Technology Partners:** Databricks, AWS, Hortonworks"
+        ),
+    },
+    {
+        "keywords": ["pre-sales", "presales", "pre sales", "sales engineer", "demo experience", "poc experience", "customer facing", "client facing"],
+        "answer": (
+            "**Yes!** Krish has **6+ years of pre-sales and customer-facing experience:**\n\n"
+            "- Delivered a live **Databricks AI/BI Genie demo** that won the Capital Group deal against 4 major competitors\n"
+            "- Delivers pre-sales demos on **Genie, AI/BI Dashboards, Databricks Apps, and AgentBricks**\n"
+            "- Executes **POC delivery** — converted the Capital Group POC into a full enterprise project\n"
+            "- Conducts **technical workshops and client enablement** sessions\n"
+            "- Skilled in **stakeholder & executive communication**, translating technical capabilities into business outcomes\n"
+            "- Experience with **GTM & territory planning** alongside Account Executives\n"
+            "- **GSI & partner collaboration** (Databricks Silver Partner achievement)"
+        ),
+    },
+    {
+        "keywords": ["team size", "how many people", "direct reports", "manage a team", "team management", "managed team", "people manager", "management experience"],
+        "answer": (
+            "Krish currently manages a team of **8** at Lumenalta as Associate Director, Data & AI.\n\n"
+            "**Leadership highlights:**\n"
+            "- Built a **Databricks Center of Excellence** from scratch with training programs and delivery frameworks\n"
+            "- Drove **50+ Databricks certifications** and produced **2 Databricks MVPs**\n"
+            "- Championed the Databricks partnership to achieve **Silver Partner** status\n"
+            "- 8+ years of team leadership and mentoring experience"
+        ),
+    },
+    {
+        "keywords": ["what industries", "industry experience", "sectors", "domains", "verticals"],
+        "answer": (
+            "Krish has experience across **8+ industries:**\n\n"
+            "- 🏦 **Financial Services** — Capital Group, TD Bank, Wells Fargo, Moody's, FIS Global, BondCliQ\n"
+            "- 🛡️ **Insurance** — Guardian Life, BCBS IL, Essent Mortgage, Horace Mann\n"
+            "- 🏥 **Healthcare** — J&J, CareFusion\n"
+            "- 🏭 **Manufacturing** — Nissan North America, Caterpillar\n"
+            "- 🏛️ **Government** — Illinois Office of Comptroller, Illinois Board of Education\n"
+            "- 🏠 **Mortgage** — Rocket Mortgage, Essent Mortgage, Wells Fargo\n"
+            "- 🛒 **Retail** — SuperValu, Henkel\n"
+            "- 💻 **Technology** — Microsoft, Databricks, AWS"
+        ),
+    },
+    {
+        "keywords": ["genie experience", "ai/bi genie", "aibi genie", "genie demo", "natural language", "genie space"],
+        "answer": (
+            "Krish is one of the foremost practitioners of **Databricks AI/BI Genie:**\n\n"
+            "- **Won Capital Group** engagement with a live Genie demo against Accenture, KPMG, Capgemini, and Infosys\n"
+            "- Implementing **Genie Spaces** for power users in Capital Group's Enterprise Data Office\n"
+            "- Delivers pre-sales demos on Genie to win new client engagements\n"
+            "- Published a **2-part comprehensive guide** on AI/BI Genie covering basics, advanced features, security, privacy, LLMs, architecture internals, and workflows\n"
+            "- Built this very resume website with an **Abu chatbot powered by Databricks Genie** 🐒\n"
+            "- Admin of the **First Coast Databricks User Group**, actively demoing Genie to the community"
+        ),
+    },
+    {
+        "keywords": ["unity catalog experience", "unity catalog", "data governance experience", "governance"],
+        "answer": (
+            "Krish has **3+ years of Unity Catalog and data governance expertise:**\n\n"
+            "- **TD Bank** — Onboarded Unity Catalog for the Data Governance team, establishing centralized access controls, lineage tracking, and audit policies\n"
+            "- **Capital Group** — Implementing Unity Catalog as part of enterprise Databricks platform architecture\n"
+            "- Expert in data lineage, access control, governance, and auditing\n"
+            "- Published thought leadership on governance best practices"
+        ),
+    },
+    {
+        "keywords": ["conference", "speaking", "speaker", "presented at", "reinvent", "re:invent", "public speaking", "talk"],
+        "answer": (
+            "**Yes!** Krish has presented at major conferences:\n\n"
+            "- 🎤 **AWS re:Invent** — Presented on serverless data architecture built for Moody's Analytics\n"
+            "  ▶️ Watch: https://www.youtube.com/watch?v=tyM3OHT_0M8\n\n"
+            "He also regularly delivers:\n"
+            "- Pre-sales demos and workshops on Databricks Genie, AI/BI Dashboards, and AgentBricks\n"
+            "- Technical enablement sessions for enterprise clients\n"
+            "- Community presentations as Admin of the First Coast Databricks User Group"
+        ),
+    },
+    {
+        "keywords": ["compensation", "salary", "pay", "ctc", "rate", "billing", "hourly", "expected salary", "salary expectation"],
+        "answer": "Compensation details are not included in this resume. Please reach out directly to discuss:\n\n- 📧 thedatabrickster@gmail.com\n- 📅 Book a meeting: https://calendly.com/thedatabrickster",
+    },
+    {
+        "keywords": ["contract or full", "full-time or contract", "employment type", "open to contract", "w2 or c2c", "w2", "c2c", "1099", "contract to hire"],
+        "answer": (
+            "Krish is currently employed **full-time** as Associate Director, Data & AI at Lumenalta.\n\n"
+            "For questions about engagement preferences (full-time, contract, etc.), please reach out directly:\n\n"
+            "- 📧 thedatabrickster@gmail.com\n"
+            "- 📅 Book a meeting: https://calendly.com/thedatabrickster"
+        ),
+    },
+    {
+        "keywords": ["strengths", "strong suit", "what is krish good at", "core competenc", "key strengths", "best at"],
+        "answer": (
+            "**Krish's core strengths:**\n\n"
+            "1. **Databricks Platform Mastery** — 10 certifications, 6+ years hands-on across engineering, analytics, ML, and governance\n"
+            "2. **Pre-Sales & Deal Winning** — Won Capital Group over 4 global SI competitors with a live Genie demo\n"
+            "3. **Solution Architecture** — End-to-end design of lakehouse, serverless, and streaming architectures\n"
+            "4. **Client Delivery** — 20+ enterprise clients across 8+ industries with measurable impact\n"
+            "5. **Leadership & CoE Building** — Built a Databricks CoE, trained 50+ engineers, achieved Silver Partner\n"
+            "6. **Technical Communication** — Published author, conference speaker (AWS re:Invent), community leader\n"
+            "7. **Full Stack Data** — ETL/ELT, Spark, Delta Lake, Unity Catalog, MLflow, GenAI, RAG, Genie"
+        ),
+    },
+    {
+        "keywords": ["coe", "center of excellence", "centre of excellence", "practice build"],
+        "answer": (
+            "**Yes!** Krish built a **Databricks Center of Excellence from scratch** at Lumenalta:\n\n"
+            "- Created training programs, best practices, and delivery frameworks\n"
+            "- Drove company-wide certification initiative: **50+ certified employees** and **2 Databricks MVPs**\n"
+            "- Championed the Databricks partnership: elevated Lumenalta from no partnership to **Silver Partner** status\n"
+            "- Established reusable accelerators for pre-sales demos, POC delivery, and client enablement"
+        ),
+    },
+    {
+        "keywords": ["aws experience", "amazon web services", "cloud experience aws"],
+        "answer": (
+            "Krish has **8+ years of AWS experience** across multiple enterprise clients:\n\n"
+            "- **Moody's** — Designed fully serverless architecture using Lambda, Glue, Step Functions, DynamoDB. **Presented at AWS re:Invent**\n"
+            "- **Essent Mortgage** — Led 15-year legacy migration to AWS (50% faster processing, 35% cost savings)\n"
+            "- **Rocket Mortgage** — Migrated Hortonworks to AWS Glue, drove org-wide Glue adoption\n"
+            "- **TD Bank** — AWS Glue-to-Databricks migration\n\n"
+            "Expert in: AWS Glue, Lambda, Step Functions, EMR, Redshift, S3, DynamoDB, and Databricks on AWS."
+        ),
+    },
+    {
+        "keywords": ["download resume", "pdf resume", "resume pdf", "resume document", "send resume", "resume copy"],
+        "answer": (
+            "This interactive website **is** Krish's resume! It includes all the information a traditional PDF would have, plus:\n\n"
+            "- 🐒 **Abu chatbot** — Ask any question about Krish's background (powered by Databricks Genie)\n"
+            "- 📊 **Interactive dashboard** — Career timeline, skills visualization, client grid, and more\n"
+            "- 📅 **Book a meeting** — https://calendly.com/thedatabrickster\n\n"
+            "For a direct conversation, reach out at thedatabrickster@gmail.com."
+        ),
+    },
+    {
+        "keywords": ["fit for solutions architect", "good for sa role", "solutions architect role", "sa position", "architect role"],
+        "answer": (
+            "**Krish is an excellent fit for a Solutions Architect role.** Here's why:\n\n"
+            "- **6+ years in customer-facing pre-sales and consulting** — designing, demoing, and delivering solutions\n"
+            "- **Won enterprise deals** against Accenture, KPMG, Capgemini, and Infosys through live technical demos\n"
+            "- **End-to-end architecture** — Lakehouse, serverless, streaming, Delta Lake, Unity Catalog, AI/BI\n"
+            "- **POC to production** — Converted Capital Group POC into full enterprise Databricks onboarding\n"
+            "- **10 Databricks certifications** including Data Engineer Professional\n"
+            "- **Presented at AWS re:Invent** — strong public speaking and technical storytelling\n"
+            "- **Published thought leader** with whitepapers and technical articles\n"
+            "- **CoE builder** — built Databricks practice, trained 50+ engineers"
+        ),
+    },
+]
+
+
+def _check_recruiter_faq(question):
+    q = question.lower().strip()
+    for faq in _RECRUITER_FAQ:
+        for kw in faq["keywords"]:
+            if kw in q:
+                return {"text": faq["answer"], "sql": None, "df": None,
+                        "conversation_id": "faq", "status": "COMPLETED"}
+    return None
+
 
 def _detect_intent(question):
     q = question.lower().strip()
@@ -895,6 +1130,11 @@ def genie_ask(question, conversation_id=None):
     if _is_smalltalk(question):
         return _smalltalk_response(question)
 
+    faq_result = _check_recruiter_faq(question)
+    if faq_result:
+        faq_result["source"] = "faq"
+        return faq_result
+
     api_result = _genie_ask_api(question, conversation_id)
     if api_result and api_result.get("text"):
         genie_text = api_result["text"].lower()
@@ -906,6 +1146,10 @@ def genie_ask(question, conversation_id=None):
             "don't have", "do not have", "not in the data",
         ]
         if any(phrase in genie_text for phrase in genie_unhelpful):
+            faq_fallback = _check_recruiter_faq(question)
+            if faq_fallback:
+                faq_fallback["source"] = "faq"
+                return faq_fallback
             local_result = _genie_ask_local(question)
             if local_result and local_result.get("text"):
                 local_result["source"] = "local"
@@ -2165,14 +2409,14 @@ def render_publications(pubs_df):
 # ────────────────────────────────────────────────────────────────
 
 QUICK_QUESTIONS = [
-    "Tell me about Krish Kilaru",
-    "What are Krish's top technical skills?",
-    "What is Krish's current role?",
-    "Show Krish's career progression",
+    "Why should we hire Krish?",
+    "What are Krish's top skills?",
+    "What clients has Krish worked with?",
+    "Tell me about Krish's Genie experience",
     "What certifications does Krish hold?",
-    "Does Krish have leadership experience?",
-    "What industries has Krish worked in?",
-    "What was Krish's most impactful project?",
+    "Does Krish have pre-sales experience?",
+    "What is Krish's biggest achievement?",
+    "What is Krish's work authorization?",
 ]
 
 
