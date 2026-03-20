@@ -1469,8 +1469,14 @@ def render_career_timeline(timeline_df):
     org_colors = {org: palette[i % len(palette)] for i, org in enumerate(orgs)}
 
     import math
+    durations = [(row["end_dt"] - row["start_dt"]).days for _, row in df.iterrows()]
+    sqrt_durations = [math.sqrt(d) for d in durations]
+    total_sqrt = sum(sqrt_durations)
+    widths = [(s / total_sqrt) * 100 for s in sqrt_durations]
+
     cards_html = ""
-    for _, row in df.iterrows():
+    cursor_pct = 0.0
+    for (_, row), width_pct in zip(df.iterrows(), widths):
         is_work = row["event_type"] == "Work"
         is_current = row["is_current"]
         icon = "💼" if is_work else "🎓"
@@ -1478,9 +1484,8 @@ def render_career_timeline(timeline_df):
         start_fmt = row["start_dt"].strftime("%Y")
         end_fmt = "Now" if is_current else row["end_dt"].strftime("%Y")
 
-        left_pct = ((row["start_dt"] - earliest).days / total_days) * 100
-        raw_width = ((row["end_dt"] - row["start_dt"]).days / total_days) * 100
-        width_pct = max(min(raw_width, 45), 16)
+        left_pct = cursor_pct
+        cursor_pct += width_pct
 
         pulse_css = "animation:tl-pulse 2s infinite;" if is_current else ""
         border = f"border:2px solid #F4A261;" if is_current else f"border:1px solid {color};"
@@ -1512,14 +1517,14 @@ def render_career_timeline(timeline_df):
         </div>'''
 
     year_markers = ""
-    start_year = earliest.year
-    end_year = latest.year + 1
-    for y in range(start_year, end_year + 1, 3):
-        y_date = datetime(y, 1, 1)
-        pct = ((y_date - earliest).days / total_days) * 100
-        if 0 <= pct <= 100:
-            year_markers += f'<div style="position:absolute;left:{pct}%;top:-16px;transform:translateX(-50%);font-size:0.68rem;color:#999;font-weight:600;">{y}</div>'
-            year_markers += f'<div style="position:absolute;left:{pct}%;top:0;bottom:0;width:1px;background:rgba(0,0,0,0.05);"></div>'
+    cum = 0.0
+    for (_, row), w in zip(df.iterrows(), widths):
+        start_y = row["start_dt"].strftime("%Y")
+        year_markers += f'<div style="position:absolute;left:{cum}%;top:-16px;font-size:0.68rem;color:#999;font-weight:600;">{start_y}</div>'
+        cum += w
+    last_row = df.iloc[-1]
+    end_label = "Now" if last_row["is_current"] else last_row["end_dt"].strftime("%Y")
+    year_markers += f'<div style="position:absolute;right:0;top:-16px;font-size:0.68rem;color:#999;font-weight:600;">{end_label}</div>'
 
     work_count = len(df[df["event_type"] == "Work"])
     work_yrs = df[df["event_type"] == "Work"]["months"].sum() // 12
