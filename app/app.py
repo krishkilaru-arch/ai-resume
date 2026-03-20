@@ -2769,12 +2769,12 @@ def generate_pdf(data):
 
     pdf.set_font("Helvetica", "B", 22)
     pdf.cell(0, 10, S(profile.get("full_name", "")), new_x="LMARGIN", new_y="NEXT", align="C")
-    pdf.set_font("Helvetica", "", 10)
+    pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(80, 80, 80)
-    pdf.cell(0, 5, S(profile.get("headline", "")), new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.cell(0, 5.5, S(profile.get("headline", "")), new_x="LMARGIN", new_y="NEXT", align="C")
     loc = f"{profile.get('location_city', '')}, {profile.get('location_state', '')}"
     contact_line1 = f"{loc}  |  {profile.get('email', '')}  |  {profile.get('phone', '')}"
-    pdf.set_font("Helvetica", "", 9)
+    pdf.set_font("Helvetica", "", 10)
     pdf.cell(0, 5, S(contact_line1), new_x="LMARGIN", new_y="NEXT", align="C")
     contact_line2 = f"{profile.get('linkedin_url', '')}  |  {profile.get('website_url', '')}"
     pdf.cell(0, 5, S(contact_line2), new_x="LMARGIN", new_y="NEXT", align="C")
@@ -2785,20 +2785,20 @@ def generate_pdf(data):
     pdf.ln(3)
 
     def section_hdr(title):
-        pdf.set_font("Helvetica", "B", 10)
+        pdf.set_font("Helvetica", "B", 13)
         pdf.set_text_color(27, 58, 75)
-        pdf.cell(0, 6, title.upper(), new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 7, title.upper(), new_x="LMARGIN", new_y="NEXT")
         pdf.set_draw_color(27, 58, 75)
-        pdf.set_line_width(0.2)
+        pdf.set_line_width(0.3)
         pdf.line(10, pdf.get_y(), 200, pdf.get_y())
-        pdf.ln(1.5)
+        pdf.ln(2)
         pdf.set_text_color(0, 0, 0)
 
     section_hdr("Professional Summary")
-    pdf.set_font("Helvetica", "", 7.5)
+    pdf.set_font("Helvetica", "", 10)
     pdf.set_x(10)
-    pdf.multi_cell(0, 3.2, S(profile.get("summary", "")))
-    pdf.ln(1.5)
+    pdf.multi_cell(0, 4.2, S(profile.get("summary", "")))
+    pdf.ln(2)
 
     section_hdr("Work Experience")
     for exp in data.get("work_experience", []):
@@ -2810,18 +2810,18 @@ def generate_pdf(data):
         if end != "Present":
             end = end[:7]
 
-        pdf.set_font("Helvetica", "B", 8.5)
+        pdf.set_font("Helvetica", "B", 11)
         pdf.set_x(10)
-        pdf.cell(0, 4.5, S(f"{title} -- {company}"), new_x="LMARGIN", new_y="NEXT")
-        pdf.set_font("Helvetica", "I", 7)
+        pdf.cell(0, 5.5, S(f"{title} -- {company}"), new_x="LMARGIN", new_y="NEXT")
+        pdf.set_font("Helvetica", "I", 9)
         pdf.set_text_color(100, 100, 100)
         meta = f"{start} to {end}  |  {exp.get('location', '')}"
         if role:
             meta += f"  |  {role}"
         pdf.set_x(10)
-        pdf.cell(0, 3.5, S(meta), new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 4.5, S(meta), new_x="LMARGIN", new_y="NEXT")
         pdf.set_text_color(0, 0, 0)
-        pdf.set_font("Helvetica", "", 7)
+        pdf.set_font("Helvetica", "", 9.5)
         for h in exp.get("highlights", [])[:4]:
             desc = h.get("description", "")
             impact = h.get("impact_metric", "")
@@ -2829,8 +2829,8 @@ def generate_pdf(data):
             if impact:
                 bullet += f" [{impact}]"
             pdf.set_x(10)
-            pdf.multi_cell(0, 3, S(bullet))
-        pdf.ln(1)
+            pdf.multi_cell(0, 4, S(bullet))
+        pdf.ln(1.5)
 
     section_hdr("Skills")
     skills_by_cat = {}
@@ -2839,32 +2839,32 @@ def generate_pdf(data):
         label = cat.split(". ", 1)[1] if ". " in cat else cat
         skills_by_cat.setdefault(label, []).append(s["skill_name"])
     for cat, skills in skills_by_cat.items():
-        pdf.set_font("Helvetica", "B", 7.5)
+        pdf.set_font("Helvetica", "B", 10)
         pdf.set_x(10)
-        pdf.cell(0, 3.5, S(f"{cat}: ") + "  ", new_x="LMARGIN", new_y="NEXT")
-        pdf.set_font("Helvetica", "", 7)
+        pdf.cell(0, 4.5, S(f"{cat}: ") + "  ", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_font("Helvetica", "", 9.5)
         pdf.set_x(10)
-        pdf.multi_cell(0, 3, S("    " + ", ".join(skills)))
-    pdf.ln(1)
+        pdf.multi_cell(0, 4, S("    " + ", ".join(skills)))
+    pdf.ln(1.5)
 
     section_hdr("Education")
     for edu in data.get("education", []):
-        pdf.set_font("Helvetica", "B", 8.5)
+        pdf.set_font("Helvetica", "B", 11)
         pdf.set_x(10)
-        pdf.cell(0, 4.5, S(f"{edu['degree']} in {edu['field_of_study']} -- {edu['institution']}"), new_x="LMARGIN", new_y="NEXT")
-        pdf.set_font("Helvetica", "I", 7)
+        pdf.cell(0, 5.5, S(f"{edu['degree']} in {edu['field_of_study']} -- {edu['institution']}"), new_x="LMARGIN", new_y="NEXT")
+        pdf.set_font("Helvetica", "I", 9)
         pdf.set_text_color(100, 100, 100)
         gpa = f"  |  GPA: {edu.get('gpa', '')}" if edu.get("gpa") else ""
         pdf.set_x(10)
-        pdf.cell(0, 3.5, S(f"{edu.get('end_date', '')[:7]}{gpa}"), new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 4.5, S(f"{edu.get('end_date', '')[:7]}{gpa}"), new_x="LMARGIN", new_y="NEXT")
         pdf.set_text_color(0, 0, 0)
 
-    pdf.ln(1)
+    pdf.ln(1.5)
     section_hdr("Certifications")
-    pdf.set_font("Helvetica", "", 7)
+    pdf.set_font("Helvetica", "", 9.5)
     for c in data.get("certifications", []):
         pdf.set_x(10)
-        pdf.cell(0, 3, S(f"  - {c['name']} ({c['issuing_organization']}, {c.get('issue_date', '')[:7]})"), new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 4, S(f"  - {c['name']} ({c['issuing_organization']}, {c.get('issue_date', '')[:7]})"), new_x="LMARGIN", new_y="NEXT")
 
     return bytes(pdf.output())
 
