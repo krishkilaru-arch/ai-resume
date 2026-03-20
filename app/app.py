@@ -1882,25 +1882,70 @@ def render_projects(projects_df):
         return
     _html('<div class="section-header">Key Projects</div>')
 
-    cols = st.columns(min(len(projects_df), 3))
-    for i, (_, row) in enumerate(projects_df.iterrows()):
-        with cols[i % len(cols)]:
-            status = "🔄 Active" if str(row.get("is_current", "")).lower() in ("true", "1") else "✅ Complete"
-            _html(f"""
-            <div class="info-card" style="min-height:200px;">
-                <h5>{row.get('project_name', '')}</h5>
-                <div style="font-size:0.82rem; color:#065A82; font-weight:600; margin-bottom:6px;">
-                    {row.get('role', '')} · {status}
-                </div>
-                <div class="detail" style="margin-bottom:8px;">{row.get('description', '')}</div>
-                <div style="font-size:0.82rem; color:#1C7C54; font-weight:600;">
-                    Impact: {row.get('impact', '')}
-                </div>
-                <div class="detail" style="margin-top:6px;">
-                    🛠 {row.get('technologies_used', '')}
-                </div>
+    cards = ""
+    for _, row in projects_df.iterrows():
+        is_active = str(row.get("is_current", "")).lower() in ("true", "1")
+        status_cls = "proj-active" if is_active else "proj-complete"
+        status_label = "Active" if is_active else "Completed"
+        status_icon = "🔄" if is_active else "✅"
+        client = row.get("client", "")
+        client_html = f'<span class="proj-client">{client}</span>' if client else ""
+
+        techs = str(row.get("technologies_used", ""))
+        tech_pills = "".join(f'<span class="proj-tech">{t.strip()}</span>' for t in techs.split(",") if t.strip())
+
+        cards += f"""
+        <div class="proj-card">
+            <div class="proj-header">
+                <div class="proj-status {status_cls}">{status_icon} {status_label}</div>
+                {client_html}
             </div>
-            """)
+            <div class="proj-title">{row.get('project_name', '')}</div>
+            <div class="proj-role">{row.get('role', '')}</div>
+            <div class="proj-desc">{row.get('description', '')}</div>
+            <div class="proj-impact">
+                <span class="proj-impact-label">Impact:</span> {row.get('impact', '')}
+            </div>
+            <div class="proj-techs">{tech_pills}</div>
+        </div>"""
+
+    _html(f"""
+    <div class="proj-grid">{cards}</div>
+    <style>
+        .proj-grid {{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 8px; }}
+        @media (max-width: 768px) {{ .proj-grid {{ grid-template-columns: 1fr; }} }}
+        .proj-card {{
+            background: #fff; border: 1px solid #E8EDF1; border-radius: 12px;
+            padding: 18px 20px; transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex; flex-direction: column; gap: 8px;
+        }}
+        .proj-card:hover {{ transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }}
+        .proj-header {{ display: flex; align-items: center; justify-content: space-between; }}
+        .proj-status {{
+            font-size: 0.72rem; font-weight: 700; padding: 3px 10px;
+            border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px;
+        }}
+        .proj-active {{ background: #E8F5E9; color: #2E7D32; }}
+        .proj-complete {{ background: #E3F2FD; color: #1565C0; }}
+        .proj-client {{
+            font-size: 0.78rem; font-weight: 600; color: #065A82;
+            background: #F0F7FA; padding: 3px 10px; border-radius: 20px;
+        }}
+        .proj-title {{ font-size: 0.95rem; font-weight: 700; color: #1B3A4B; line-height: 1.3; }}
+        .proj-role {{ font-size: 0.82rem; color: #065A82; font-weight: 600; }}
+        .proj-desc {{ font-size: 0.84rem; color: #555; line-height: 1.45; }}
+        .proj-impact {{
+            font-size: 0.82rem; color: #1C7C54; line-height: 1.4;
+            background: #F0FFF4; padding: 8px 12px; border-radius: 8px; border-left: 3px solid #1C7C54;
+        }}
+        .proj-impact-label {{ font-weight: 700; }}
+        .proj-techs {{ display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }}
+        .proj-tech {{
+            font-size: 0.7rem; background: #F4F6F8; color: #555;
+            padding: 2px 8px; border-radius: 12px; border: 1px solid #E0E4E8;
+        }}
+    </style>
+    """)
 
 
 def render_publications(pubs_df):
