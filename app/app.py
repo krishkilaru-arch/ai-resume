@@ -171,26 +171,26 @@ _html("""
     .exp-card h4 {
         color: #1B3A4B;
         margin: 0 0 4px 0;
-        font-size: 1.1rem;
+        font-size: 1.25rem;
     }
     .exp-card .subtitle {
         color: #065A82;
         font-weight: 600;
-        font-size: 0.95rem;
+        font-size: 1.1rem;
     }
     .exp-card .meta {
         color: #6C757D;
-        font-size: 0.85rem;
+        font-size: 0.95rem;
         margin-bottom: 12px;
     }
     .exp-card .highlight {
         padding: 6px 0;
-        font-size: 0.9rem;
+        font-size: 1.0rem;
         color: #212529;
     }
     .exp-card .badge {
         display: inline-block;
-        font-size: 0.72rem;
+        font-size: 0.82rem;
         font-weight: 600;
         padding: 2px 8px;
         border-radius: 12px;
@@ -2343,21 +2343,21 @@ def render_experience(work_df, highlights_df):
                 <div class="highlight">
                     <span class="badge {badge_cls}">{cat}</span>
                     {h.get('highlight', '')}
-                    <span style="color:#1C7C54; font-weight:600; font-size:0.82rem;">
+                    <span style="color:#1C7C54; font-weight:600; font-size:0.92rem;">
                         → {h.get('impact_metric', '')}
                     </span>
                 </div>"""
 
-        role_html = f'<div style="font-size:0.93rem; margin-top:2px;"><span style="color:#6C757D;">Role at Customer:</span> <span style="color:#065A82; font-weight:600;">{role}</span></div>' if role and role != title else ""
+        role_html = f'<div style="font-size:1.05rem; margin-top:2px;"><span style="color:#6C757D;">Role at Customer:</span> <span style="color:#065A82; font-weight:600;">{role}</span></div>' if role and role != title else ""
         title_label = f"Title at {company}" if role and role != title else ""
-        title_line = f'<div style="font-size:0.93rem;"><span style="color:#6C757D;">{title_label}:</span> <span style="font-weight:600;">{title}</span></div>' if title_label else f"<h4>{title}</h4>"
+        title_line = f'<div style="font-size:1.05rem;"><span style="color:#6C757D;">{title_label}:</span> <span style="font-weight:600;">{title}</span></div>' if title_label else f"<h4>{title}</h4>"
         _html(f"""
         <div class="exp-card">
             {title_line}
             {role_html}
             <div class="subtitle">{company}</div>
             <div class="meta">📍 {location} &nbsp;|&nbsp; 📅 {start} — {end} {badge_html}</div>
-            <div style="color:#444; font-size:0.9rem; margin-bottom:8px;">{desc}</div>
+            <div style="color:#444; font-size:1.0rem; margin-bottom:8px;">{desc}</div>
             {highlights_html}
         </div>
         """)
