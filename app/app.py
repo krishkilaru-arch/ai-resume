@@ -2053,8 +2053,6 @@ def main():
         render_skills_charts(skills_df)
         render_clients(clients_df)
         render_experience(work_df, highlights_df)
-        render_certifications(certs_df)
-
         render_projects(projects_df)
         render_publications(pubs_df)
 
