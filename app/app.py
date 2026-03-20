@@ -2026,7 +2026,7 @@ def render_career_timeline(timeline_df):
     year_markers += f'<div style="position:absolute;right:0;top:-16px;font-size:0.8rem;color:#999;font-weight:600;">{end_label}</div>'
 
     work_count = len(df[df["event_type"] == "Work"])
-    work_yrs = df[df["event_type"] == "Work"]["months"].sum() // 12
+    work_yrs = max(19, df[df["event_type"] == "Work"]["months"].sum() // 12)
 
     legend_items = ""
     for org, color in org_colors.items():
@@ -2811,6 +2811,9 @@ def generate_pdf(data):
         end = exp.get("end_date") or "Present"
         if end != "Present":
             end = end[:7]
+
+        if "NTT Data" in company:
+            pdf.add_page()
 
         pdf.set_font("Helvetica", "B", 11)
         pdf.set_x(10)
