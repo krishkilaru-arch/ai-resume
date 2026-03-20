@@ -1371,19 +1371,25 @@ def render_profile_header(profile_df, certs_df=None):
     usergroup = p.get("usergroup_url", "")
 
     sep = '<span class="sep">|</span>'
-    links_parts = []
+    nav_parts = []
     if linkedin:
-        links_parts.append(f'<a href="{linkedin}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" class="social-icon" alt="LinkedIn" title="LinkedIn"></a>')
+        nav_parts.append(f'<a href="{linkedin}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" class="social-icon" alt="LinkedIn" title="LinkedIn"></a>')
     if github:
-        links_parts.append(f'<a href="{github}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" class="social-icon" alt="GitHub" title="GitHub"></a>')
+        nav_parts.append(f'<a href="{github}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" class="social-icon" alt="GitHub" title="GitHub"></a>')
     if usergroup:
-        links_parts.append(f'<a href="{usergroup}" target="_blank">🧱 First Coast DUG</a>')
-    if email:
-        links_parts.append(f'<a href="mailto:{email}">📧 {email}</a>')
-    if phone:
-        links_parts.append(f'<span>📱 {phone}</span>')
+        nav_parts.append(f'<a href="{usergroup}" target="_blank">🧱 First Coast DUG</a>')
+    nav_html = f' {sep} '.join(nav_parts)
 
-    links_html = f' {sep} '.join(links_parts)
+    contact_parts = []
+    if email:
+        contact_parts.append(f'<a href="mailto:{email}">📧 {email}</a>')
+    if phone:
+        contact_parts.append(f'<span>📱 {phone}</span>')
+    contact_html = f' {sep} '.join(contact_parts)
+
+    links_html = nav_html
+    if contact_html:
+        links_html += f'<br>{contact_html}'
 
     photo_html = ""
     photo_path = Path(__file__).parent.parent / "images" / "KrishImage.png"
