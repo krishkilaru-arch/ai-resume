@@ -311,7 +311,9 @@
 
     {"skill_name": "Databricks SQL", "category": "3. SQL, Analytics & BI", "proficiency": "Expert", "years_used": 5},
     {"skill_name": "Query Optimization & Performance Tuning", "category": "3. SQL, Analytics & BI", "proficiency": "Expert", "years_used": 15},
-    {"skill_name": "BI Integrations (Power BI, Tableau)", "category": "3. SQL, Analytics & BI", "proficiency": "Expert", "years_used": 10},
+    {"skill_name": "AI/BI Dashboards", "category": "3. SQL, Analytics & BI", "proficiency": "Expert", "years_used": 2},
+    {"skill_name": "Databricks Genie (NL Interface)", "category": "3. SQL, Analytics & BI", "proficiency": "Expert", "years_used": 2},
+    {"skill_name": "BI Connectors (Power BI, Tableau)", "category": "3. SQL, Analytics & BI", "proficiency": "Expert", "years_used": 10},
 
     {"skill_name": "Mosaic AI (Databricks AI Suite)", "category": "4. AI / Machine Learning", "proficiency": "Advanced", "years_used": 3},
     {"skill_name": "Model Development & Training", "category": "4. AI / Machine Learning", "proficiency": "Advanced", "years_used": 3},
