@@ -111,9 +111,9 @@
           "client": "FIS Global"
         },
         {
-          "description": "Designed fully serverless data architecture for Moody's Analytics using AWS Lambda, Glue, Step Functions, and DynamoDB, eliminating server management overhead and enabling event-driven data processing. Presented at AWS re:Invent",
+          "description": "Designed fully serverless data architecture for Moody's Analytics using AWS Lambda, Glue, Step Functions, and DynamoDB, eliminating server management overhead and enabling event-driven data processing. Architecture featured at AWS re:Invent",
           "category": "Technical",
-          "impact_metric": "Fully serverless architecture; presented at AWS re:Invent",
+          "impact_metric": "Fully serverless architecture; featured at AWS re:Invent",
           "client": "Moody's"
         },
         {
@@ -508,14 +508,14 @@
     },
     {
       "name": "Serverless Data Architecture — Moody's Analytics",
-      "description": "Designed fully serverless data architecture using AWS Lambda, Glue, Step Functions, and DynamoDB, eliminating server management overhead and enabling event-driven data processing. Presented at AWS re:Invent.",
+      "description": "Designed fully serverless data architecture using AWS Lambda, Glue, Step Functions, and DynamoDB, eliminating server management overhead and enabling event-driven data processing. Architecture featured at AWS re:Invent.",
       "role": "Senior Data Engineer",
       "client": "Moody's",
       "technologies": "AWS Lambda, Glue, Step Functions, DynamoDB, S3, Python",
       "start_date": "2020-01-01",
       "end_date": "2021-06-30",
       "is_current": false,
-      "impact": "Fully serverless architecture; presented at AWS re:Invent",
+      "impact": "Fully serverless architecture; featured at AWS re:Invent",
       "url": "https://www.youtube.com/watch?v=tyM3OHT_0M8"
     },
     {

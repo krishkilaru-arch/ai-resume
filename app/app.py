@@ -684,7 +684,7 @@ _RECRUITER_FAQ = [
             "6. **Published Thought Leader** — Author of whitepapers and technical articles on Genie, RAG, dbt vs Databricks, and more.\n"
             "7. **Community Builder** — Admin of the First Coast Databricks User Group (Jacksonville, FL).\n"
             "8. **Enterprise Client Portfolio** — TD Bank, Moody's, J&J, Capital Group, Rocket Mortgage, Wells Fargo, BCBS, and more.\n"
-            "9. **Conference Speaker** — Presented serverless architecture at AWS re:Invent."
+            "9. **AWS re:Invent** — Serverless architecture for Moody's featured at AWS re:Invent."
         ),
     },
     {
@@ -695,7 +695,7 @@ _RECRUITER_FAQ = [
             "The POC with the Quants team was then converted into a full enterprise Databricks onboarding project for Capital Group's Enterprise Data Office.\n\n"
             "Other notable highlights:\n"
             "- Built a Databricks Center of Excellence from zero, certifying 50+ engineers\n"
-            "- Presented serverless architecture at **AWS re:Invent**\n"
+            "- Serverless architecture for Moody's **featured at AWS re:Invent**\n"
             "- Achieved **3x throughput improvement** for J&J's Spark pipelines\n"
             "- Delivered **40% query time reduction** for Guardian Life\n"
             "- Led Essent Mortgage's 15-year legacy migration: **50% faster processing, 35% cost savings**"
@@ -744,7 +744,7 @@ _RECRUITER_FAQ = [
         "answer": (
             "Krish has served **20+ enterprise clients** across Financial Services, Insurance, Healthcare, Manufacturing, Government, and Technology:\n\n"
             "**Databricks Engagements:** Capital Group, TD Bank, Guardian Life, J&J, FIS Global, BondCliQ\n\n"
-            "**AWS Engagements:** Moody's (presented at AWS re:Invent), Essent Mortgage, Rocket Mortgage\n\n"
+            "**AWS Engagements:** Moody's (architecture featured at AWS re:Invent), Essent Mortgage, Rocket Mortgage\n\n"
             "**Other Enterprise Clients:** BCBS IL, Nissan North America, Wells Fargo, Horace Mann, "
             "Illinois Board of Education, Illinois Office of Comptroller, CareFusion, Caterpillar, Henkel, Microsoft, SuperValu\n\n"
             "**Technology Partners:** Databricks, AWS, Hortonworks"
@@ -813,10 +813,10 @@ _RECRUITER_FAQ = [
     {
         "keywords": ["conference", "speaking", "speaker", "presented at", "reinvent", "re:invent", "public speaking", "talk"],
         "answer": (
-            "**Yes!** Krish has presented at major conferences:\n\n"
-            "- 🎤 **AWS re:Invent** — Presented on serverless data architecture built for Moody's Analytics\n"
+            "Krish's serverless data architecture for Moody's Analytics was **featured at AWS re:Invent**:\n\n"
+            "- 🎤 **AWS re:Invent** — Serverless architecture using Lambda, Glue, Step Functions & DynamoDB\n"
             "  ▶️ Watch: https://www.youtube.com/watch?v=tyM3OHT_0M8\n\n"
-            "He also regularly delivers:\n"
+            "Krish also regularly delivers:\n"
             "- Pre-sales demos and workshops on Databricks Genie, AI/BI Dashboards, and AgentBricks\n"
             "- Technical enablement sessions for enterprise clients\n"
             "- Community presentations as Admin of the First Coast Databricks User Group"
@@ -844,7 +844,7 @@ _RECRUITER_FAQ = [
             "3. **Solution Architecture** — End-to-end design of lakehouse, serverless, and streaming architectures\n"
             "4. **Client Delivery** — 20+ enterprise clients across 8+ industries with measurable impact\n"
             "5. **Leadership & CoE Building** — Built a Databricks CoE, trained 50+ engineers, achieved Silver Partner\n"
-            "6. **Technical Communication** — Published author, conference speaker (AWS re:Invent), community leader\n"
+            "6. **Technical Communication** — Published author, community leader, work featured at AWS re:Invent\n"
             "7. **Full Stack Data** — ETL/ELT, Spark, Delta Lake, Unity Catalog, MLflow, GenAI, RAG, Genie"
         ),
     },
@@ -862,7 +862,7 @@ _RECRUITER_FAQ = [
         "keywords": ["aws experience", "amazon web services", "cloud experience aws"],
         "answer": (
             "Krish has **8+ years of AWS experience** across multiple enterprise clients:\n\n"
-            "- **Moody's** — Designed fully serverless architecture using Lambda, Glue, Step Functions, DynamoDB. **Presented at AWS re:Invent**\n"
+            "- **Moody's** — Designed fully serverless architecture using Lambda, Glue, Step Functions, DynamoDB. **Featured at AWS re:Invent**\n"
             "- **Essent Mortgage** — Led 15-year legacy migration to AWS (50% faster processing, 35% cost savings)\n"
             "- **Rocket Mortgage** — Migrated Hortonworks to AWS Glue, drove org-wide Glue adoption\n"
             "- **TD Bank** — AWS Glue-to-Databricks migration\n\n"
@@ -888,7 +888,7 @@ _RECRUITER_FAQ = [
             "- **End-to-end architecture** — Lakehouse, serverless, streaming, Delta Lake, Unity Catalog, AI/BI\n"
             "- **POC to production** — Converted Capital Group POC into full enterprise Databricks onboarding\n"
             "- **10 Databricks certifications** including Data Engineer Professional\n"
-            "- **Presented at AWS re:Invent** — strong public speaking and technical storytelling\n"
+            "- **Work featured at AWS re:Invent** — serverless architecture for Moody's Analytics\n"
             "- **Published thought leader** with whitepapers and technical articles\n"
             "- **CoE builder** — built Databricks practice, trained 50+ engineers"
         ),
