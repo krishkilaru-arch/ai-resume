@@ -3,3 +3,4 @@ plotly>=5.18.0
 pandas>=2.0.0
 databricks-sdk>=0.38.0
 requests
+fpdf2>=2.7.0

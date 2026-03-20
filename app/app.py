@@ -24,6 +24,8 @@ try:
 except ImportError:
     pass
 
+from fpdf import FPDF
+
 def _html(content):
     """Render HTML content using st.html (Streamlit 1.33+) with fallback."""
     if hasattr(st, "html"):
@@ -2492,6 +2494,201 @@ def render_genie_chat():
 
 
 # ────────────────────────────────────────────────────────────────
+# PDF Resume Generator
+# ────────────────────────────────────────────────────────────────
+
+def _pdf_safe(text):
+    """Replace Unicode characters not supported by Helvetica."""
+    return (str(text)
+            .replace("\u2014", "--")   # em-dash
+            .replace("\u2013", "-")    # en-dash
+            .replace("\u2018", "'")    # left single quote
+            .replace("\u2019", "'")    # right single quote
+            .replace("\u201c", '"')    # left double quote
+            .replace("\u201d", '"')    # right double quote
+            .replace("\u2022", "-")    # bullet
+            .replace("\u2026", "...")   # ellipsis
+            .replace("\u00e9", "e")    # accented e
+            )
+
+
+def generate_pdf(data):
+    """Generate a clean, professional resume PDF."""
+    S = _pdf_safe
+    pdf = FPDF()
+    pdf.set_margin(10)
+    pdf.add_page()
+    pdf.set_auto_page_break(auto=True, margin=12)
+    profile = data.get("profile", {})
+
+    pdf.set_font("Helvetica", "B", 18)
+    pdf.cell(0, 9, S(profile.get("full_name", "")), new_x="LMARGIN", new_y="NEXT")
+    pdf.set_font("Helvetica", "", 9)
+    pdf.set_text_color(80, 80, 80)
+    pdf.cell(0, 4.5, S(profile.get("headline", "")), new_x="LMARGIN", new_y="NEXT")
+    loc = f"{profile.get('location_city', '')}, {profile.get('location_state', '')}"
+    contact = f"{loc}  |  {profile.get('email', '')}  |  {profile.get('phone', '')}  |  {profile.get('linkedin_url', '')}"
+    pdf.cell(0, 4.5, S(contact), new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(1)
+    pdf.set_draw_color(27, 58, 75)
+    pdf.set_line_width(0.5)
+    pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+    pdf.ln(3)
+
+    def section_hdr(title):
+        pdf.set_font("Helvetica", "B", 10)
+        pdf.set_text_color(27, 58, 75)
+        pdf.cell(0, 6, title.upper(), new_x="LMARGIN", new_y="NEXT")
+        pdf.set_draw_color(27, 58, 75)
+        pdf.set_line_width(0.2)
+        pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+        pdf.ln(1.5)
+        pdf.set_text_color(0, 0, 0)
+
+    section_hdr("Professional Summary")
+    pdf.set_font("Helvetica", "", 7.5)
+    pdf.set_x(10)
+    pdf.multi_cell(0, 3.2, S(profile.get("summary", "")))
+    pdf.ln(1.5)
+
+    section_hdr("Work Experience")
+    for exp in data.get("work_experience", []):
+        title = exp.get("title_at_employer", exp.get("title", ""))
+        company = exp.get("company", "")
+        role = exp.get("role_at_customer", "")
+        start = exp.get("start_date", "")[:7]
+        end = exp.get("end_date") or "Present"
+        if end != "Present":
+            end = end[:7]
+
+        pdf.set_font("Helvetica", "B", 8.5)
+        pdf.set_x(10)
+        pdf.cell(0, 4.5, S(f"{title} -- {company}"), new_x="LMARGIN", new_y="NEXT")
+        pdf.set_font("Helvetica", "I", 7)
+        pdf.set_text_color(100, 100, 100)
+        meta = f"{start} to {end}  |  {exp.get('location', '')}"
+        if role:
+            meta += f"  |  {role}"
+        pdf.set_x(10)
+        pdf.cell(0, 3.5, S(meta), new_x="LMARGIN", new_y="NEXT")
+        pdf.set_text_color(0, 0, 0)
+        pdf.set_font("Helvetica", "", 7)
+        for h in exp.get("highlights", [])[:4]:
+            desc = h.get("description", "")
+            impact = h.get("impact_metric", "")
+            bullet = f"  - {desc}"
+            if impact:
+                bullet += f" [{impact}]"
+            pdf.set_x(10)
+            pdf.multi_cell(0, 3, S(bullet))
+        pdf.ln(1)
+
+    section_hdr("Skills")
+    skills_by_cat = {}
+    for s in data.get("skills", []):
+        cat = s.get("category", "Other")
+        label = cat.split(". ", 1)[1] if ". " in cat else cat
+        skills_by_cat.setdefault(label, []).append(s["skill_name"])
+    for cat, skills in skills_by_cat.items():
+        pdf.set_font("Helvetica", "B", 7.5)
+        pdf.set_x(10)
+        pdf.cell(0, 3.5, S(f"{cat}: ") + "  ", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_font("Helvetica", "", 7)
+        pdf.set_x(10)
+        pdf.multi_cell(0, 3, S("    " + ", ".join(skills)))
+    pdf.ln(1)
+
+    section_hdr("Education")
+    for edu in data.get("education", []):
+        pdf.set_font("Helvetica", "B", 8.5)
+        pdf.set_x(10)
+        pdf.cell(0, 4.5, S(f"{edu['degree']} in {edu['field_of_study']} -- {edu['institution']}"), new_x="LMARGIN", new_y="NEXT")
+        pdf.set_font("Helvetica", "I", 7)
+        pdf.set_text_color(100, 100, 100)
+        gpa = f"  |  GPA: {edu.get('gpa', '')}" if edu.get("gpa") else ""
+        pdf.set_x(10)
+        pdf.cell(0, 3.5, S(f"{edu.get('end_date', '')[:7]}{gpa}"), new_x="LMARGIN", new_y="NEXT")
+        pdf.set_text_color(0, 0, 0)
+
+    pdf.ln(1)
+    section_hdr("Certifications")
+    pdf.set_font("Helvetica", "", 7)
+    for c in data.get("certifications", []):
+        pdf.set_x(10)
+        pdf.cell(0, 3, S(f"  - {c['name']} ({c['issuing_organization']}, {c.get('issue_date', '')[:7]})"), new_x="LMARGIN", new_y="NEXT")
+
+    return pdf.output()
+
+
+# ────────────────────────────────────────────────────────────────
+# Testimonials / Recommendations
+# ────────────────────────────────────────────────────────────────
+
+TESTIMONIALS = [
+    {
+        "quote": "Krish's live Genie demo was the decisive moment in our evaluation. He didn't just show technology — he showed how it solves real business problems. That's what won us over against four global competitors.",
+        "name": "Capital Group Engagement",
+        "role": "Pre-Sales Win",
+        "avatar": "🏆",
+    },
+    {
+        "quote": "Krish built our Databricks Center of Excellence from the ground up — training programs, certification tracks, delivery frameworks, everything. He personally drove 50+ certifications across the company and helped us reach Silver Partner status.",
+        "name": "Lumenalta Leadership",
+        "role": "CoE & Partnership",
+        "avatar": "🚀",
+    },
+    {
+        "quote": "The ingestion, orchestration, and ETL frameworks Krish built at TD Bank became the standard for our enterprise Databricks platform. His Unity Catalog governance implementation set the foundation for how we manage data access and lineage across teams.",
+        "name": "TD Bank Engagement",
+        "role": "Enterprise Databricks Delivery",
+        "avatar": "🏦",
+    },
+]
+
+
+def render_testimonials():
+    _html('<div class="section-header">What People Say</div>')
+
+    cards = ""
+    for t in TESTIMONIALS:
+        cards += f"""
+        <div style="flex:1; min-width:260px; background:white; border-radius:14px; padding:22px 24px;
+                    box-shadow:0 2px 10px rgba(0,0,0,0.06); border-top:3px solid #065A82;">
+            <div style="font-size:1.8rem; margin-bottom:8px; opacity:0.15;">❝</div>
+            <p style="color:#495057; font-size:0.82rem; line-height:1.6; font-style:italic; margin:0 0 16px;">
+                {t['quote']}
+            </p>
+            <div style="display:flex; align-items:center; gap:10px; border-top:1px solid #F0F2F5; padding-top:12px;">
+                <div style="width:36px; height:36px; border-radius:50%; background:#E8EDF1;
+                            display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+                    {t['avatar']}
+                </div>
+                <div>
+                    <div style="font-weight:700; color:#1B3A4B; font-size:0.82rem;">{t['name']}</div>
+                    <div style="color:#6C757D; font-size:0.72rem;">{t['role']}</div>
+                </div>
+            </div>
+        </div>"""
+
+    _html(f"""
+    <div style="display:flex; gap:16px; flex-wrap:wrap;">
+        {cards}
+    </div>
+    """)
+
+
+# ────────────────────────────────────────────────────────────────
+# Visitor Analytics (GoatCounter — privacy-friendly, no cookies)
+# ────────────────────────────────────────────────────────────────
+
+def inject_analytics():
+    st.components.v1.html("""
+    <script data-goatcounter="https://thedatabrickster.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+    """, height=0)
+
+
+# ────────────────────────────────────────────────────────────────
 # Main App
 # ────────────────────────────────────────────────────────────────
 
@@ -2524,6 +2721,21 @@ def main():
         render_experience(work_df, highlights_df)
         render_projects(projects_df)
         render_publications(pubs_df)
+        render_testimonials()
+
+        # PDF Download
+        data = load_resume_json()
+        if data:
+            pdf_bytes = generate_pdf(data)
+            dl_col1, dl_col2, dl_col3 = st.columns([1, 2, 1])
+            with dl_col2:
+                st.download_button(
+                    label="📄 Download Resume as PDF",
+                    data=pdf_bytes,
+                    file_name="Krish_Kilaru_Resume.pdf",
+                    mime="application/pdf",
+                    use_container_width=True,
+                )
 
         # Footer
         _html(
@@ -2550,6 +2762,8 @@ def main():
 
     with tab_about:
         render_about_app()
+
+    inject_analytics()
 
 
 def render_about_app():
