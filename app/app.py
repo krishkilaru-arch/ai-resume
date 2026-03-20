@@ -2773,7 +2773,7 @@ def generate_pdf(data):
     pdf.set_text_color(80, 80, 80)
     pdf.cell(0, 4.5, S(profile.get("headline", "")), new_x="LMARGIN", new_y="NEXT")
     loc = f"{profile.get('location_city', '')}, {profile.get('location_state', '')}"
-    contact = f"{loc}  |  {profile.get('email', '')}  |  {profile.get('phone', '')}  |  {profile.get('linkedin_url', '')}"
+    contact = f"{loc}  |  {profile.get('email', '')}  |  {profile.get('phone', '')}  |  {profile.get('linkedin_url', '')}  |  {profile.get('website_url', '')}"
     pdf.cell(0, 4.5, S(contact), new_x="LMARGIN", new_y="NEXT")
     pdf.ln(1)
     pdf.set_draw_color(27, 58, 75)
