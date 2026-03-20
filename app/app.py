@@ -577,6 +577,7 @@ def _json_to_df(data, table):
                 "end_date": p.get("end_date") or "Present",
                 "is_current": p.get("is_current", False),
                 "impact": p["impact"],
+                "url": p.get("url") or "",
             })
         return pd.DataFrame(rows)
 
@@ -1986,6 +1987,9 @@ def render_projects(projects_df):
         techs = str(row.get("technologies_used", ""))
         tech_pills = "".join(f'<span class="proj-tech">{t.strip()}</span>' for t in techs.split(",") if t.strip())
 
+        url = row.get("url", "")
+        link_html = f'<a href="{url}" target="_blank" style="font-size:0.78rem;color:#065A82;text-decoration:none;font-weight:600;">▶️ Watch Presentation</a>' if url else ""
+
         cards += f"""
         <div class="proj-card">
             <div class="proj-header">
@@ -1999,6 +2003,7 @@ def render_projects(projects_df):
                 <span class="proj-impact-label">Impact:</span> {row.get('impact', '')}
             </div>
             <div class="proj-techs">{tech_pills}</div>
+            {link_html}
         </div>"""
 
     _html(f"""
