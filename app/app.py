@@ -2179,8 +2179,8 @@ QUICK_QUESTIONS = [
 def render_genie_chat():
     _html("""
     <div class="genie-banner">
-        <h3>🐒 Abu — Ask Me Anything About Krish</h3>
-        <p>Ask any question about Krish's career, skills, experience, or qualifications. Powered by Databricks AI/BI Genie 🧞</p>
+        <h3>🐒 Abu — Ask Me Anything About Krish (Powered by Databricks AI/BI Genie 🧞)</h3>
+        <p>Ask any question about Krish's career, skills, experience, or qualifications.</p>
     </div>
     """)
 
