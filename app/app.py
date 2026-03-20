@@ -1468,6 +1468,7 @@ def render_career_timeline(timeline_df):
     orgs = df["organization"].unique().tolist()
     org_colors = {org: palette[i % len(palette)] for i, org in enumerate(orgs)}
 
+    import math
     cards_html = ""
     for _, row in df.iterrows():
         is_work = row["event_type"] == "Work"
@@ -1478,7 +1479,8 @@ def render_career_timeline(timeline_df):
         end_fmt = "Now" if is_current else row["end_dt"].strftime("%Y")
 
         left_pct = ((row["start_dt"] - earliest).days / total_days) * 100
-        width_pct = max(((row["end_dt"] - row["start_dt"]).days / total_days) * 100, 14)
+        raw_width = ((row["end_dt"] - row["start_dt"]).days / total_days) * 100
+        width_pct = max(min(raw_width, 45), 16)
 
         pulse_css = "animation:tl-pulse 2s infinite;" if is_current else ""
         border = f"border:2px solid #F4A261;" if is_current else f"border:1px solid {color};"
