@@ -877,11 +877,18 @@ def genie_ask(question, conversation_id=None):
     api_result = _genie_ask_api(question, conversation_id)
     if api_result and api_result.get("text"):
         genie_text = api_result["text"].lower()
-        if any(phrase in genie_text for phrase in [
+        genie_unhelpful = [
             "unrelated to", "cannot answer", "not related",
+            "cannot find", "no information", "not available",
             "i'm here to help you analyze", "please let me know what",
             "please ask a question about", "available tables",
-        ]):
+            "don't have", "do not have", "not in the data",
+        ]
+        if any(phrase in genie_text for phrase in genie_unhelpful):
+            local_result = _genie_ask_local(question)
+            if local_result and local_result.get("text"):
+                local_result["source"] = "local"
+                return local_result
             return _smalltalk_response(question)
         api_result["source"] = "genie"
         return api_result
