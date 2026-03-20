@@ -1905,21 +1905,89 @@ def render_projects(projects_df):
 def render_publications(pubs_df):
     if pubs_df.empty:
         return
-    _html('<div class="section-header">Publications & Talks</div>')
+    _html('<div class="section-header">Publications & Thought Leadership</div>')
+
+    type_icons = {
+        "Article": "📄",
+        "Whitepaper / Research Guide": "📘",
+        "Talk": "🎤",
+        "Blog": "✍️",
+    }
+    type_colors = {
+        "Article": "#1B6B93",
+        "Whitepaper / Research Guide": "#7B2D8E",
+        "Talk": "#E24A33",
+        "Blog": "#2E8B57",
+    }
+    publisher_icons = {
+        "LinkedIn Pulse": "🔗",
+        "Lumenalta Labs": "🏢",
+    }
+
+    cards = ""
     for _, row in pubs_df.iterrows():
         url = row.get("url", "")
         title = row.get("title", "")
-        link_html = f'<a href="{url}" target="_blank">{title}</a>' if url else title
-        _html(f"""
-        <div class="info-card">
-            <h5>{link_html}</h5>
-            <div class="detail">
-                {row.get('publisher', '')} &nbsp;|&nbsp;
-                📅 {row.get('publication_date', '')} &nbsp;|&nbsp;
-                📝 {row.get('publication_type', '')}
+        pub_type = row.get("publication_type", "") or row.get("type", "")
+        publisher = row.get("publisher", "")
+        pub_date = row.get("publication_date", "") or row.get("date", "")
+        icon = type_icons.get(pub_type, "📝")
+        color = type_colors.get(pub_type, "#1B3A4B")
+        pub_icon = publisher_icons.get(publisher, "📰")
+
+        title_html = f'<a href="{url}" target="_blank" class="pub-title">{title}</a>' if url else f'<span class="pub-title">{title}</span>'
+
+        cards += f"""
+        <div class="pub-card">
+            <div class="pub-icon" style="background:{color};">{icon}</div>
+            <div class="pub-content">
+                {title_html}
+                <div class="pub-meta">
+                    <span class="pub-type" style="color:{color};">{pub_type}</span>
+                    <span class="pub-sep">·</span>
+                    <span>{pub_icon} {publisher}</span>
+                    <span class="pub-sep">·</span>
+                    <span>📅 {pub_date}</span>
+                </div>
             </div>
-        </div>
-        """)
+            {'<a href="' + url + '" target="_blank" class="pub-link">↗</a>' if url else ''}
+        </div>"""
+
+    _html(f"""
+    <div class="pubs-container">{cards}</div>
+    <style>
+        .pubs-container {{ display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }}
+        .pub-card {{
+            display: flex; align-items: flex-start; gap: 14px;
+            background: #fff; border: 1px solid #E8EDF1; border-radius: 12px;
+            padding: 16px 18px; transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }}
+        .pub-card:hover {{ transform: translateX(4px); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }}
+        .pub-icon {{
+            width: 42px; height: 42px; min-width: 42px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; color: #fff;
+        }}
+        .pub-content {{ flex: 1; min-width: 0; }}
+        .pub-title {{
+            font-size: 0.92rem; font-weight: 600; color: #1B3A4B;
+            text-decoration: none; line-height: 1.35; display: block;
+        }}
+        a.pub-title:hover {{ color: #065A82; }}
+        .pub-meta {{
+            font-size: 0.78rem; color: #6C757D; margin-top: 6px;
+            display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+        }}
+        .pub-type {{ font-weight: 600; }}
+        .pub-sep {{ color: #ccc; }}
+        .pub-link {{
+            font-size: 1.1rem; color: #065A82; text-decoration: none;
+            padding: 4px 8px; border-radius: 8px; flex-shrink: 0;
+            transition: background 0.2s;
+        }}
+        .pub-link:hover {{ background: #E8EDF1; }}
+    </style>
+    """)
 
 
 # ────────────────────────────────────────────────────────────────
