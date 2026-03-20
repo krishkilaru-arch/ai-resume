@@ -189,14 +189,14 @@ _html("""
         letter-spacing: -0.5px;
     }
     .profile-header .headline {
-        font-size: 1.1rem;
+        font-size: 1.25rem;
         opacity: 0.9;
         margin-top: 6px;
         font-weight: 400;
     }
     .profile-header .location {
-        font-size: 0.9rem;
-        opacity: 0.75;
+        font-size: 1rem;
+        opacity: 0.8;
         margin-top: 8px;
     }
     .profile-header-inner {
@@ -316,7 +316,7 @@ _html("""
         color: #B8D4E3;
         text-decoration: none;
         margin-right: 20px;
-        font-size: 0.85rem;
+        font-size: 1rem;
     }
     .profile-header .links a.calendly-btn {
         background: #fff;
@@ -1354,11 +1354,11 @@ def render_profile_header(profile_df, certs_df=None):
         links_html += f'<a href="{github}">GitHub</a>'
     usergroup = p.get("usergroup_url", "")
     if usergroup:
-        links_html += f'<a href="{usergroup}" target="_blank">🧱 First Coast DUG</a>'
+        links_html += f'<a href="{usergroup}" target="_blank">🧱 First Coast Databricks User Group</a>'
 
     contact_html = ""
     if email:
-        contact_html += f'<span>📧 <a href="mailto:{email}">{email}</a></span>'
+        contact_html += f'<span>📧 <a href="mailto:{email}" style="color:#B8D4E3;text-decoration:none;">{email}</a></span>'
     if phone:
         contact_html += f'<span>📱 {phone}</span>'
 
@@ -1398,7 +1398,7 @@ def render_profile_header(profile_df, certs_df=None):
                 <div class="headline">{headline}</div>
                 <div class="location">📍 {location}</div>
                 <div class="links" style="margin-top:10px;">{links_html}</div>
-                <div class="contact-row" style="margin-top:6px;display:flex;gap:20px;font-size:0.82rem;color:#B8D4E3;">{contact_html}</div>
+                <div class="contact-row" style="margin-top:6px;display:flex;gap:20px;font-size:1rem;color:#B8D4E3;">{contact_html}</div>
                 {text_row}
             </div>
             {right_col}
