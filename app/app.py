@@ -1883,12 +1883,48 @@ def render_metrics(profile_df, work_df, skills_df, certs_df, clients_df=None):
         ("Certifications", total_certs, "#D4A017"),
     ]
 
-    c1, c2, c3, c4, c5 = st.columns(5)
-    c1.metric("Years Experience", yrs)
-    c2.metric("Clients Served", clients_count)
-    c3.metric("Total Skills", total_skills)
-    c4.metric("Expert Skills", expert_skills)
-    c5.metric("Certifications", total_certs)
+    dark = st.session_state.get('dark_mode', False)
+    bg = '#1E2530' if dark else '#fff'
+    border_c = '#2D3748' if dark else '#E9ECEF'
+    lbl_c = '#A0AEC0' if dark else '#6C757D'
+
+    cards = ""
+    for label, value, color in metrics:
+        cards += f"""<div class="mc">
+            <div class="ml" style="color:{lbl_c};">{label}</div>
+            <div class="mv" style="color:{color};">{value}</div>
+        </div>"""
+
+    _html(f"""
+    <style>
+        .mg {{
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 8px;
+        }}
+        .mc {{
+            background: {bg};
+            border: 1px solid {border_c};
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }}
+        .ml {{ font-size: 0.78rem; margin-bottom: 4px; }}
+        .mv {{ font-size: 1.7rem; font-weight: 700; }}
+        @media (max-width: 768px) {{
+            .mg {{ grid-template-columns: repeat(3, 1fr); }}
+            .ml {{ font-size: 0.65rem; }}
+            .mv {{ font-size: 1.2rem; }}
+            .mc {{ padding: 10px 6px; border-radius: 8px; }}
+        }}
+        @media (max-width: 400px) {{
+            .mg {{ grid-template-columns: repeat(2, 1fr); }}
+        }}
+    </style>
+    <div class="mg">{cards}</div>
+    """)
 
 
 def render_summary(profile_df):
