@@ -1646,6 +1646,7 @@ def render_clients(clients_df):
         "Healthcare": "#7B2D8E",
         "Healthcare IT": "#9B59B6",
         "Technology": "#4682B4",
+        "Cloud": "#FF9900",
         "Government": "#6C757D",
         "Retail": "#FF8C00",
         "Pro Serv": "#065A82",
@@ -1672,6 +1673,9 @@ def render_clients(clients_df):
         "Henkel": "henkel.png",
         "Microsoft": "microsoft.png",
         "SuperValu": "supervalu.png",
+        "Databricks": "databricks.png",
+        "AWS": "aws.png",
+        "Hortonworks": "hortonworks.png",
     }
 
     logos_dir = Path(__file__).parent.parent / "images" / "clients"
