@@ -2191,7 +2191,7 @@ def render_skills_charts(skills_df):
             background: #F0F2F5; border-radius: 3px; overflow: hidden;
         }}
         .sk-bar-fill {{ height: 100%; border-radius: 3px; transition: width 0.5s ease; }}
-        .sk-val {{ font-size: 0.78rem; color: #888; min-width: 80px; text-align: right; white-space: nowrap; }}
+        .sk-val {{ font-size: 0.88rem; color: #888; min-width: 90px; text-align: right; white-space: nowrap; }}
     </style>
     """)
 
