@@ -2673,9 +2673,14 @@ def render_genie_chat():
 
     # Suggested questions at the top
     st.markdown("**Suggested questions:**")
-    btn_cols = st.columns(4)
-    for i, q in enumerate(QUICK_QUESTIONS):
-        if btn_cols[i % 4].button(q, key=f"quick_{i}", use_container_width=True):
+    row1 = st.columns(4)
+    for i, q in enumerate(QUICK_QUESTIONS[:4]):
+        if row1[i].button(q, key=f"quick_{i}", use_container_width=True):
+            st.session_state.pending_question = q
+            st.rerun()
+    row2 = st.columns(4)
+    for i, q in enumerate(QUICK_QUESTIONS[4:]):
+        if row2[i].button(q, key=f"quick_{i+4}", use_container_width=True):
             st.session_state.pending_question = q
             st.rerun()
 
