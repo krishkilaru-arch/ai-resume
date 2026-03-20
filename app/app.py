@@ -2617,7 +2617,7 @@ def generate_pdf(data):
         pdf.set_x(10)
         pdf.cell(0, 3, S(f"  - {c['name']} ({c['issuing_organization']}, {c.get('issue_date', '')[:7]})"), new_x="LMARGIN", new_y="NEXT")
 
-    return pdf.output()
+    return bytes(pdf.output())
 
 
 # ────────────────────────────────────────────────────────────────
