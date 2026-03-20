@@ -216,7 +216,7 @@ _html("""
         flex-shrink: 0;
     }
     .cert-badge-img {
-        height: 110px;
+        height: 140px;
         width: auto;
         border-radius: 6px;
         transition: transform 0.2s ease;
@@ -224,7 +224,7 @@ _html("""
         filter: drop-shadow(0 2px 8px rgba(0,0,0,0.35));
     }
     .cert-badge-img:hover {
-        transform: scale(1.12);
+        transform: scale(1.1);
     }
     .cert-text-row {
         display: flex;
@@ -1224,35 +1224,29 @@ def render_profile_header(profile_df, certs_df=None):
     if email:
         links_html += f'<a href="mailto:{email}">{email}</a>'
 
-    BADGE_IMAGES = [
-        ("data engineer professional", "https://www.databricks.com/sites/default/files/2025-10/professional-badge-de.png?v=1761143167"),
-        ("data engineer associate", "https://www.databricks.com/sites/default/files/2025-10/associate-badge-de.png?v=1761149691"),
-        ("generative ai engineer associate", "https://www.databricks.com/sites/default/files/2025-10/associate-badge-gen-ai.png?v=1761153880"),
-        ("machine learning associate", "https://www.databricks.com/sites/default/files/2025-10/Associate-badge-ML.png?v=1761077024"),
+    CERT_BADGES = [
+        ("Databricks Certified Data Engineer Professional", "https://www.databricks.com/sites/default/files/2025-10/professional-badge-de.png?v=1761143167"),
+        ("Databricks Certified Data Engineer Associate", "https://www.databricks.com/sites/default/files/2025-10/associate-badge-de.png?v=1761149691"),
+        ("Databricks Certified Generative AI Engineer Associate", "https://www.databricks.com/sites/default/files/2025-10/associate-badge-gen-ai.png?v=1761153880"),
+        ("Databricks Certified Machine Learning Associate", "https://www.databricks.com/sites/default/files/2025-10/Associate-badge-ML.png?v=1761077024"),
     ]
 
     image_badges_html = ""
+    for cert_name, img_url in CERT_BADGES:
+        image_badges_html += f'<img src="{img_url}" alt="{cert_name}" title="{cert_name}" class="cert-badge-img" />'
+
     text_badges_html = ""
     if certs_df is not None and not certs_df.empty:
         org_col = "issuing_organization" if "issuing_organization" in certs_df.columns else "issuing_org"
         name_col = "certification_name" if "certification_name" in certs_df.columns else "name"
         db_certs = certs_df[certs_df[org_col].str.lower() == "databricks"]
+        badge_names = {n for n, _ in CERT_BADGES}
         if not db_certs.empty:
-            matched_keys = set()
             for _, cert in db_certs.iterrows():
-                cert_name = cert.get(name_col, "")
-                cert_lower = cert_name.lower().replace("databricks certified ", "")
-                img_url = None
-                for key, url in BADGE_IMAGES:
-                    if key in cert_lower and key not in matched_keys:
-                        img_url = url
-                        matched_keys.add(key)
-                        break
-                if img_url:
-                    image_badges_html += f'<img src="{img_url}" alt="{cert_name}" title="{cert_name}" class="cert-badge-img" />'
-                else:
-                    short = cert_name.replace("Databricks Certified ", "").replace("Partner Training - ", "").replace("Academy Accreditation - ", "").replace("Knowledge Badge - ", "")
-                    text_badges_html += f'<span class="cert-badge" title="{cert_name}">🏅 {short}</span>'
+                cn = cert.get(name_col, "")
+                if cn not in badge_names:
+                    short = cn.replace("Databricks Certified ", "").replace("Partner Training - ", "").replace("Academy Accreditation - ", "").replace("Knowledge Badge - ", "")
+                    text_badges_html += f'<span class="cert-badge" title="{cn}">🏅 {short}</span>'
 
     right_col = ""
     if image_badges_html:
