@@ -1375,17 +1375,6 @@ def render_profile_header(profile_df, certs_df=None):
         image_badges_html += f'<img src="{img_url}" alt="{cert_name}" title="{cert_name}" class="cert-badge-img" />'
 
     text_badges_html = ""
-    if certs_df is not None and not certs_df.empty:
-        org_col = "issuing_organization" if "issuing_organization" in certs_df.columns else "issuing_org"
-        name_col = "certification_name" if "certification_name" in certs_df.columns else "name"
-        db_certs = certs_df[certs_df[org_col].str.lower() == "databricks"]
-        badge_names = {n for n, _ in CERT_BADGES}
-        if not db_certs.empty:
-            for _, cert in db_certs.iterrows():
-                cn = cert.get(name_col, "")
-                if cn not in badge_names:
-                    short = cn.replace("Databricks Certified ", "").replace("Partner Training - ", "").replace("Academy Accreditation - ", "").replace("Knowledge Badge - ", "")
-                    text_badges_html += f'<span class="cert-badge" title="{cn}">🏅 {short}</span>'
 
     right_col = ""
     if image_badges_html:
