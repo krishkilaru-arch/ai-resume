@@ -2695,16 +2695,17 @@ def render_genie_chat():
             st.rerun()
 
     # Input field below suggestions
-    input_col, btn_col = st.columns([6, 1])
-    with input_col:
-        user_input = st.text_input(
-            "Ask Abu",
-            placeholder="Ask anything about Krish's career, skills, or experience...",
-            key="genie_input",
-            label_visibility="collapsed",
-        )
-    with btn_col:
-        send_clicked = st.button("Ask 🐒", type="primary", use_container_width=True)
+    with st.form("genie_form", clear_on_submit=True):
+        input_col, btn_col = st.columns([6, 1])
+        with input_col:
+            user_input = st.text_input(
+                "Ask Abu",
+                placeholder="Ask anything about Krish's career, skills, or experience...",
+                key="genie_input",
+                label_visibility="collapsed",
+            )
+        with btn_col:
+            send_clicked = st.form_submit_button("Ask 🐒", type="primary", use_container_width=True)
 
     st.divider()
 
