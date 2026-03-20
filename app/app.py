@@ -2856,9 +2856,12 @@ def generate_pdf(data):
         pdf.cell(0, 5.5, S(f"{edu['degree']} in {edu['field_of_study']} -- {edu['institution']}"), new_x="LMARGIN", new_y="NEXT")
         pdf.set_font("Helvetica", "I", 9)
         pdf.set_text_color(100, 100, 100)
+        start_year = edu.get("start_date", "")[:4]
+        end_year = edu.get("end_date", "")[:4]
+        date_range = f"{start_year}-{end_year}" if start_year and end_year else end_year or start_year
         gpa = f"  |  GPA: {edu.get('gpa', '')}" if edu.get("gpa") else ""
         pdf.set_x(10)
-        pdf.cell(0, 4.5, S(f"{edu.get('end_date', '')[:7]}{gpa}"), new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 4.5, S(f"{date_range}{gpa}"), new_x="LMARGIN", new_y="NEXT")
         pdf.set_text_color(0, 0, 0)
 
     pdf.ln(1.5)
