@@ -457,6 +457,146 @@ _html("""
     }
     .genie-banner h3 { margin: 0 0 6px 0; }
     .genie-banner p { margin: 0; opacity: 0.85; font-size: 0.9rem; }
+
+    /* ─── Mobile Responsive ─── */
+    @media (max-width: 768px) {
+        .block-container {
+            padding-top: 0.5rem;
+            padding-left: 0.8rem;
+            padding-right: 0.8rem;
+        }
+        .profile-header {
+            padding: 18px 16px;
+            border-radius: 10px;
+            margin-bottom: 14px;
+        }
+        .profile-header-inner {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .profile-header h1 {
+            font-size: 1.4rem;
+        }
+        .profile-header .headline {
+            font-size: 0.78rem;
+        }
+        .profile-header .location {
+            font-size: 0.75rem;
+        }
+        .profile-photo {
+            width: 80px;
+            height: 80px;
+            align-self: center;
+        }
+        .profile-info-col {
+            width: 100%;
+        }
+        .cert-images-col {
+            justify-content: center;
+            width: 100%;
+        }
+        .cert-badge-img {
+            height: 60px;
+        }
+        .profile-header .links {
+            justify-content: center;
+            gap: 2px;
+        }
+        .profile-header .links a,
+        .profile-header .links span {
+            font-size: 0.7rem;
+        }
+        .profile-header .links img.social-icon {
+            width: 14px;
+            height: 14px;
+        }
+
+        .section-header {
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Tabs */
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 4px;
+            padding: 4px 6px;
+            flex-wrap: wrap;
+        }
+        .stTabs [data-baseweb="tab"] {
+            padding: 8px 10px;
+            font-size: 0.72rem;
+        }
+
+        /* Experience cards */
+        .exp-card {
+            padding: 14px;
+        }
+        .exp-card h3 {
+            font-size: 0.95rem;
+        }
+        .exp-card .highlight {
+            font-size: 0.8rem;
+        }
+
+        /* Skills grid */
+        .sk-grid {
+            grid-template-columns: 1fr !important;
+        }
+        .sk-card {
+            margin-bottom: 8px;
+        }
+        .sk-name {
+            font-size: 0.72rem !important;
+        }
+        .sk-val {
+            font-size: 0.58rem !important;
+            min-width: 60px !important;
+        }
+
+        /* Clients grid */
+        .clients-grid {
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+        }
+        .client-card {
+            padding: 10px 6px 8px;
+        }
+        .client-name {
+            font-size: 0.7rem;
+        }
+        .client-logo, .client-logo-fallback {
+            height: 36px;
+            width: 36px;
+        }
+
+        /* Genie chat */
+        .genie-banner {
+            padding: 14px 16px;
+        }
+        .genie-banner h3 {
+            font-size: 0.9rem;
+        }
+        .genie-banner p {
+            font-size: 0.75rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .profile-header h1 {
+            font-size: 1.15rem;
+        }
+        .profile-header .headline {
+            font-size: 0.7rem;
+        }
+        .cert-badge-img {
+            height: 45px;
+        }
+        .stTabs [data-baseweb="tab"] {
+            padding: 6px 8px;
+            font-size: 0.65rem;
+        }
+    }
 </style>
 """)
 
@@ -1767,7 +1907,7 @@ def render_metrics(profile_df, work_df, skills_df, certs_df, clients_df=None):
             }}, 16);
         }});
     </script>
-    """, height=110)
+    """, height=260)
 
 
 def render_summary(profile_df):
@@ -2778,6 +2918,12 @@ def inject_seo_meta():
     """Inject Open Graph & SEO meta tags for rich link previews on LinkedIn/Slack."""
     st.components.v1.html("""
     <script>
+        if (!document.querySelector('meta[name="viewport"]')) {
+            var vp = document.createElement('meta');
+            vp.setAttribute('name', 'viewport');
+            vp.setAttribute('content', 'width=device-width, initial-scale=1.0');
+            document.head.appendChild(vp);
+        }
         if (!document.querySelector('meta[property="og:title"]')) {
             var metas = [
                 {p:'og:title', c:'Krish Kilaru — Databricks Solutions Architect | Interactive AI Resume'},
