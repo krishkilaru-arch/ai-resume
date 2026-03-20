@@ -2903,18 +2903,18 @@ def render_testimonials():
         cards += f"""
         <div style="flex:1; min-width:260px; background:white; border-radius:14px; padding:22px 24px;
                     box-shadow:0 2px 10px rgba(0,0,0,0.06); border-top:3px solid #065A82;">
-            <div style="font-size:1.8rem; margin-bottom:8px; opacity:0.15;">❝</div>
-            <p style="color:#495057; font-size:0.82rem; line-height:1.6; font-style:italic; margin:0 0 16px;">
+            <div style="font-size:2rem; margin-bottom:8px; opacity:0.15;">❝</div>
+            <p style="color:#495057; font-size:0.95rem; line-height:1.7; font-style:italic; margin:0 0 16px;">
                 {t['quote']}
             </p>
             <div style="display:flex; align-items:center; gap:10px; border-top:1px solid #F0F2F5; padding-top:12px;">
-                <div style="width:36px; height:36px; border-radius:50%; background:#E8EDF1;
-                            display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+                <div style="width:40px; height:40px; border-radius:50%; background:#E8EDF1;
+                            display:flex; align-items:center; justify-content:center; font-size:1.3rem;">
                     {t['avatar']}
                 </div>
                 <div>
-                    <div style="font-weight:700; color:#1B3A4B; font-size:0.82rem;">{t['name']}</div>
-                    <div style="color:#6C757D; font-size:0.72rem;">{t['role']}</div>
+                    <div style="font-weight:700; color:#1B3A4B; font-size:0.95rem;">{t['name']}</div>
+                    <div style="color:#6C757D; font-size:0.82rem;">{t['role']}</div>
                 </div>
             </div>
         </div>"""
