@@ -2767,14 +2767,17 @@ def generate_pdf(data):
     pdf.set_auto_page_break(auto=True, margin=12)
     profile = data.get("profile", {})
 
-    pdf.set_font("Helvetica", "B", 18)
-    pdf.cell(0, 9, S(profile.get("full_name", "")), new_x="LMARGIN", new_y="NEXT")
-    pdf.set_font("Helvetica", "", 9)
+    pdf.set_font("Helvetica", "B", 22)
+    pdf.cell(0, 10, S(profile.get("full_name", "")), new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(80, 80, 80)
-    pdf.cell(0, 4.5, S(profile.get("headline", "")), new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 5, S(profile.get("headline", "")), new_x="LMARGIN", new_y="NEXT", align="C")
     loc = f"{profile.get('location_city', '')}, {profile.get('location_state', '')}"
-    contact = f"{loc}  |  {profile.get('email', '')}  |  {profile.get('phone', '')}  |  {profile.get('linkedin_url', '')}  |  {profile.get('website_url', '')}"
-    pdf.cell(0, 4.5, S(contact), new_x="LMARGIN", new_y="NEXT")
+    contact_line1 = f"{loc}  |  {profile.get('email', '')}  |  {profile.get('phone', '')}"
+    pdf.set_font("Helvetica", "", 9)
+    pdf.cell(0, 5, S(contact_line1), new_x="LMARGIN", new_y="NEXT", align="C")
+    contact_line2 = f"{profile.get('linkedin_url', '')}  |  {profile.get('website_url', '')}"
+    pdf.cell(0, 5, S(contact_line2), new_x="LMARGIN", new_y="NEXT", align="C")
     pdf.ln(1)
     pdf.set_draw_color(27, 58, 75)
     pdf.set_line_width(0.5)
