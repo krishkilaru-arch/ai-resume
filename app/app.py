@@ -1650,17 +1650,46 @@ def render_clients(clients_df):
         "Pro Serv": "#065A82",
     }
 
+    LOGO_FILES = {
+        "Capital Group": "capitalgroup.png",
+        "TD Bank": "tdbank.png",
+        "Guardian Life Insurance": "guardianlife.png",
+        "FIS Global": "fisglobal.png",
+        "Johnson & Johnson": "jnj.png",
+        "BondCliQ": "bondcliq.png",
+        "Moody's": "moodys.png",
+        "Essent Mortgage": "essent.png",
+        "Rocket Mortgage": "rocketmortgage.png",
+        "BCBS IL": "bcbsil.png",
+        "Nissan North America": "nissan.png",
+        "Wells Fargo": "wellsfargo.png",
+        "Horace Mann": "horacemann.png",
+        "Illinois State Board of Education": "isbe.png",
+        "CareFusion": "carefusion.png",
+        "Illinois Office of Comptroller": "ioc.png",
+        "Caterpillar": "caterpillar.png",
+        "Henkel": "henkel.png",
+        "Microsoft": "microsoft.png",
+        "SuperValu": "supervalu.png",
+    }
+
+    logos_dir = Path(__file__).parent.parent / "images" / "clients"
+
     cards = ""
     for _, row in clients_df.iterrows():
         name = row.get("client_name", "")
         domain = row.get("domain", "")
-        logo = row.get("logo_url", "")
         color = domain_colors.get(domain, "#1B3A4B")
+
+        logo_html = f'<div class="client-logo-fallback">{name[0]}</div>'
+        logo_file = logos_dir / LOGO_FILES.get(name, "")
+        if logo_file.exists():
+            b64 = base64.b64encode(logo_file.read_bytes()).decode()
+            logo_html = f'<img src="data:image/png;base64,{b64}" alt="{name}" class="client-logo" />'
+
         cards += f"""
         <div class="client-card">
-            <img src="{logo}" alt="{name}" class="client-logo"
-                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-            <div class="client-logo-fallback" style="display:none;">{name[0]}</div>
+            {logo_html}
             <div class="client-name">{name}</div>
             <span class="client-domain" style="background:{color};">{domain}</span>
         </div>"""

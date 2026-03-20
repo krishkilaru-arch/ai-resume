@@ -443,7 +443,7 @@
     {"name": "BondCliQ", "domain": "Financial", "logo": "https://logo.uplead.com/bondcliq.com"},
     {"name": "Moody's", "domain": "Financial", "logo": "https://logo.uplead.com/moodys.com"},
     {"name": "Essent Mortgage", "domain": "Mortgage Insurance", "logo": "https://logo.uplead.com/essent.us"},
-    {"name": "Rocket Mortgage", "domain": "Mortgage", "logo": "https://logo.uplead.com/quickenloans.com"},
+    {"name": "Rocket Mortgage", "domain": "Mortgage", "logo": "https://prod.rockmedialibrary.com/api/public/content/R4M-RocketMortgageLogoStacked?v=81fe94e4"},
     {"name": "BCBS IL", "domain": "Insurance", "logo": "https://logo.uplead.com/bcbsil.com"},
     {"name": "Nissan North America", "domain": "Manufacturing", "logo": "https://logo.uplead.com/nissanusa.com"},
     {"name": "Wells Fargo", "domain": "Mortgage", "logo": "https://logo.uplead.com/wellsfargo.com"},
