@@ -318,6 +318,22 @@ _html("""
         margin-right: 20px;
         font-size: 0.85rem;
     }
+    .profile-header .links a.calendly-btn {
+        background: #fff;
+        color: #065A82;
+        font-weight: 700;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.82rem;
+        transition: all 0.25s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .profile-header .links a.calendly-btn:hover {
+        background: #E8F5E9;
+        color: #1C7C54;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+        transform: translateY(-1px);
+    }
 
     /* Info cards */
     .info-card {
@@ -1319,6 +1335,9 @@ def render_profile_header(profile_df, certs_df=None):
     github = p.get("github_url", "")
     email = p.get("email", "")
 
+    calendly = p.get("calendly_url", "")
+    website = p.get("website_url", "")
+
     links_html = ""
     if linkedin:
         links_html += f'<a href="{linkedin}">LinkedIn</a>'
@@ -1326,6 +1345,10 @@ def render_profile_header(profile_df, certs_df=None):
         links_html += f'<a href="{github}">GitHub</a>'
     if email:
         links_html += f'<a href="mailto:{email}">{email}</a>'
+    if website:
+        links_html += f'<a href="{website}">Website</a>'
+    if calendly:
+        links_html += f'<a href="{calendly}" class="calendly-btn" target="_blank">📅 Book a Meeting</a>'
 
     photo_html = ""
     photo_path = Path(__file__).parent.parent / "images" / "KrishImage.png"
