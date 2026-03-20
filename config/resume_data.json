@@ -543,37 +543,51 @@
     {
       "title": "Databricks Backfill Jobs",
       "publisher": "LinkedIn Pulse",
-      "date": "2025-01-01",
+      "date": "2025-11-28",
       "type": "Article",
       "url": "https://www.linkedin.com/pulse/databricks-backfill-jobs-krish-kilaru-yg7kc"
     },
     {
       "title": "Building Retrieval Augmented Generation (RAG) for Financial Services",
       "publisher": "LinkedIn Pulse",
-      "date": "2025-01-01",
+      "date": "2025-06-29",
       "type": "Article",
       "url": "https://www.linkedin.com/pulse/building-retrieval-augmented-generation-rag-financial-krish-kilaru-qihwc"
     },
     {
       "title": "Part 1: Comprehensive Guide to AI/BI Genie in Databricks — In-Depth Basics, Advanced Features, Security, Privacy, and LLMs",
       "publisher": "LinkedIn Pulse",
-      "date": "2025-01-01",
+      "date": "2025-05-08",
       "type": "Article",
       "url": "https://www.linkedin.com/pulse/comprehensive-guide-aibi-genie-databricks-in-depth-basics-kilaru-uqrsc"
     },
     {
       "title": "Part 2 : AI/BI Genie in Databricks: Architecture Internals and Detailed Workflow",
       "publisher": "LinkedIn Pulse",
-      "date": "2025-01-01",
+      "date": "2025-05-08",
       "type": "Article",
       "url": "https://www.linkedin.com/pulse/part-2-aibi-genie-databricks-architecture-internals-detailed-kilaru-uw0ec"
     },
     {
       "title": "Part 1: dbt vs Databricks — Clash or Collaboration? The Ultimate Showdown",
       "publisher": "LinkedIn Pulse",
-      "date": "2025-01-01",
+      "date": "2025-04-21",
       "type": "Article",
       "url": "https://www.linkedin.com/pulse/part-1-dbt-vs-databricks-clash-collaboration-ultimate-krish-kilaru-7zowc"
+    },
+    {
+      "title": "A Walk Through on Assessing Data Maturity for Modern Data Strategies",
+      "publisher": "LinkedIn Pulse",
+      "date": "2025-02-09",
+      "type": "Article",
+      "url": "https://www.linkedin.com/pulse/walk-through-assessing-data-maturity-modern-krish-kilaru-ycklc"
+    },
+    {
+      "title": "Databricks Lakebase: The Superhero Making Financial Apps Easy and Awesome",
+      "publisher": "LinkedIn Pulse",
+      "date": "2025-06-14",
+      "type": "Article",
+      "url": "https://www.linkedin.com/pulse/databricks-lakebase-superhero-making-financial-apps-easy-krish-kilaru-63wsc"
     }
   ]
 }
