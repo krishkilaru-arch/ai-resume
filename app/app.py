@@ -1883,21 +1883,60 @@ def render_metrics(profile_df, work_df, skills_df, certs_df, clients_df=None):
         ("Certifications", total_certs, "#D4A017"),
     ]
 
+    dark = st.session_state.get('dark_mode', False)
+    bg = '#1E2530' if dark else '#fff'
+    border = '#2D3748' if dark else '#E9ECEF'
+    label_color = '#A0AEC0' if dark else '#6C757D'
+
     cards = ""
     for label, value, color in metrics:
         cards += f"""
-        <div style="flex:1; min-width:120px; background:{'#1E2530' if st.session_state.get('dark_mode') else '#fff'};
-                    border:1px solid {'#2D3748' if st.session_state.get('dark_mode') else '#E9ECEF'};
-                    border-radius:12px; padding:16px 20px; text-align:center;
-                    box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-            <div style="color:{'#A0AEC0' if st.session_state.get('dark_mode') else '#6C757D'};
-                        font-size:0.8rem; margin-bottom:4px;">{label}</div>
-            <div class="countup" data-target="{value}"
-                 style="font-size:1.8rem; font-weight:700; color:{color};">0</div>
+        <div class="metric-card">
+            <div class="metric-label">{label}</div>
+            <div class="countup" data-target="{value}" style="color:{color};">0</div>
         </div>"""
 
     st.components.v1.html(f"""
-    <div style="display:flex; gap:12px; flex-wrap:wrap; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    <style>
+        * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }}
+        .metrics-grid {{
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }}
+        .metric-card {{
+            background: {bg};
+            border: 1px solid {border};
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }}
+        .metric-label {{
+            color: {label_color};
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+        }}
+        .countup {{
+            font-size: 1.6rem;
+            font-weight: 700;
+        }}
+        @media (max-width: 768px) {{
+            .metrics-grid {{
+                grid-template-columns: repeat(3, 1fr);
+            }}
+            .metric-label {{ font-size: 0.65rem; }}
+            .countup {{ font-size: 1.3rem; }}
+            .metric-card {{ padding: 10px 6px; }}
+        }}
+        @media (max-width: 400px) {{
+            .metrics-grid {{
+                grid-template-columns: repeat(2, 1fr);
+            }}
+        }}
+    </style>
+    <div class="metrics-grid">
         {cards}
     </div>
     <script>
@@ -1914,7 +1953,7 @@ def render_metrics(profile_df, work_df, skills_df, certs_df, clients_df=None):
             }}, 16);
         }});
     </script>
-    """, height=260)
+    """, height=200)
 
 
 def render_summary(profile_df):
