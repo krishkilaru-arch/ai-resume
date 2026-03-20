@@ -1697,25 +1697,34 @@ def render_skills_charts(skills_df):
 
     other_df = df[~df["category"].isin(cat_order)].sort_values(["category", "rating"], ascending=[True, False])
     if not other_df.empty:
-        _html('<div style="font-size:1rem;font-weight:700;color:#1B3A4B;margin-top:16px;margin-bottom:8px;">Additional Skills</div>')
-        cats = other_df["category"].unique()
-        cols = st.columns(min(len(cats), 3))
-        for i, cat in enumerate(cats):
-            with cols[i % len(cols)]:
-                cat_df = other_df[other_df["category"] == cat]
-                _html(f'<div style="font-size:0.85rem;font-weight:700;color:#1B3A4B;margin-top:12px;margin-bottom:6px;">{cat}</div>')
-                for _, row in cat_df.iterrows():
-                    r = int(row["rating"])
-                    filled = "█" * r + "░" * (10 - r)
-                    prof = row[prof_col]
-                    color = "#065A82" if prof == "Expert" else "#1C7C54" if prof == "Advanced" else "#F4A261"
-                    _html(
-                        f'<div style="font-size:0.78rem;margin-bottom:3px;">'
-                        f'<span style="color:#333;">{row["skill_name"]}</span> '
-                        f'<span style="color:{color};font-family:monospace;font-size:0.7rem;">{filled}</span> '
-                        f'<span style="color:#888;font-size:0.7rem;">{r}/10</span>'
-                        f'</div>'
-                    )
+        other_icons = {"Client-Facing": "🤝", "Leadership": "👑"}
+        other_colors = {"Client-Facing": "#065A82", "Leadership": "#1C7C54"}
+        other_cards = ""
+        for cat in other_df["category"].unique():
+            cat_df = other_df[other_df["category"] == cat].sort_values("rating", ascending=False)
+            color = other_colors.get(cat, "#1B3A4B")
+            icon = other_icons.get(cat, "💡")
+            skills_rows = ""
+            for _, row in cat_df.iterrows():
+                r = int(row["rating"])
+                pct = r * 10
+                skills_rows += f"""
+                <div class="sk-row">
+                    <span class="sk-name">{row["skill_name"]}</span>
+                    <div class="sk-bar-bg">
+                        <div class="sk-bar-fill" style="width:{pct}%;background:{color};"></div>
+                    </div>
+                    <span class="sk-val">{r}/10</span>
+                </div>"""
+            other_cards += f"""
+            <div class="sk-card">
+                <div class="sk-header" style="border-left:4px solid {color};">
+                    <span class="sk-icon">{icon}</span>
+                    <span class="sk-title">{cat}</span>
+                </div>
+                {skills_rows}
+            </div>"""
+        _html(f'<div class="sk-grid" style="margin-top:14px;">{other_cards}</div>')
 
 
 def render_clients(clients_df):
