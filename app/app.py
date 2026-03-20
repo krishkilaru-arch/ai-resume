@@ -2130,6 +2130,7 @@ def main():
             "<p style='text-align:center; color:#999; font-size:0.8rem;'>"
             "Powered by Databricks AI/BI · Data model in Unity Catalog · "
             "Abu-powered Q&A 🐒</p>",
+            unsafe_allow_html=True,
         )
 
     with tab_genie:
