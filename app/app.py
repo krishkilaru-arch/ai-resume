@@ -1424,7 +1424,7 @@ def render_profile_header(profile_df, certs_df=None):
             {photo_html}
             <div class="profile-info-col">
                 <h1>{name}</h1>
-                <div class="headline">{headline}</div>
+                <div class="headline">{headline.replace(' | Tech Pre-Sales', '<br>Tech Pre-Sales')}</div>
                 <div class="location">📍 {location}</div>
                 <div class="links" style="margin-top:10px;">{links_html}</div>
                 {text_row}
