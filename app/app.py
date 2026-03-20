@@ -2506,7 +2506,7 @@ def main():
     render_profile_header(profile_df, certs_df)
 
     # Tabs
-    tab_dashboard, tab_genie, tab_meeting = st.tabs(["📊  Resume Dashboard", "🐒  Ask Abu Anything", "📅  Book a Meeting"])
+    tab_dashboard, tab_genie, tab_meeting, tab_about = st.tabs(["📊  Resume Dashboard", "🐒  Ask Abu Anything", "📅  Book a Meeting", "🛠  How This Was Built"])
 
     with tab_dashboard:
         render_metrics(profile_df, work_df, skills_df, certs_df, clients_df)
@@ -2541,6 +2541,139 @@ def main():
         </div>
         """)
         st.components.v1.iframe(f"{calendly_url}?hide_gdpr_banner=1", height=700, scrolling=True)
+
+    with tab_about:
+        render_about_app()
+
+
+def render_about_app():
+    _html("""
+    <div style="max-width:900px; margin:0 auto;">
+        <div style="text-align:center; margin-bottom:28px;">
+            <h2 style="color:#1B3A4B; margin-bottom:6px;">🛠 How This App Was Built</h2>
+            <p style="color:#6C757D; font-size:0.95rem;">
+                This isn't a traditional resume — it's a <strong>full-stack data application</strong>
+                built on the Databricks Lakehouse platform with an AI-powered Q&amp;A chatbot.
+            </p>
+        </div>
+    </div>
+    """)
+
+    arch_col1, arch_col2 = st.columns(2)
+
+    with arch_col1:
+        _html("""
+        <div style="background:linear-gradient(135deg,#1B3A4B 0%,#065A82 100%); color:white;
+                    border-radius:14px; padding:24px 28px; height:100%;">
+            <h3 style="margin:0 0 16px; font-size:1.15rem;">📐 Architecture</h3>
+            <div style="font-size:0.88rem; line-height:1.7; opacity:0.95;">
+                <p style="margin:0 0 10px;">All resume data lives as <strong>Delta tables</strong> in
+                <strong>Databricks Unity Catalog</strong>, following the Lakehouse pattern.</p>
+                <p style="margin:0 0 10px;">The app queries tables via the <strong>Databricks SQL Statement Execution API</strong>,
+                with local JSON fallback for resilience.</p>
+                <p style="margin:0;">The <strong>Abu chatbot 🐒</strong> uses <strong>Databricks AI/BI Genie</strong>
+                for natural-language SQL generation, backed by a curated FAQ engine for recruiter questions.</p>
+            </div>
+        </div>
+        """)
+
+    with arch_col2:
+        _html("""
+        <div style="background:linear-gradient(135deg,#0D7C66 0%,#1A9E78 100%); color:white;
+                    border-radius:14px; padding:24px 28px; height:100%;">
+            <h3 style="margin:0 0 16px; font-size:1.15rem;">🔄 Data Flow</h3>
+            <div style="font-size:0.88rem; line-height:1.7; opacity:0.95;">
+                <p style="margin:0 0 6px;"><strong>1.</strong> Resume data authored in <code style="background:rgba(255,255,255,0.2); padding:1px 5px; border-radius:4px;">resume_data.json</code></p>
+                <p style="margin:0 0 6px;"><strong>2.</strong> Pushed to Delta tables via SQL Statement Execution API</p>
+                <p style="margin:0 0 6px;"><strong>3.</strong> Genie Space configured with table instructions &amp; comments</p>
+                <p style="margin:0 0 6px;"><strong>4.</strong> Streamlit app reads from Databricks (JSON fallback)</p>
+                <p style="margin:0;"><strong>5.</strong> Abu chatbot routes: FAQ → Genie API → Local Q&amp;A</p>
+            </div>
+        </div>
+        """)
+
+    st.markdown("")
+
+    _html("""
+    <div style="max-width:900px; margin:0 auto;">
+        <h3 style="color:#1B3A4B; margin-bottom:16px; text-align:center;">🧰 Tools & Technologies</h3>
+    </div>
+    """)
+
+    tools = [
+        ("Databricks Unity Catalog", "Centralized metadata & governance for all resume Delta tables", "#FF3621", "🏛️"),
+        ("Databricks SQL Warehouse", "Serverless compute for querying resume data via SQL", "#FF3621", "⚡"),
+        ("Databricks AI/BI Genie", "Natural language → SQL for the Abu chatbot Q&A", "#FF3621", "🧞"),
+        ("Delta Lake", "ACID-compliant open table format for reliable data storage", "#FF3621", "🔺"),
+        ("SQL Statement Execution API", "REST API for executing SQL & managing data from Python", "#FF3621", "🔌"),
+        ("Streamlit", "Python framework for the interactive web UI & dashboard", "#FF4B4B", "🎈"),
+        ("Streamlit Community Cloud", "Free hosting platform for the public-facing app", "#FF4B4B", "☁️"),
+        ("Python", "Core language for data processing, API calls, and app logic", "#3776AB", "🐍"),
+        ("Pandas", "DataFrame manipulation for transforming resume data", "#150458", "🐼"),
+        ("Plotly", "Interactive charts & visualizations for skills and metrics", "#3F4F75", "📊"),
+        ("HTML / CSS", "Custom layouts — timelines, skill cards, client grid, banners", "#E34F26", "🎨"),
+        ("Git & GitHub", "Version control & CI/CD trigger for Streamlit Cloud deployments", "#24292E", "💻"),
+        ("Databricks REST API", "Direct API integration for Genie conversations", "#FF3621", "🔗"),
+        ("Base64 Encoding", "Embedding local images (profile photo, client logos) in HTML", "#6C757D", "🖼️"),
+        ("Calendly", "Embedded scheduling widget for recruiter meetings", "#006BFF", "📅"),
+    ]
+
+    cols_per_row = 3
+    rows_html = ""
+    for i, (name, desc, color, icon) in enumerate(tools):
+        if i % cols_per_row == 0:
+            if i > 0:
+                rows_html += "</div>"
+            rows_html += '<div style="display:flex; gap:14px; margin-bottom:14px;">'
+        rows_html += f'''
+        <div style="flex:1; background:white; border-radius:12px; padding:18px 20px;
+                    border-left:4px solid {color}; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+            <div style="font-size:1.3rem; margin-bottom:6px;">{icon}</div>
+            <div style="font-weight:700; color:#1B3A4B; font-size:0.9rem; margin-bottom:4px;">{name}</div>
+            <div style="color:#6C757D; font-size:0.78rem; line-height:1.4;">{desc}</div>
+        </div>
+        '''
+    rows_html += "</div>"
+
+    _html(f'<div style="max-width:900px; margin:0 auto;">{rows_html}</div>')
+
+    st.markdown("")
+
+    _html("""
+    <div style="max-width:900px; margin:0 auto;">
+        <div style="background:#F8F9FA; border-radius:14px; padding:24px 28px; border:1px solid #E8EDF1;">
+            <h3 style="color:#1B3A4B; margin:0 0 14px; font-size:1.05rem;">💡 Why Build a Resume This Way?</h3>
+            <div style="display:flex; gap:20px; flex-wrap:wrap;">
+                <div style="flex:1; min-width:200px;">
+                    <p style="color:#495057; font-size:0.85rem; line-height:1.6; margin:0;">
+                        <strong>For recruiters:</strong> Instead of a static PDF, you get an interactive experience —
+                        ask Abu any question, explore skills visually, and book a meeting in one click.
+                    </p>
+                </div>
+                <div style="flex:1; min-width:200px;">
+                    <p style="color:#495057; font-size:0.85rem; line-height:1.6; margin:0;">
+                        <strong>As a showcase:</strong> This app <em>is</em> the portfolio. It demonstrates
+                        Databricks, Unity Catalog, Genie, Delta Lake, Streamlit, and full-stack data app
+                        development — the exact skills Krish brings to every engagement.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    """)
+
+    _html("""
+    <div style="max-width:900px; margin:16px auto 0;">
+        <div style="background:linear-gradient(135deg,#2C3E50,#3498DB); border-radius:14px;
+                    padding:20px 28px; color:white; text-align:center;">
+            <p style="margin:0; font-size:0.88rem; opacity:0.9;">
+                🐒 <strong>Fun fact:</strong> Abu answers recruiter questions using a 3-tier system —
+                <strong>Curated FAQ</strong> (instant) → <strong>Databricks Genie API</strong> (SQL generation) →
+                <strong>Local Q&amp;A Engine</strong> (keyword search across all resume data).
+            </p>
+        </div>
+    </div>
+    """)
 
 
 if __name__ == "__main__":
