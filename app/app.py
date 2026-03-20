@@ -1525,32 +1525,30 @@ def render_skills_charts(skills_df):
     df["rating"] = df.apply(lambda r: _skill_rating(r.get(prof_col, ""), r.get(yrs_col, 0)), axis=1)
 
     cat_order = [
-        "1. Data Engineering & Processing",
-        "2. Data Lakehouse & Storage",
-        "3. SQL & Analytics",
-        "4. Machine Learning & AI",
-        "5. Governance & Security",
-        "6. Cloud & Infrastructure",
-        "7. Collaboration & Development",
+        "1. Data Engineering & Pipelines",
+        "2. Lakehouse & Data Platform",
+        "3. SQL, Analytics & BI",
+        "4. AI / Machine Learning",
+        "5. Generative AI & Agents",
+        "6. Data Governance & Catalog",
+        "7. Apps, Interfaces & Access",
+        "8. Databases & New Storage",
+        "9. Cloud & Infrastructure",
+        "10. DevOps & Deployment",
     ]
     cat_color_map = {
-        "1. Data Engineering & Processing": "#1B6B93",
-        "2. Data Lakehouse & Storage":      "#E24A33",
-        "3. SQL & Analytics":               "#2E8B57",
-        "4. Machine Learning & AI":         "#7B2D8E",
-        "5. Governance & Security":         "#D4A017",
-        "6. Cloud & Infrastructure":        "#FF6347",
-        "7. Collaboration & Development":   "#4682B4",
+        "1. Data Engineering & Pipelines":  "#1B6B93",
+        "2. Lakehouse & Data Platform":     "#E24A33",
+        "3. SQL, Analytics & BI":           "#2E8B57",
+        "4. AI / Machine Learning":         "#7B2D8E",
+        "5. Generative AI & Agents":        "#E91E63",
+        "6. Data Governance & Catalog":     "#D4A017",
+        "7. Apps, Interfaces & Access":     "#4682B4",
+        "8. Databases & New Storage":       "#FF6347",
+        "9. Cloud & Infrastructure":        "#FF9800",
+        "10. DevOps & Deployment":          "#607D8B",
     }
-    cat_labels = {
-        "1. Data Engineering & Processing": "Data Engineering & Processing",
-        "2. Data Lakehouse & Storage":      "Data Lakehouse & Storage",
-        "3. SQL & Analytics":               "SQL & Analytics",
-        "4. Machine Learning & AI":         "Machine Learning & AI",
-        "5. Governance & Security":         "Governance & Security",
-        "6. Cloud & Infrastructure":        "Cloud & Infrastructure",
-        "7. Collaboration & Development":   "Collaboration & Development",
-    }
+    cat_labels = {k: k.split(". ", 1)[1] for k in cat_order}
 
     chart_df = df[df["category"].isin(cat_order)].copy()
     if chart_df.empty:
