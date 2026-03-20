@@ -2902,12 +2902,13 @@ def render_testimonials():
     for t in TESTIMONIALS:
         cards += f"""
         <div style="flex:1; min-width:260px; background:white; border-radius:14px; padding:22px 24px;
-                    box-shadow:0 2px 10px rgba(0,0,0,0.06); border-top:3px solid #065A82;">
+                    box-shadow:0 2px 10px rgba(0,0,0,0.06); border-top:3px solid #065A82;
+                    display:flex; flex-direction:column;">
             <div style="font-size:2rem; margin-bottom:8px; opacity:0.15;">❝</div>
-            <p style="color:#495057; font-size:0.95rem; line-height:1.7; font-style:italic; margin:0 0 16px;">
+            <p style="color:#495057; font-size:0.95rem; line-height:1.7; font-style:italic; margin:0 0 16px; flex:1;">
                 {t['quote']}
             </p>
-            <div style="display:flex; align-items:center; gap:10px; border-top:1px solid #F0F2F5; padding-top:12px;">
+            <div style="display:flex; align-items:center; gap:10px; border-top:1px solid #F0F2F5; padding-top:12px; margin-top:auto;">
                 <div style="width:40px; height:40px; border-radius:50%; background:#E8EDF1;
                             display:flex; align-items:center; justify-content:center; font-size:1.3rem;">
                     {t['avatar']}
