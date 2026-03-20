@@ -1953,7 +1953,17 @@ def render_metrics(profile_df, work_df, skills_df, certs_df, clients_df=None):
             }}, 16);
         }});
     </script>
-    """, height=200)
+    <script>
+        window.addEventListener('load', function() {{
+            var h = document.querySelector('.metrics-grid').offsetHeight + 10;
+            window.frameElement.style.height = h + 'px';
+        }});
+        window.addEventListener('resize', function() {{
+            var h = document.querySelector('.metrics-grid').offsetHeight + 10;
+            window.frameElement.style.height = h + 'px';
+        }});
+    </script>
+    """, height=90, scrolling=False)
 
 
 def render_summary(profile_df):
