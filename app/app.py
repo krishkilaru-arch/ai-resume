@@ -2125,12 +2125,11 @@ def main():
         render_publications(pubs_df)
 
         # Footer
-        _html("---")
-        st.markdown(
+        _html(
+            "<hr style='border:none; border-top:1px solid #E8EDF1; margin:30px 0 10px;'>"
             "<p style='text-align:center; color:#999; font-size:0.8rem;'>"
             "Powered by Databricks AI/BI · Data model in Unity Catalog · "
-            "Abu-powered Q&A 🐒</p>",
-            unsafe_allow_html=True,
+            "Abu-powered Q&A 🐒</p>"
         )
 
     with tab_genie:
