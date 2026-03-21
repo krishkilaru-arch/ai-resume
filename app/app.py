@@ -215,6 +215,52 @@ _html("""
     .badge-leadership { background: #E3F8EE; color: #1C7C54; }
     .badge-business { background: #FFF3E0; color: #E76F00; }
 
+    /* Summary text */
+    .summary-text {
+        font-size: 0.95rem; line-height: 1.7; color: #333;
+        text-align: justify; margin: 0 0 10px;
+    }
+    /* Experience title/role lines */
+    .exp-title-line, .exp-role-line {
+        font-size: 1.05rem; margin-top: 2px;
+    }
+    .exp-label { color: #6C757D; }
+    .exp-title-value { font-weight: 600; color: #1B3A4B; }
+    .exp-role-value { color: #065A82; font-weight: 600; }
+    .exp-card .description { color: #444; font-size: 1.0rem; margin-bottom: 8px; }
+
+    /* System dark mode support */
+    @media (prefers-color-scheme: dark) {
+        .summary-text { color: #E2E8F0 !important; }
+        .exp-label { color: #A0AEC0 !important; }
+        .exp-title-value { color: #E2E8F0 !important; }
+        .exp-role-value { color: #63B3ED !important; }
+        .exp-card .description { color: #CBD5E0 !important; }
+        .exp-card h4 { color: #E2E8F0 !important; }
+        .exp-card .subtitle { color: #63B3ED !important; }
+        .exp-card .meta { color: #A0AEC0 !important; }
+        .exp-card .highlight { color: #CBD5E0 !important; }
+        .exp-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .sk-card { background: #1E2530 !important; }
+        .sk-name { color: #CBD5E0 !important; }
+        .sk-title { color: #E2E8F0 !important; }
+        .sk-val { color: #A0AEC0 !important; }
+        .sk-bar-bg { background: #2D3748 !important; }
+        .info-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .info-card h5 { color: #E2E8F0 !important; }
+        .info-card .detail { color: #A0AEC0 !important; }
+        .section-header { color: #63B3ED !important; border-color: #3182CE !important; }
+        .client-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .client-name { color: #E2E8F0 !important; }
+        .pub-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .pub-title { color: #E2E8F0 !important; }
+        .pub-meta { color: #A0AEC0 !important; }
+        .proj-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .proj-title { color: #E2E8F0 !important; }
+        .proj-desc { color: #CBD5E0 !important; }
+        .proj-role { color: #63B3ED !important; }
+    }
+
     /* Profile header */
     .profile-header {
         background: linear-gradient(135deg, #1B3A4B 0%, #065A82 100%);
@@ -603,40 +649,57 @@ _html("""
             font-size: 0.85rem;
         }
 
-        /* Improve color contrast on mobile */
-        .exp-card .meta {
-            color: #444 !important;
-        }
-        .exp-card .highlight {
-            color: #111 !important;
-        }
-        .exp-card .subtitle {
-            color: #044A6E !important;
-        }
-        .sk-val {
-            color: #555 !important;
-        }
-        .sk-name {
-            color: #222 !important;
-        }
-        .sk-title {
-            color: #111 !important;
-        }
-        .info-card .detail {
-            color: #444 !important;
-        }
-        .client-name {
-            color: #111 !important;
-        }
-        .pub-meta {
-            color: #444 !important;
-        }
-        .proj-desc {
-            color: #333 !important;
-        }
-        .proj-role {
-            color: #044A6E !important;
-        }
+    }
+
+    /* Mobile light-mode contrast */
+    @media (max-width: 768px) and (prefers-color-scheme: light) {
+        .exp-card .meta { color: #444 !important; }
+        .exp-card .highlight { color: #111 !important; }
+        .exp-card .subtitle { color: #044A6E !important; }
+        .sk-val { color: #555 !important; }
+        .sk-name { color: #222 !important; }
+        .sk-title { color: #111 !important; }
+        .info-card .detail { color: #444 !important; }
+        .client-name { color: #111 !important; }
+        .pub-meta { color: #444 !important; }
+        .proj-desc { color: #333 !important; }
+        .proj-role { color: #044A6E !important; }
+        .summary-text { color: #333 !important; }
+        .exp-label { color: #6C757D !important; }
+        .exp-title-value { color: #1B3A4B !important; }
+        .exp-role-value { color: #065A82 !important; }
+        .exp-card .description { color: #444 !important; }
+    }
+
+    /* Mobile dark-mode contrast */
+    @media (max-width: 768px) and (prefers-color-scheme: dark) {
+        .summary-text { color: #E2E8F0 !important; }
+        .exp-card .meta { color: #A0AEC0 !important; }
+        .exp-card .highlight { color: #CBD5E0 !important; }
+        .exp-card .subtitle { color: #63B3ED !important; }
+        .exp-card h4 { color: #E2E8F0 !important; }
+        .exp-card .description { color: #CBD5E0 !important; }
+        .exp-label { color: #A0AEC0 !important; }
+        .exp-title-value { color: #E2E8F0 !important; }
+        .exp-role-value { color: #63B3ED !important; }
+        .exp-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .sk-val { color: #A0AEC0 !important; }
+        .sk-name { color: #CBD5E0 !important; }
+        .sk-title { color: #E2E8F0 !important; }
+        .sk-card { background: #1E2530 !important; }
+        .info-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .info-card h5 { color: #E2E8F0 !important; }
+        .info-card .detail { color: #A0AEC0 !important; }
+        .client-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .client-name { color: #E2E8F0 !important; }
+        .pub-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .pub-title { color: #E2E8F0 !important; }
+        .pub-meta { color: #A0AEC0 !important; }
+        .proj-card { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .proj-title { color: #E2E8F0 !important; }
+        .proj-desc { color: #CBD5E0 !important; }
+        .proj-role { color: #63B3ED !important; }
+        .section-header { color: #63B3ED !important; border-color: #3182CE !important; }
     }
 
     @media (max-width: 480px) {
@@ -1986,7 +2049,7 @@ def render_summary(profile_df):
     if summary:
         _html('<div class="section-header">Professional Summary</div>')
         paragraphs = summary.replace("\\n\\n", "\n\n").split("\n\n")
-        body = "".join(f"<p style='font-size:0.95rem; line-height:1.7; color:#333; text-align:justify; margin:0 0 10px;'>{p.strip()}</p>" for p in paragraphs if p.strip())
+        body = "".join(f"<p class='summary-text'>{p.strip()}</p>" for p in paragraphs if p.strip())
         _html(body)
 
 
@@ -2400,16 +2463,16 @@ def render_experience(work_df, highlights_df):
                     </span>
                 </div>"""
 
-        role_html = f'<div style="font-size:1.05rem; margin-top:2px;"><span style="color:#6C757D;">Role at Customer:</span> <span style="color:#065A82; font-weight:600;">{role}</span></div>' if role and role != title else ""
+        role_html = f'<div class="exp-role-line"><span class="exp-label">Role at Customer:</span> <span class="exp-role-value">{role}</span></div>' if role and role != title else ""
         title_label = f"Title at {company}" if role and role != title else ""
-        title_line = f'<div style="font-size:1.05rem;"><span style="color:#6C757D;">{title_label}:</span> <span style="font-weight:600;">{title}</span></div>' if title_label else f"<h4>{title}</h4>"
+        title_line = f'<div class="exp-title-line"><span class="exp-label">{title_label}:</span> <span class="exp-title-value">{title}</span></div>' if title_label else f"<h4>{title}</h4>"
         _html(f"""
         <div class="exp-card">
             {title_line}
             {role_html}
             <div class="subtitle">{company}</div>
             <div class="meta">📍 {location} &nbsp;|&nbsp; 📅 {start} — {end} {badge_html}</div>
-            <div style="color:#444; font-size:1.0rem; margin-bottom:8px;">{desc}</div>
+            <div class="description">{desc}</div>
             {highlights_html}
         </div>
         """)
