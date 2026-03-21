@@ -123,7 +123,33 @@ if st.session_state.dark_mode:
         .proj-title { color: #E2E8F0 !important; }
         .proj-desc { color: #CBD5E0 !important; }
         .proj-role { color: #63B3ED !important; }
+        .summary-text { color: #E2E8F0 !important; }
+        .exp-label { color: #A0AEC0 !important; }
+        .exp-title-value { color: #E2E8F0 !important; }
+        .exp-role-value { color: #63B3ED !important; }
+        .exp-card .description { color: #CBD5E0 !important; }
+        .info-card h5 { color: #E2E8F0 !important; }
+        .info-card .detail { color: #A0AEC0 !important; }
         p, span, div { color: inherit; }
+        h1, h2, h3, h4, h5, h6 { color: #E2E8F0 !important; }
+        /* Suggested question buttons */
+        div[data-testid="stHorizontalBlock"] button[kind="secondary"] {
+            background: #1E2530 !important; color: #E2E8F0 !important;
+            border-color: #2D3748 !important;
+        }
+        div[data-testid="stHorizontalBlock"] button[kind="secondary"]:hover {
+            background: #2D3748 !important; border-color: #4A5568 !important;
+        }
+        /* Download button */
+        button[data-testid="stDownloadButton"] button,
+        div[data-testid="stDownloadButton"] button {
+            background: #3182CE !important; color: #fff !important;
+            border-color: #3182CE !important;
+        }
+        /* PDF tab tip box */
+        .pdf-tip-box { background: #1E2530 !important; border-color: #2D3748 !important; }
+        .pdf-tip-box p { color: #A0AEC0 !important; }
+        .pdf-tip-box a { color: #63B3ED !important; }
         [data-testid="stTabs"] [data-baseweb="tab-list"] { background: linear-gradient(135deg,#1a1a2e,#16213e) !important; }
         [data-testid="stTabs"] button[role="tab"] { color: #A0AEC0 !important; }
         [data-testid="stTabs"] button[role="tab"][aria-selected="true"] { color: #fff !important; }
@@ -229,6 +255,11 @@ _html("""
     .exp-role-value { color: #065A82; font-weight: 600; }
     .exp-card .description { color: #444; font-size: 1.0rem; margin-bottom: 8px; }
 
+    /* PDF tab */
+    .pdf-heading { color: #1B3A4B; }
+    .pdf-subtext { color: #6C757D; }
+    .pdf-link { color: #065A82; }
+
     /* System dark mode support */
     @media (prefers-color-scheme: dark) {
         .summary-text { color: #E2E8F0 !important; }
@@ -259,6 +290,15 @@ _html("""
         .proj-title { color: #E2E8F0 !important; }
         .proj-desc { color: #CBD5E0 !important; }
         .proj-role { color: #63B3ED !important; }
+        .pdf-heading { color: #E2E8F0 !important; }
+        .pdf-subtext { color: #A0AEC0 !important; }
+        .pdf-link { color: #63B3ED !important; }
+        .pdf-tip-box { background: #1E2530 !important; border-color: #2D3748 !important; }
+        h1, h2, h3, h4, h5, h6 { color: #E2E8F0 !important; }
+        div[data-testid="stHorizontalBlock"] button[kind="secondary"] {
+            background: #1E2530 !important; color: #E2E8F0 !important;
+            border-color: #2D3748 !important;
+        }
     }
 
     /* Profile header */
@@ -700,6 +740,10 @@ _html("""
         .proj-desc { color: #CBD5E0 !important; }
         .proj-role { color: #63B3ED !important; }
         .section-header { color: #63B3ED !important; border-color: #3182CE !important; }
+        .pdf-heading { color: #E2E8F0 !important; }
+        .pdf-subtext { color: #A0AEC0 !important; }
+        .pdf-link { color: #63B3ED !important; }
+        .pdf-tip-box { background: #1E2530 !important; border-color: #2D3748 !important; }
     }
 
     @media (max-width: 480px) {
@@ -3187,8 +3231,8 @@ def main():
     with tab_pdf:
         _html("""
         <div style="text-align:center; margin-bottom:20px;">
-            <h3 style="color:#1B3A4B; margin-bottom:6px;">📄 Download Krish's Resume</h3>
-            <p style="color:#6C757D; font-size:1.0rem;">
+            <h3 class="pdf-heading" style="margin-bottom:6px;">📄 Download Krish's Resume</h3>
+            <p class="pdf-subtext" style="font-size:1.0rem;">
                 Get a clean, ATS-friendly PDF version of this resume for your records or to share with hiring managers.
             </p>
         </div>
@@ -3206,12 +3250,12 @@ def main():
                     use_container_width=True,
                 )
         _html("""
-        <div style="margin-top:24px; background:#F8F9FA; border-radius:12px; padding:20px 24px;
+        <div class="pdf-tip-box" style="margin-top:24px; background:#F8F9FA; border-radius:12px; padding:20px 24px;
                     border:1px solid #E8EDF1; text-align:center;">
-            <p style="color:#6C757D; font-size:0.95rem; margin:0;">
+            <p style="font-size:0.95rem; margin:0;" class="pdf-subtext">
                 💡 <strong>Tip:</strong> This PDF is auto-generated from the same data that powers this interactive resume.
                 For the full experience — including the AI chatbot, skills visualizations, and project details —
-                share the link: <a href="https://thedatabrickster.streamlit.app" style="color:#065A82;">thedatabrickster.streamlit.app</a>
+                share the link: <a href="https://thedatabrickster.streamlit.app" class="pdf-link" style="color:#065A82;">thedatabrickster.streamlit.app</a>
             </p>
         </div>
         """)
