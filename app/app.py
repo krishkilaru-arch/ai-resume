@@ -1820,8 +1820,9 @@ def _genie_ask_local(question):
                 f"- 📱 Phone: {profile.get('phone', 'N/A')}\n"
                 f"- 🔗 LinkedIn: {profile.get('linkedin_url', 'N/A')}\n"
                 f"- 💻 GitHub: {profile.get('github_url', 'N/A')}\n"
+                f"- 🎬 YouTube: {profile.get('youtube_url', 'N/A')}\n"
                 f"- 🌐 Website: {profile.get('website_url', 'N/A')}")
-        sql = "SELECT email, phone, linkedin_url, github_url, website_url\nFROM profile;"
+        sql = "SELECT email, phone, linkedin_url, github_url, youtube_url, website_url\nFROM profile;"
 
     elif intent == "work_preferences":
         text = (f"**{name}**'s work preferences:\n\n"
@@ -1958,6 +1959,7 @@ def render_profile_header(profile_df, certs_df=None):
     phone = p.get("phone", "")
 
     usergroup = p.get("usergroup_url", "")
+    youtube = p.get("youtube_url", "")
 
     sep = '<span class="sep">|</span>'
     nav_parts = []
@@ -1965,6 +1967,8 @@ def render_profile_header(profile_df, certs_df=None):
         nav_parts.append(f'<a href="{linkedin}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" class="social-icon" alt="LinkedIn" title="LinkedIn"></a>')
     if github:
         nav_parts.append(f'<a href="{github}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" class="social-icon" alt="GitHub" title="GitHub"></a>')
+    if youtube:
+        nav_parts.append(f'<a href="{youtube}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" class="social-icon" alt="YouTube" title="YouTube"></a>')
     if usergroup:
         nav_parts.append(f'<a href="{usergroup}" target="_blank">🧱 First Coast Databricks User Group</a>')
     nav_html = f' {sep} '.join(nav_parts)
@@ -2935,7 +2939,7 @@ def generate_pdf(data):
     contact_line1 = f"{loc}  |  {profile.get('email', '')}  |  {profile.get('phone', '')}"
     pdf.set_font("Helvetica", "", 10)
     pdf.cell(0, 5, S(contact_line1), new_x="LMARGIN", new_y="NEXT", align="C")
-    contact_line2 = f"{profile.get('linkedin_url', '')}  |  {profile.get('website_url', '')}"
+    contact_line2 = f"{profile.get('linkedin_url', '')}  |  {profile.get('website_url', '')}  |  YouTube: {profile.get('youtube_url', '')}"
     pdf.cell(0, 5, S(contact_line2), new_x="LMARGIN", new_y="NEXT", align="C")
     pdf.ln(1)
     pdf.set_draw_color(27, 58, 75)
