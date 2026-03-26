@@ -1960,6 +1960,10 @@ def render_profile_header(profile_df, certs_df=None):
 
     usergroup = p.get("usergroup_url", "")
     youtube = p.get("youtube_url", "")
+    if not youtube:
+        jdata = load_resume_json()
+        if jdata and "profile" in jdata:
+            youtube = jdata["profile"].get("youtube_url", "")
 
     sep = '<span class="sep">|</span>'
     nav_parts = []
