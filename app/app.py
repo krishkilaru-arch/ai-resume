@@ -1981,8 +1981,8 @@ def render_profile_header(profile_df, certs_df=None):
         gh_src = _icon_b64("github")
         nav_parts.append(f'<a href="{github}" target="_blank"><img src="{gh_src}" class="social-icon" alt="GitHub" title="GitHub"></a>')
     if youtube:
-        yt_src = _icon_b64("youtube")
-        nav_parts.append(f'<a href="{youtube}" target="_blank"><img src="{yt_src}" class="social-icon" alt="YouTube" title="YouTube"></a>')
+        yt_svg = 'data:image/svg+xml;base64,' + _b64.b64encode(b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FF0000"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>').decode()
+        nav_parts.append(f'<a href="{youtube}" target="_blank"><img src="{yt_svg}" class="social-icon" style="filter:none !important;" alt="YouTube" title="YouTube"></a>')
     if usergroup:
         nav_parts.append(f'<a href="{usergroup}" target="_blank">🧱 First Coast Databricks User Group</a>')
     nav_html = f' {sep} '.join(nav_parts)
