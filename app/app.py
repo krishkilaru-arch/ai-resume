@@ -1965,14 +1965,24 @@ def render_profile_header(profile_df, certs_df=None):
         if jdata and "profile" in jdata:
             youtube = jdata["profile"].get("youtube_url", "")
 
+    import base64 as _b64
+    def _icon_b64(name):
+        icon_path = Path(__file__).parent.parent / "images" / f"{name}.png"
+        if icon_path.exists():
+            return f"data:image/png;base64,{_b64.b64encode(icon_path.read_bytes()).decode()}"
+        return ""
+
     sep = '<span class="sep">|</span>'
     nav_parts = []
     if linkedin:
-        nav_parts.append(f'<a href="{linkedin}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" class="social-icon" alt="LinkedIn" title="LinkedIn"></a>')
+        li_src = _icon_b64("linkedin")
+        nav_parts.append(f'<a href="{linkedin}" target="_blank"><img src="{li_src}" class="social-icon" alt="LinkedIn" title="LinkedIn"></a>')
     if github:
-        nav_parts.append(f'<a href="{github}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" class="social-icon" alt="GitHub" title="GitHub"></a>')
+        gh_src = _icon_b64("github")
+        nav_parts.append(f'<a href="{github}" target="_blank"><img src="{gh_src}" class="social-icon" alt="GitHub" title="GitHub"></a>')
     if youtube:
-        nav_parts.append(f'<a href="{youtube}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" class="social-icon" alt="YouTube" title="YouTube"></a>')
+        yt_src = _icon_b64("youtube")
+        nav_parts.append(f'<a href="{youtube}" target="_blank"><img src="{yt_src}" class="social-icon" alt="YouTube" title="YouTube"></a>')
     if usergroup:
         nav_parts.append(f'<a href="{usergroup}" target="_blank">🧱 First Coast Databricks User Group</a>')
     nav_html = f' {sep} '.join(nav_parts)
