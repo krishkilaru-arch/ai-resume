@@ -959,6 +959,11 @@ def _json_to_df(data, table):
 @st.cache_data(ttl=60)
 def load_table(table_name):
     """Load a table: try Databricks first, fall back to local JSON."""
+    if table_name == "publications":
+        data = load_resume_json()
+        if data:
+            return _json_to_df(data, table_name)
+        return pd.DataFrame()
     df = query_sql(f"SELECT * FROM {table_name}")
     if df is not None and not df.empty:
         return df
