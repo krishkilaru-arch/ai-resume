@@ -1815,9 +1815,11 @@ def _genie_ask_local(question):
                "ORDER BY years_of_experience DESC;")
 
     elif intent == "contact":
+        jd = load_resume_json()
+        ph = (jd["profile"].get("phone", "") if jd and "profile" in jd else "") or profile.get("phone", "N/A")
         text = (f"**Contact {name}:**\n\n"
                 f"- 📧 Email: {profile.get('email', 'N/A')}\n"
-                f"- 📱 Phone: {profile.get('phone', 'N/A')}\n"
+                f"- 📱 Phone: {ph}\n"
                 f"- 🔗 LinkedIn: {profile.get('linkedin_url', 'N/A')}\n"
                 f"- 💻 GitHub: {profile.get('github_url', 'N/A')}\n"
                 f"- 🎬 YouTube: {profile.get('youtube_url', 'N/A')}\n"
@@ -1960,10 +1962,11 @@ def render_profile_header(profile_df, certs_df=None):
 
     usergroup = p.get("usergroup_url", "")
     youtube = p.get("youtube_url", "")
-    if not youtube:
-        jdata = load_resume_json()
-        if jdata and "profile" in jdata:
+    jdata = load_resume_json()
+    if jdata and "profile" in jdata:
+        if not youtube:
             youtube = jdata["profile"].get("youtube_url", "")
+        phone = jdata["profile"].get("phone", phone)
 
     import base64 as _b64
     def _icon_b64(name):
