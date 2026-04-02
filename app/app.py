@@ -2964,9 +2964,9 @@ def generate_pdf(data):
     # --- Header banner ---
     header_y = pdf.get_y()
     pdf.set_fill_color(*PRIMARY)
-    pdf.rect(0, 0, 210, 42, "F")
+    pdf.rect(0, 0, 210, 47, "F")
     pdf.set_fill_color(*ACCENT)
-    pdf.rect(0, 42, 210, 3, "F")
+    pdf.rect(0, 47, 210, 3, "F")
 
     pdf.set_y(6)
     pdf.set_text_color(255, 255, 255)
@@ -2982,10 +2982,12 @@ def generate_pdf(data):
     pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(200, 220, 230)
     pdf.cell(0, 4.5, S(contact_line1), new_x="LMARGIN", new_y="NEXT", align="C")
-    contact_line2 = f"{profile.get('linkedin_url', '')}  |  {profile.get('github_url', '')}  |  {profile.get('website_url', '')}  |  {profile.get('youtube_url', '')}"
+    contact_line2 = f"LinkedIn: linkedin.com/in/brickster  |  GitHub: github.com/krishkilaru-arch"
     pdf.cell(0, 4.5, S(contact_line2), new_x="LMARGIN", new_y="NEXT", align="C")
+    contact_line3 = f"Resume: thedatabrickster.streamlit.app  |  YouTube: youtube.com/@TheDataBrickster"
+    pdf.cell(0, 4.5, S(contact_line3), new_x="LMARGIN", new_y="NEXT", align="C")
 
-    pdf.set_y(48)
+    pdf.set_y(52)
     pdf.set_text_color(0, 0, 0)
 
     # --- Section header with colored bar ---
