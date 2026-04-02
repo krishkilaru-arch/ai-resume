@@ -2142,7 +2142,7 @@ def render_career_timeline(timeline_df):
     df["end_calc"] = df["end_date"].apply(lambda x: today_str if x in ("Present", None, "") else x)
     df["start_dt"] = pd.to_datetime(df["start_date"])
     df["end_dt"] = pd.to_datetime(df["end_calc"])
-    df["months"] = ((df["end_dt"] - df["start_dt"]).dt.days / 30.44).round().astype(int)
+    df["months"] = ((df["end_dt"] - df["start_dt"]).dt.days / 30.44).round().fillna(0).astype(int)
     df["duration_label"] = df["months"].apply(
         lambda m: f"{m // 12}y {m % 12}m" if m >= 12 and m % 12 else (f"{m // 12}y" if m >= 12 else f"{m}m")
     )
@@ -2565,7 +2565,7 @@ def render_education(edu_df):
     df["start_dt"] = pd.to_datetime(df["start_date"])
     end_col = "end_date"
     df["end_dt"] = pd.to_datetime(df[end_col])
-    df["months"] = ((df["end_dt"] - df["start_dt"]).dt.days / 30.44).round().astype(int)
+    df["months"] = ((df["end_dt"] - df["start_dt"]).dt.days / 30.44).round().fillna(0).astype(int)
     df["duration_label"] = df["months"].apply(
         lambda m: f"{m // 12}y {m % 12}m" if m >= 12 and m % 12 else (f"{m // 12}y" if m >= 12 else f"{m}m")
     )
