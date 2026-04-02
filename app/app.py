@@ -2967,24 +2967,45 @@ def generate_pdf(data):
     pdf.set_fill_color(*ACCENT)
     pdf.rect(0, 46, 210, 2, "F")
 
-    pdf.set_y(3)
+    # --- Cert badges 2x2 on right ---
+    cert_dir = Path(__file__).parent.parent / "images" / "certs"
+    cert_files = ["de-associate.png", "de-professional.png", "ml-associate.png", "genai-associate.png"]
+    badge_size = 18
+    badge_x_start = 170
+    badge_y_start = 4
+    badge_gap = 2
+    for idx, cf in enumerate(cert_files):
+        cp = cert_dir / cf
+        if cp.exists():
+            row, col = divmod(idx, 2)
+            bx = badge_x_start + col * (badge_size + badge_gap)
+            by = badge_y_start + row * (badge_size + badge_gap)
+            pdf.image(str(cp), x=bx, y=by, w=badge_size, h=badge_size)
+
+    # --- Left-aligned header text ---
+    pdf.set_y(4)
     pdf.set_text_color(255, 255, 255)
-    pdf.set_font("Helvetica", "B", 24)
-    pdf.cell(0, 9, S(profile.get("full_name", "")), new_x="LMARGIN", new_y="NEXT", align="C")
-    pdf.set_font("Helvetica", "", 12)
+    pdf.set_font("Helvetica", "B", 22)
+    pdf.set_x(12)
+    pdf.cell(150, 8, S(profile.get("full_name", "")), new_x="LMARGIN", new_y="NEXT")
+    pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(184, 212, 227)
-    pdf.cell(0, 5, S(profile.get("headline", "")), new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.set_x(12)
+    pdf.cell(150, 4.5, S(profile.get("headline", "")), new_x="LMARGIN", new_y="NEXT")
     loc = f"{profile.get('location_city', '')}, {profile.get('location_state', '')}"
     jdata = load_resume_json()
     phone = (jdata["profile"].get("phone", "") if jdata and "profile" in jdata else "") or profile.get("phone", "")
     contact_line1 = f"{loc}  |  {profile.get('email', '')}  |  {phone}"
-    pdf.set_font("Helvetica", "", 11)
+    pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(200, 220, 230)
-    pdf.cell(0, 4.5, S(contact_line1), new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.set_x(12)
+    pdf.cell(150, 4, S(contact_line1), new_x="LMARGIN", new_y="NEXT")
     contact_line2 = f"LinkedIn: linkedin.com/in/brickster  |  GitHub: github.com/krishkilaru-arch"
-    pdf.cell(0, 4.5, S(contact_line2), new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.set_x(12)
+    pdf.cell(150, 4, S(contact_line2), new_x="LMARGIN", new_y="NEXT")
     contact_line3 = f"Website: thedatabrickster.streamlit.app  |  YouTube: youtube.com/@TheDataBrickster"
-    pdf.cell(0, 4.5, S(contact_line3), new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.set_x(12)
+    pdf.cell(150, 4, S(contact_line3), new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_y(49)
     pdf.set_text_color(0, 0, 0)
