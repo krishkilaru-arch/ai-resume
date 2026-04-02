@@ -1017,7 +1017,7 @@ _RECRUITER_FAQ = [
             "3. **10 Databricks Certifications** — Including Data Engineer Professional, ML Associate, and GenAI Engineer Associate.\n"
             "4. **Built a CoE from Scratch** — Established a Databricks Center of Excellence at Lumenalta, trained 50+ engineers, and achieved Silver Partner status.\n"
             "5. **Pre-Sales & Architecture** — 6+ years translating complex technical capabilities into business outcomes for executive stakeholders.\n"
-            "6. **Published Thought Leader** — Author of whitepapers and technical articles on Genie, RAG, dbt vs Databricks, and more.\n"
+            "6. **Published Thought Leader** — Author of 15+ articles on Genie, RAG, Lakebase, Lakewatch, AgentBricks, dbt vs Databricks, and more.\n"
             "7. **Community Builder** — Admin of the First Coast Databricks User Group (Jacksonville, FL).\n"
             "8. **Enterprise Client Portfolio** — TD Bank, Moody's, J&J, Capital Group, Rocket Mortgage, Wells Fargo, BCBS, and more.\n"
             "9. **AWS re:Invent** — Serverless architecture for Moody's featured at AWS re:Invent."
@@ -1031,6 +1031,8 @@ _RECRUITER_FAQ = [
             "The POC with the Quants team was then converted into a full enterprise Databricks onboarding project for Capital Group's Enterprise Data Office.\n\n"
             "Other notable highlights:\n"
             "- Built a Databricks Center of Excellence from zero, certifying 50+ engineers\n"
+            "- Led AWS Glue to Databricks migration and Medallion Architecture implementation at Capital Group\n"
+            "- Configured Genie Spaces for Quants team, converting Python code to production-ready Genie insights\n"
             "- Serverless architecture for Moody's **featured at AWS re:Invent**\n"
             "- Achieved **3x throughput improvement** for J&J's Spark pipelines\n"
             "- Delivered **40% query time reduction** for Guardian Life\n"
@@ -1044,7 +1046,7 @@ _RECRUITER_FAQ = [
             "- 📧 Email: thedatabrickster@gmail.com\n"
             "- 📱 Phone: 63 63 62 62 63\n"
             "- 📅 Book a meeting: https://calendly.com/thedatabrickster\n\n"
-            "Krish is currently working as **Associate Director, Data & AI** at **Lumenalta** (since July 2024)."
+            "Krish is currently working as **Associate Director, Data & AI** at **Lumenalta** (since August 2024)."
         ),
     },
     {
@@ -1067,7 +1069,7 @@ _RECRUITER_FAQ = [
         "keywords": ["how many years databricks", "databricks experience", "years in databricks", "long with databricks", "databricks expertise"],
         "answer": (
             "Krish has **6+ years of hands-on Databricks experience** across multiple enterprise clients:\n\n"
-            "- **Capital Group** — AI/BI Dashboards, Genie, Quant model migration\n"
+            "- **Capital Group** — AI/BI Dashboards, Genie Spaces for Quants, AWS Glue-to-Databricks migration, Medallion Architecture, R code modernization to Spark, SQL Server ingestion\n"
             "- **TD Bank** — Glue-to-Databricks migration, Unity Catalog, Ingestion/ETL frameworks\n"
             "- **Guardian Life** — Databricks environment optimization, 40% query time reduction\n"
             "- **J&J** — Spark pipeline optimization, 3x throughput improvement\n"
@@ -1129,9 +1131,11 @@ _RECRUITER_FAQ = [
         "answer": (
             "Krish is one of the foremost practitioners of **Databricks AI/BI Genie:**\n\n"
             "- **Won Capital Group** engagement with a live Genie demo against Accenture, KPMG, Capgemini, and Infosys\n"
+            "- Configured and demoed **Genie Spaces for the Quants team**, converting end-to-end use cases from raw Python code to production-ready Genie-enabled insights\n"
             "- Implementing **Genie Spaces** for power users in Capital Group's Enterprise Data Office\n"
             "- Delivers pre-sales demos on Genie to win new client engagements\n"
             "- Published a **2-part comprehensive guide** on AI/BI Genie covering basics, advanced features, security, privacy, LLMs, architecture internals, and workflows\n"
+            "- Published **Databricks One + Genie** article on the AI-powered front door for business users (March 2026)\n"
             "- Built this very resume website with an **Abu chatbot powered by Databricks Genie** 🐒\n"
             "- Admin of the **First Coast Databricks User Group**, actively demoing Genie to the community"
         ),
@@ -1140,8 +1144,8 @@ _RECRUITER_FAQ = [
         "keywords": ["unity catalog experience", "unity catalog", "data governance experience", "governance"],
         "answer": (
             "Krish has **3+ years of Unity Catalog and data governance expertise:**\n\n"
+            "- **Capital Group** — Implementing Unity Catalog as part of enterprise Databricks platform architecture, including data quality controls, lineage, and catalog governance across migration efforts\n"
             "- **TD Bank** — Onboarded Unity Catalog for the Data Governance team, establishing centralized access controls, lineage tracking, and audit policies\n"
-            "- **Capital Group** — Implementing Unity Catalog as part of enterprise Databricks platform architecture\n"
             "- Expert in data lineage, access control, governance, and auditing\n"
             "- Published thought leadership on governance best practices"
         ),
@@ -1198,6 +1202,7 @@ _RECRUITER_FAQ = [
         "keywords": ["aws experience", "amazon web services", "cloud experience aws"],
         "answer": (
             "Krish has **8+ years of AWS experience** across multiple enterprise clients:\n\n"
+            "- **Capital Group** — Led migration of AWS Glue pipelines to Databricks, improving scalability and governance\n"
             "- **Moody's** — Designed fully serverless architecture using Lambda, Glue, Step Functions, DynamoDB. **Featured at AWS re:Invent**\n"
             "- **Essent Mortgage** — Led 15-year legacy migration to AWS (50% faster processing, 35% cost savings)\n"
             "- **Rocket Mortgage** — Migrated Hortonworks to AWS Glue, drove org-wide Glue adoption\n"
@@ -1211,6 +1216,7 @@ _RECRUITER_FAQ = [
             "This interactive website **is** Krish's resume! It includes all the information a traditional PDF would have, plus:\n\n"
             "- 🐒 **Abu chatbot** — Ask any question about Krish's background (powered by Databricks Genie)\n"
             "- 📊 **Interactive dashboard** — Career timeline, skills visualization, client grid, and more\n"
+            "- 🎬 **YouTube** — https://www.youtube.com/@TheDataBrickster\n"
             "- 📅 **Book a meeting** — https://calendly.com/thedatabrickster\n\n"
             "For a direct conversation, reach out at thedatabrickster@gmail.com."
         ),
