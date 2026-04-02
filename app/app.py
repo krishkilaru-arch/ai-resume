@@ -3123,6 +3123,12 @@ def generate_pdf(data):
             pub_date = p.get("date", "")
             publisher = p.get("publisher", "")
             pdf.cell(0, 3.5, S(f"{publisher}  |  {pub_date}"), new_x="LMARGIN", new_y="NEXT")
+            url = p.get("url", "")
+            if url:
+                pdf.set_font("Helvetica", "", 7.5)
+                pdf.set_text_color(*ACCENT)
+                pdf.set_x(10)
+                pdf.cell(0, 3.5, S(url), new_x="LMARGIN", new_y="NEXT", link=url)
             pdf.ln(1)
 
     pdf.set_text_color(0, 0, 0)
