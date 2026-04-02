@@ -2986,17 +2986,16 @@ def generate_pdf(data):
     contact_line3 = f"Website: thedatabrickster.streamlit.app  |  YouTube: youtube.com/@TheDataBrickster"
     pdf.cell(0, 4.5, S(contact_line3), new_x="LMARGIN", new_y="NEXT", align="C")
 
-    pdf.set_y(50)
+    pdf.set_y(49)
     pdf.set_text_color(0, 0, 0)
 
     # --- Section header with colored bar ---
     def section_hdr(title, color=SECTION_BG):
-        pdf.ln(1)
         pdf.set_fill_color(*color)
         pdf.set_text_color(255, 255, 255)
         pdf.set_font("Helvetica", "B", 11)
         pdf.cell(0, 7, f"  {title.upper()}", new_x="LMARGIN", new_y="NEXT", fill=True)
-        pdf.ln(2)
+        pdf.ln(1.5)
         pdf.set_text_color(0, 0, 0)
 
     # --- Professional Summary ---
