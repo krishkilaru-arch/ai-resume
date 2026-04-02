@@ -2866,7 +2866,13 @@ def _notify_abu_interaction(question, answer):
                     "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "_template": "table",
                 },
-                headers={"Content-Type": "application/json", "Accept": "application/json"},
+                headers={
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Referer": "https://thedatabrickster.streamlit.app",
+                    "Origin": "https://thedatabrickster.streamlit.app",
+                    "User-Agent": "Mozilla/5.0",
+                },
                 timeout=10,
             )
         except Exception:
