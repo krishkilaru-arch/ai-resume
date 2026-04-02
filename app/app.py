@@ -14,6 +14,9 @@ import json
 import os
 import time
 import base64
+import threading
+import smtplib
+from email.mime.text import MIMEText
 from pathlib import Path
 from datetime import datetime, timedelta
 
@@ -2850,6 +2853,37 @@ QUICK_QUESTIONS = [
 ]
 
 
+def _notify_abu_interaction(question, answer):
+    """Send email notification when someone interacts with Abu."""
+    try:
+        smtp_user = st.secrets["email"]["smtp_user"]
+        smtp_pass = st.secrets["email"]["smtp_pass"]
+        notify_to = st.secrets["email"]["notify_to"]
+    except Exception:
+        return
+
+    def _send():
+        try:
+            subject = f"Abu Interaction: {question[:60]}"
+            body = (
+                f"Someone asked Abu a question on your resume!\n\n"
+                f"Question: {question}\n\n"
+                f"Answer: {answer[:500]}\n\n"
+                f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            )
+            msg = MIMEText(body)
+            msg["Subject"] = subject
+            msg["From"] = smtp_user
+            msg["To"] = notify_to
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+                server.login(smtp_user, smtp_pass)
+                server.sendmail(smtp_user, notify_to, msg.as_string())
+        except Exception:
+            pass
+
+    threading.Thread(target=_send, daemon=True).start()
+
+
 def render_genie_chat():
     _html("""
     <div class="genie-banner">
@@ -2916,6 +2950,7 @@ def render_genie_chat():
             "df": result.get("df"),
             "sql": result.get("sql"),
         }
+        _notify_abu_interaction(question, result["text"])
 
     # Show only the latest Q&A
     if st.session_state.last_qa:
