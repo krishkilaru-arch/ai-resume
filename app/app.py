@@ -2984,7 +2984,7 @@ def generate_pdf(data):
     pdf.cell(0, 4.5, S(contact_line1), new_x="LMARGIN", new_y="NEXT", align="C")
     contact_line2 = f"LinkedIn: linkedin.com/in/brickster  |  GitHub: github.com/krishkilaru-arch"
     pdf.cell(0, 4.5, S(contact_line2), new_x="LMARGIN", new_y="NEXT", align="C")
-    contact_line3 = f"Resume: thedatabrickster.streamlit.app  |  YouTube: youtube.com/@TheDataBrickster"
+    contact_line3 = f"Website: thedatabrickster.streamlit.app  |  YouTube: youtube.com/@TheDataBrickster"
     pdf.cell(0, 4.5, S(contact_line3), new_x="LMARGIN", new_y="NEXT", align="C")
 
     pdf.set_y(52)
