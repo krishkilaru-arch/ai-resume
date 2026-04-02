@@ -3020,9 +3020,6 @@ def generate_pdf(data):
         if end != "Present":
             end = end[:7]
 
-        if "NTT Data" in company:
-            pdf.add_page()
-
         pdf.set_font("Helvetica", "B", 11)
         pdf.set_text_color(*PRIMARY)
         pdf.set_x(10)
