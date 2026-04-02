@@ -2851,9 +2851,44 @@ QUICK_QUESTIONS = [
 ]
 
 
+def _get_visitor_location():
+    """Get visitor's approximate location from IP via free geolocation API."""
+    import requests as _req
+    try:
+        ip = None
+        try:
+            headers = st.context.headers
+            forwarded = headers.get("X-Forwarded-For", "")
+            if forwarded:
+                ip = forwarded.split(",")[0].strip()
+        except Exception:
+            pass
+
+        if not ip:
+            return "Unknown location"
+
+        resp = _req.get(f"https://ipapi.co/{ip}/json/", timeout=5)
+        if resp.status_code == 200:
+            geo = resp.json()
+            city = geo.get("city", "")
+            region = geo.get("region", "")
+            country = geo.get("country_name", "")
+            org = geo.get("org", "")
+            parts = [p for p in [city, region, country] if p]
+            loc = ", ".join(parts) or "Unknown"
+            if org:
+                loc += f" ({org})"
+            return f"{loc} [IP: {ip}]"
+        return f"Unknown [IP: {ip}]"
+    except Exception:
+        return "Unknown location"
+
+
 def _notify_abu_interaction(question, answer):
     """Send email notification via FormSubmit.co (free, no credentials needed)."""
     import requests as _req
+
+    location = _get_visitor_location()
 
     def _send():
         try:
@@ -2863,6 +2898,7 @@ def _notify_abu_interaction(question, answer):
                     "_subject": f"Abu Interaction: {question[:60]}",
                     "Question": question,
                     "Answer": answer[:500],
+                    "Visitor Location": location,
                     "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "_template": "table",
                 },
