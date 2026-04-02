@@ -3038,7 +3038,7 @@ def generate_pdf(data):
 
         pdf.set_text_color(0, 0, 0)
         pdf.set_font("Helvetica", "", 9.5)
-        for h in exp.get("highlights", [])[:6]:
+        for h in exp.get("highlights", []):
             desc = h.get("description", "")
             impact = h.get("impact_metric", "")
             category = h.get("category", "Technical")
