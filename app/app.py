@@ -2982,7 +2982,7 @@ def generate_pdf(data):
     pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(200, 220, 230)
     pdf.cell(0, 4.5, S(contact_line1), new_x="LMARGIN", new_y="NEXT", align="C")
-    contact_line2 = f"{profile.get('linkedin_url', '')}  |  {profile.get('website_url', '')}  |  YouTube: {profile.get('youtube_url', '')}"
+    contact_line2 = f"{profile.get('linkedin_url', '')}  |  {profile.get('github_url', '')}  |  {profile.get('website_url', '')}  |  {profile.get('youtube_url', '')}"
     pdf.cell(0, 4.5, S(contact_line2), new_x="LMARGIN", new_y="NEXT", align="C")
 
     pdf.set_y(48)
