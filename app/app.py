@@ -15,8 +15,6 @@ import os
 import time
 import base64
 import threading
-import smtplib
-from email.mime.text import MIMEText
 from pathlib import Path
 from datetime import datetime, timedelta
 
@@ -2854,30 +2852,23 @@ QUICK_QUESTIONS = [
 
 
 def _notify_abu_interaction(question, answer):
-    """Send email notification when someone interacts with Abu."""
-    try:
-        smtp_user = st.secrets["email"]["smtp_user"]
-        smtp_pass = st.secrets["email"]["smtp_pass"]
-        notify_to = st.secrets["email"]["notify_to"]
-    except Exception:
-        return
+    """Send email notification via FormSubmit.co (free, no credentials needed)."""
+    import requests as _req
 
     def _send():
         try:
-            subject = f"Abu Interaction: {question[:60]}"
-            body = (
-                f"Someone asked Abu a question on your resume!\n\n"
-                f"Question: {question}\n\n"
-                f"Answer: {answer[:500]}\n\n"
-                f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            _req.post(
+                "https://formsubmit.co/ajax/thedatabrickster@gmail.com",
+                json={
+                    "_subject": f"Abu Interaction: {question[:60]}",
+                    "Question": question,
+                    "Answer": answer[:500],
+                    "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "_template": "table",
+                },
+                headers={"Content-Type": "application/json", "Accept": "application/json"},
+                timeout=10,
             )
-            msg = MIMEText(body)
-            msg["Subject"] = subject
-            msg["From"] = smtp_user
-            msg["To"] = notify_to
-            with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-                server.login(smtp_user, smtp_pass)
-                server.sendmail(smtp_user, notify_to, msg.as_string())
         except Exception:
             pass
 
