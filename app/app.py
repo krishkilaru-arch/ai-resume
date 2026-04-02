@@ -2884,24 +2884,17 @@ def _get_visitor_location():
         return "Unknown location"
 
 
-def _notify_abu_interaction(question, answer):
-    """Send email notification via FormSubmit.co (free, no credentials needed)."""
+def _send_formsubmit(subject, fields):
+    """Send an email notification via FormSubmit.co."""
     import requests as _req
-
-    location = _get_visitor_location()
 
     def _send():
         try:
+            payload = {"_subject": subject, "_template": "table"}
+            payload.update(fields)
             _req.post(
                 "https://formsubmit.co/ajax/thedatabrickster@gmail.com",
-                json={
-                    "_subject": f"Abu Interaction: {question[:60]}",
-                    "Question": question,
-                    "Answer": answer[:500],
-                    "Visitor Location": location,
-                    "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                    "_template": "table",
-                },
+                json=payload,
                 headers={
                     "Content-Type": "application/json",
                     "Accept": "application/json",
@@ -2915,6 +2908,37 @@ def _notify_abu_interaction(question, answer):
             pass
 
     threading.Thread(target=_send, daemon=True).start()
+
+
+def _notify_visitor():
+    """Send a one-time email when a new visitor opens the site."""
+    if st.session_state.get("_visitor_notified"):
+        return
+    st.session_state["_visitor_notified"] = True
+
+    location = _get_visitor_location()
+    _send_formsubmit(
+        "New Visitor on Resume Site",
+        {
+            "Event": "Someone opened your resume website",
+            "Visitor Location": location,
+            "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        },
+    )
+
+
+def _notify_abu_interaction(question, answer):
+    """Send email when someone interacts with Abu."""
+    location = _get_visitor_location()
+    _send_formsubmit(
+        f"Abu Interaction: {question[:60]}",
+        {
+            "Question": question,
+            "Answer": answer[:500],
+            "Visitor Location": location,
+            "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        },
+    )
 
 
 def render_genie_chat():
@@ -3359,6 +3383,8 @@ def inject_seo_meta():
 # ────────────────────────────────────────────────────────────────
 
 def main():
+    _notify_visitor()
+
     # Load all data
     profile_df = load_table("profile")
     work_df = load_table("work_experience")
