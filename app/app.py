@@ -959,7 +959,8 @@ def _json_to_df(data, table):
 @st.cache_data(ttl=60)
 def load_table(table_name):
     """Load a table: try Databricks first, fall back to local JSON."""
-    if table_name == "publications":
+    local_first = {"publications", "work_experience", "work_highlights", "profile"}
+    if table_name in local_first:
         data = load_resume_json()
         if data:
             return _json_to_df(data, table_name)
