@@ -2857,10 +2857,11 @@ def _get_visitor_location():
     try:
         ip = None
         try:
-            headers = st.context.headers
-            forwarded = headers.get("X-Forwarded-For", "")
-            if forwarded:
-                ip = forwarded.split(",")[0].strip()
+            if hasattr(st, "context") and hasattr(st.context, "headers"):
+                headers = st.context.headers
+                forwarded = headers.get("X-Forwarded-For", "")
+                if forwarded:
+                    ip = forwarded.split(",")[0].strip()
         except Exception:
             pass
 
