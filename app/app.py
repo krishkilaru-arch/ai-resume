@@ -2963,30 +2963,30 @@ def generate_pdf(data):
 
     # --- Header banner ---
     pdf.set_fill_color(*PRIMARY)
-    pdf.rect(0, 0, 210, 40, "F")
+    pdf.rect(0, 0, 210, 46, "F")
     pdf.set_fill_color(*ACCENT)
-    pdf.rect(0, 40, 210, 2, "F")
+    pdf.rect(0, 46, 210, 2, "F")
 
     pdf.set_y(3)
     pdf.set_text_color(255, 255, 255)
     pdf.set_font("Helvetica", "B", 20)
     pdf.cell(0, 8, S(profile.get("full_name", "")), new_x="LMARGIN", new_y="NEXT", align="C")
-    pdf.set_font("Helvetica", "", 9)
+    pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(184, 212, 227)
-    pdf.cell(0, 4, S(profile.get("headline", "")), new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.cell(0, 5, S(profile.get("headline", "")), new_x="LMARGIN", new_y="NEXT", align="C")
     loc = f"{profile.get('location_city', '')}, {profile.get('location_state', '')}"
     jdata = load_resume_json()
     phone = (jdata["profile"].get("phone", "") if jdata and "profile" in jdata else "") or profile.get("phone", "")
     contact_line1 = f"{loc}  |  {profile.get('email', '')}  |  {phone}"
-    pdf.set_font("Helvetica", "", 8)
+    pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(200, 220, 230)
-    pdf.cell(0, 4, S(contact_line1), new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.cell(0, 4.5, S(contact_line1), new_x="LMARGIN", new_y="NEXT", align="C")
     contact_line2 = f"LinkedIn: linkedin.com/in/brickster  |  GitHub: github.com/krishkilaru-arch"
-    pdf.cell(0, 4, S(contact_line2), new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.cell(0, 4.5, S(contact_line2), new_x="LMARGIN", new_y="NEXT", align="C")
     contact_line3 = f"Website: thedatabrickster.streamlit.app  |  YouTube: youtube.com/@TheDataBrickster"
-    pdf.cell(0, 4, S(contact_line3), new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.cell(0, 4.5, S(contact_line3), new_x="LMARGIN", new_y="NEXT", align="C")
 
-    pdf.set_y(44)
+    pdf.set_y(50)
     pdf.set_text_color(0, 0, 0)
 
     # --- Section header with colored bar ---
