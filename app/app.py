@@ -2969,16 +2969,16 @@ def generate_pdf(data):
 
     pdf.set_y(3)
     pdf.set_text_color(255, 255, 255)
-    pdf.set_font("Helvetica", "B", 20)
-    pdf.cell(0, 8, S(profile.get("full_name", "")), new_x="LMARGIN", new_y="NEXT", align="C")
-    pdf.set_font("Helvetica", "", 11)
+    pdf.set_font("Helvetica", "B", 24)
+    pdf.cell(0, 9, S(profile.get("full_name", "")), new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.set_font("Helvetica", "", 12)
     pdf.set_text_color(184, 212, 227)
     pdf.cell(0, 5, S(profile.get("headline", "")), new_x="LMARGIN", new_y="NEXT", align="C")
     loc = f"{profile.get('location_city', '')}, {profile.get('location_state', '')}"
     jdata = load_resume_json()
     phone = (jdata["profile"].get("phone", "") if jdata and "profile" in jdata else "") or profile.get("phone", "")
     contact_line1 = f"{loc}  |  {profile.get('email', '')}  |  {phone}"
-    pdf.set_font("Helvetica", "", 10)
+    pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(200, 220, 230)
     pdf.cell(0, 4.5, S(contact_line1), new_x="LMARGIN", new_y="NEXT", align="C")
     contact_line2 = f"LinkedIn: linkedin.com/in/brickster  |  GitHub: github.com/krishkilaru-arch"
