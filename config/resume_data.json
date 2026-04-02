@@ -71,6 +71,41 @@
           "description": "Delivering pre-sales demos and training programs on Genie, AI/BI Dashboards, Databricks Apps, and AgentBricks to win new client engagements",
           "category": "Business",
           "impact_metric": "Multiple pre-sales engagements won"
+        },
+        {
+          "description": "Led migration of AWS Glue pipelines to Databricks, improving scalability, performance, and governance of data workflows in a lakehouse environment",
+          "category": "Technical",
+          "impact_metric": "AWS Glue to Databricks migration"
+        },
+        {
+          "description": "Migrated legacy R code to Databricks for the Trading and Research team, enabling modern Spark-based processing and seamless integration with Delta Lake tables",
+          "category": "Technical",
+          "impact_metric": "Legacy R code modernized to Spark"
+        },
+        {
+          "description": "Collaborated with Quants team to design and implement Medallion Architecture (Bronze-Silver-Gold layers) for Python-based data pipelines, delivering clean, reliable data products for downstream analytics",
+          "category": "Technical",
+          "impact_metric": "Medallion Architecture for Quants pipelines"
+        },
+        {
+          "description": "Configured and demoed Databricks Genie Spaces for the Quants team, enabling natural language querying over governed data and successfully converting end-to-end use cases from raw Python code to production-ready Genie-enabled insights",
+          "category": "Technical",
+          "impact_metric": "Genie Spaces for natural language analytics"
+        },
+        {
+          "description": "Supported the Platform team by troubleshooting and resolving Databricks workspace issues, ensuring high availability and smooth operations for engineering and data teams",
+          "category": "Technical",
+          "impact_metric": "High availability platform support"
+        },
+        {
+          "description": "Contributed to Databricks platform adoption by implementing lakehouse best practices, including data quality controls, lineage, and catalog governance across migration efforts",
+          "category": "Technical",
+          "impact_metric": "Lakehouse best practices and governance"
+        },
+        {
+          "description": "Ingested SQL Server data into Databricks across multiple projects, building reliable data pipelines for migrating on-premises relational data into the lakehouse",
+          "category": "Technical",
+          "impact_metric": "SQL Server to Databricks data ingestion"
         }
       ]
     },
