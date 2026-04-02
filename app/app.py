@@ -3002,12 +3002,14 @@ def generate_pdf(data):
     pdf.set_text_color(200, 220, 230)
     pdf.set_x(10)
     pdf.cell(text_w, 5, S(contact_line1), new_x="LMARGIN", new_y="NEXT")
-    contact_line2 = f"LinkedIn: linkedin.com/in/brickster  |  GitHub: github.com/krishkilaru-arch"
     pdf.set_x(10)
-    pdf.cell(text_w, 5, S(contact_line2), new_x="LMARGIN", new_y="NEXT")
-    contact_line3 = f"Website: thedatabrickster.streamlit.app  |  YouTube: youtube.com/@TheDataBrickster"
+    pdf.cell(pdf.get_string_width("LinkedIn: linkedin.com/in/brickster") + 2, 5, "LinkedIn: linkedin.com/in/brickster", new_x="END", link="https://www.linkedin.com/in/brickster/")
+    pdf.cell(pdf.get_string_width("  |  ") + 1, 5, "  |  ", new_x="END")
+    pdf.cell(text_w, 5, "GitHub: github.com/krishkilaru-arch", new_x="LMARGIN", new_y="NEXT", link="https://github.com/krishkilaru-arch")
     pdf.set_x(10)
-    pdf.cell(text_w, 5, S(contact_line3), new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(pdf.get_string_width("Website: thedatabrickster.streamlit.app") + 2, 5, "Website: thedatabrickster.streamlit.app", new_x="END", link="https://thedatabrickster.streamlit.app")
+    pdf.cell(pdf.get_string_width("  |  ") + 1, 5, "  |  ", new_x="END")
+    pdf.cell(text_w, 5, "YouTube: youtube.com/@TheDataBrickster", new_x="LMARGIN", new_y="NEXT", link="https://www.youtube.com/@TheDataBrickster")
 
     pdf.set_y(banner_h + 3)
     pdf.set_text_color(0, 0, 0)
