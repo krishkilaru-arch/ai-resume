@@ -3383,11 +3383,6 @@ def inject_seo_meta():
 # ────────────────────────────────────────────────────────────────
 
 def main():
-    try:
-        _notify_visitor()
-    except Exception:
-        pass
-
     # Load all data
     profile_df = load_table("profile")
     work_df = load_table("work_experience")
