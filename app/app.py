@@ -2541,7 +2541,15 @@ def render_experience(work_df, highlights_df):
                     </span>
                 </div>"""
 
-        role_html = f'<div class="exp-role-line"><span class="exp-label">Role at Customer:</span> <span class="exp-role-value">{role}</span></div>' if role and role != title else ""
+        # Hide customer-facing role for Lumenalta only (requested "for now")
+        role_customer_visible = role and (
+            str(company).strip().lower() != "lumenalta"
+        )
+        role_html = (
+            f'<div class="exp-role-line"><span class="exp-label">Role at Customer:</span> <span class="exp-role-value">{role}</span></div>'
+            if role_customer_visible and role != title
+            else ""
+        )
         title_label = f"Title at {company}" if role and role != title else ""
         title_line = f'<div class="exp-title-line"><span class="exp-label">{title_label}:</span> <span class="exp-title-value">{title}</span></div>' if title_label else f"<h4>{title}</h4>"
         _html(f"""
@@ -3152,7 +3160,7 @@ def generate_pdf(data):
         pdf.set_font("Helvetica", "I", 9)
         pdf.set_text_color(*ACCENT)
         meta = f"{start} to {end}  |  {exp.get('location', '')}"
-        if role:
+        if role and str(company).strip().lower() != "lumenalta":
             meta += f"  |  {role}"
         pdf.set_x(10)
         pdf.cell(0, 4.5, S(meta), new_x="LMARGIN", new_y="NEXT")
