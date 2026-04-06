@@ -85,7 +85,7 @@ CATEGORY_COLORS = {
 # ────────────────────────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="Krish Kilaru — Databricks Leader | AI Resume",
+    page_title="Krish Kilaru — Databricks Practice Leader | AI Resume",
     page_icon="🧠",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -3366,12 +3366,12 @@ def inject_seo_meta():
         }
         if (!document.querySelector('meta[property="og:title"]')) {
             var metas = [
-                {p:'og:title', c:'Krish Kilaru — Databricks Leader | Interactive AI Resume'},
+                {p:'og:title', c:'Krish Kilaru — Databricks Practice Leader | Interactive AI Resume'},
                 {p:'og:description', c:'19+ years in data engineering. 10 Databricks certifications. Explore skills, projects, and ask Abu the AI chatbot anything.'},
                 {p:'og:type', c:'website'},
                 {p:'og:url', c:'https://thedatabrickster.streamlit.app'},
                 {p:'og:image', c:'https://www.databricks.com/sites/default/files/2025-10/professional-badge-de.png?v=1761143167'},
-                {n:'description', c:'Interactive AI-powered resume of Krish Kilaru — Databricks Leader with 19+ years of data engineering experience. Features a Genie-powered Q&A chatbot.'},
+                {n:'description', c:'Interactive AI-powered resume of Krish Kilaru — Databricks Practice Leader with 19+ years of data engineering experience. Features a Genie-powered Q&A chatbot.'},
                 {n:'author', c:'Krish Kilaru'},
                 {n:'keywords', c:'Databricks, Solutions Architect, Data Engineer, Resume, AI Resume, Krish Kilaru, Unity Catalog, Delta Lake'}
             ];
